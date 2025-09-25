@@ -45,7 +45,7 @@ Use it alongside Moodle and the official module descriptor.
 ### How to use this repo
 - Start with `syllabus/learning_outcomes.md` to understand **what** we assess and **why**.
 - Each week, open the matching folder in `topics/`:
-  - **Read** `notes.md`, skim `topic-mindmap.md`, then **attempt** `exercises.md` (core first, stretch after).
+  - **Read** `notes.md`, skim `topic-mindmap.md`, then **attempt** `exercises` (core first, stretch after) and `challenge exercises` (to feel the fear and face it anyway).
   - Use `assets/` for diagrams/data and **do not peek** at `solutions/` until we’ve covered the topic in class.
 - Refer to `shared/` for style and quick reminders while coding.
 
