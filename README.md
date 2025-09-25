@@ -20,14 +20,15 @@ Use it alongside Moodle and the official module descriptor.
 │        └─ rubric_ca1.md          # Marking rubric for CA1
 │
 ├─ topics/
-│  ├─ t01-intro-oop/
+│  ├─ t01-arrays/
 │  │  ├─ notes.md                  # Theory, examples, diagrams, references
-│  │  ├─ exercises.md              # Exercise ladder (core → stretch)
 │  │  ├─ topic-mindmap.md          # Mind map of this topic’s keywords
 │  │  ├─ solutions/                # Instructor solutions (added after delivery)
 │  │  ├─ quiz/                     # GIFT/XML banks for Moodle quizzes
 │  │  └─ assets/                   # Diagrams, Mermaid, sample data
-│  ├─ t02-classes-objects/
+│  │  └─ challenges/               # Challenge exercises
+│  │  └─ exercises/                # Exercises for the topic
+│  ├─ t02-comparators/
 │  │  └─ (same structure as above)
 │  └─ …
 │
