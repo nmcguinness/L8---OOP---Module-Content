@@ -2,7 +2,7 @@
 ## Exercise: Array of Suspects - Crime License Plate Hunt
 
 ### Scenario
-A tool booth operator saw a suspicious car passing through the toll booth moments after a crime in the area. Strangely, they remember:
+A tollbooth operator saw a suspicious car passing through the toll booth moments after a crime in the area. Strangely, they remember:
 
 1. The **county code** contained an **“L”**.  
 2. The **year digits (YYY)** summed to **10**.  
