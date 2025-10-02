@@ -1,13 +1,3 @@
-<style>
-/* Generic table styling */
-table { border-collapse: collapse; width: 100%; }
-th, td { padding: .55rem .7rem; border: 1px solid #e5e7eb; }
-
-/* Header color */
-thead th { background: #6ec56eff; color: #fff; }
-
-</style>
-
 # Arrays (1D & 2D)
 > Prereqs: variables, `if`, loops, simple methods  
 
