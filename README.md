@@ -51,7 +51,6 @@ Welcome to the module repo. This space holds your weekly topics, exercises, shar
 Below is a commented code block you can paste near your `Main` class. It explains how each exercise’s `Exercise.run()` is called.
 
 ```java
-//How to run any exercise from Main 
 //Every exercise/challenge package contains an Exercise class with:
 public final class Exercise {
   public static void run() 
@@ -60,7 +59,7 @@ public final class Exercise {
   }
 }
 
-//Call an exercise from Main in one of two simple ways:
+//Call an exercise from Main using the fully-qualified path to the class (e.g. t01_arrays.challenges.ce01.Exercise):
 public class Main {
     public static void main(String[] args) {
         Main app = new Main();
