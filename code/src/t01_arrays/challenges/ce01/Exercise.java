@@ -13,7 +13,7 @@ public class Exercise {
 
             //read all file contents
             char dataDelimiter = ',';
-            String filePath = "ce01_data.txt";
+            String filePath = "data/ce01/ce01_data.txt";
             ArrayList<String> rawLicensePlateList = FileUtils.readDelimitedFile(filePath, dataDelimiter);
 
             //exit if fail
