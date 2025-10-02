@@ -209,7 +209,7 @@ Call `Exercise.run()` from your `Main`, as shown in the repo README.
 
 ---
 
-## (Optional) Reflection prompts
+## Reflective Questions
 - Where did you add **guards** (null/empty/bounds)? Which could be turned into helpers?
 - What’s a bug you hit (or could hit), and what’s the **symptom** and **fix**?
 - If you had to test `hasWon`, which **3 boards** would you start with and why?

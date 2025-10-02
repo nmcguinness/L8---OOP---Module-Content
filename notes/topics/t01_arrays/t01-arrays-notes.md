@@ -304,7 +304,7 @@ static void print2D(int[][] g) {
 
 ---
 
-## Reflect more (optional, 5–10 minutes)
+## Reflective Questions
 - In your own words, explain **IPO** for the cinema example. What are the inputs, the key steps, and the final output?
 - Where did you add **guards** (safety checks) in 1D and 2D code? Could any be turned into reusable helpers?
 - Pick one bug you hit (or could hit): what **symptom** would you see, and what **fix** would you apply?
