@@ -40,7 +40,21 @@ public class Demo
 
     public static float standardDeviation(int[] nums)
     {
-        return -1;
+        //get average
+        float average = average(nums);
+
+        //get sum of differences
+        float sumOfDifferences = 0;
+        for(int i = 0; i < nums.length; i++)
+        {
+            sumOfDifferences += nums[i] - average;
+        }
+
+        //divide by N-1
+        sumOfDifferences =  sumOfDifferences/(nums.length - 1);
+
+        //sqrt and return
+        return (float)Math.sqrt(sumOfDifferences);
     }
 
 }
