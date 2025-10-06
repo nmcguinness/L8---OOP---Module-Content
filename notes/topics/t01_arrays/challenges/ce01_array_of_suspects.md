@@ -1,6 +1,6 @@
-## Challenge Exercise: Array of Suspects - Crime License Plate Hunt
+# Challenge Exercise: Array of Suspects - Crime License Plate Hunt
 
-### Scenario
+## Scenario
 A tollbooth operator saw a suspicious car passing through the toll booth moments after a crime in the area. Strangely, they remember:
 
 1. The **county code** contained an **“L”**.  
@@ -20,7 +20,7 @@ Example: 181 LH 626
 
 ---
 
-### Starter Tasks 
+## Starter Tasks 
 
 **Model a `LicensePlate` as a class**
 - Create a class to represent a license plate with fields for year, period, county, and serial.  
