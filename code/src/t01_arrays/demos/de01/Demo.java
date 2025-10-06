@@ -6,6 +6,8 @@ public class Demo
     {
         int[] nums = {3, 5, 8, 12, 21, 67, 34, 56, 77};
 
+        System.out.println("SD: " + standardDeviation(nums));
+
         //forward with span
         int span = 2;
         for(int i = 0; i < nums.length; i+=span)
@@ -44,14 +46,14 @@ public class Demo
         float average = average(nums);
 
         //get sum of differences
-        float sumOfDifferences = 0;
+        double sumOfDifferences = 0;
         for(int i = 0; i < nums.length; i++)
         {
-            sumOfDifferences += nums[i] - average;
+            sumOfDifferences += Math.pow(nums[i] - average, 2);
         }
 
         //divide by N-1
-        sumOfDifferences =  sumOfDifferences/(nums.length - 1);
+        sumOfDifferences =  sumOfDifferences/(nums.length-1);
 
         //sqrt and return
         return (float)Math.sqrt(sumOfDifferences);
