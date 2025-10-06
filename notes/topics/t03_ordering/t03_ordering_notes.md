@@ -1,9 +1,9 @@
 ---
 title: "Ordering in Java — Comparable & Comparator"
 subtitle: "COMP C8Z03 — Year 2 OOP"
-description: "A practical, lambda-free introduction using explicit Comparator classes and anonymous classes. ArrayList-only; ends with chaining user-defined comparators."
+description: "A practical introduction using explicit Comparator classes and anonymous classes. ArrayList-only; ends with chaining user-defined comparators."
 created: 2025-10-06
-version: "v1.2 (no lambdas)"
+version: "v1.2"
 tags: [java, ordering, sorting, comparable, comparator, arraylist]
 ---
 

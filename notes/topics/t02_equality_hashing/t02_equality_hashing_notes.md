@@ -27,7 +27,7 @@ A quick summary of what **you** should be able to do after this lesson:
 | Debug         | Detect and explain bugs caused by **mutable identifying fields** or inconsistent `equals`/`hashCode`.                                             |
 
 
-> We will **not** use `HashSet`, `HashMap`, or any collection types here. Those appear in the next lesson.
+> We will **not** use `HashSet`, `HashMap`, or any collection types here. Those appear in a later lesson.
 
 ## Identity vs Value Equality
 

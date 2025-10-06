@@ -1,16 +1,10 @@
----
-title: "Ordering — Exercises (Comparable & Comparator, No Lambdas) — Readable Edition"
-subtitle: "COMP C8Z03 — Year 2 OOP"
-description: "The same 8 exercises, rewritten with clearer steps, hints, and expected outcomes. Lambda-free; ArrayList only."
-created: 2025-10-06
-version: "v1.1"
-tags: [java, exercises, ordering, comparable, comparator, arraylist]
----
 
-# Ordering — Exercises (Comparable & Comparator, No Lambdas) — Readable Edition
+# Ordering — Exercises (Comparable & Comparator) 
 
-> These exercises match the lesson **Ordering in Java — Comparable & Comparator (No Lambdas)**.  
-> You will write **named Comparator classes** or **anonymous classes** (no lambdas or method references).  
+> These exercises match the lesson **Ordering in Java — Comparable & Comparator (No Lambdas)**. 
+
+> You will write **named Comparator classes** or **anonymous classes** (no lambdas or method references). 
+
 > Keep your lists short so you can quickly see the effect of sorting.
 
 ## How to run

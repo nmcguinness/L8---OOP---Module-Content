@@ -1,8 +1,10 @@
 # Equality & Hashing — Exercises
 
-> These exercises build directly on the **Equality & Hashing — Foundations** notes. Work from top to bottom. Most tasks include small, checkable outputs. Use the provided method signatures and add tiny tests in `main` or `Exercise.run()`.
+> These exercises build directly on the **Equality & Hashing — Foundations** notes. Work from top to bottom. 
 
-> Hints you can reuse are in the notes (e.g., 31‑multiplier pattern, `Objects.hash`, and `Math.floorMod`).
+> Most tasks include small, checkable outputs. Use the provided method signatures and add tiny tests in `main` or `Exercise.run()`.
+
+> Hints and snippets you can reuse are in the notes (e.g., 31‑multiplier pattern, `Objects.hash`, and `Math.floorMod`).
 
 ## How to run
 Each exercise assumes a package like:

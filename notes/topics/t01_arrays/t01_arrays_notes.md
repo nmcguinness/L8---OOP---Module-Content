@@ -1,3 +1,14 @@
+---
+
+title: "Arrays (1D & 2D)"
+subtitle: "COMP C8Z03 — Year 2 OOP"
+description: "Introduction to Java arrays: creating and indexing 1D/2D arrays, iterating with loops, common patterns (min/max, count, search), bounds checks, and typical pitfalls."
+created: 2025-10-01
+version: "v1.0"
+tags: [java, arrays, 1d, 2d, loops, indexing, debugging]
+--------------------------------------------------------
+
+
 # Arrays (1D & 2D)
 > Prereqs: variables, `if`, loops, simple methods  
 

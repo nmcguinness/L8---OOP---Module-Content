@@ -3,7 +3,7 @@
 
 > These exercises build directly on the **Arrays (1D & 2D)** notes. Work from top to bottom. Most tasks include small, checkable outputs. Use the provided method signatures and add tiny tests in `main` or `Exercise.run()`.
 >
-> Hints and canonical snippets you can reuse are in the notes (e.g., `inBounds`, `print2D`).
+> Hints and snippets you can reuse are in the notes (e.g., `inBounds`, `print2D`).
 
 ## How to run
 Each exercise assumes a package like:
