@@ -9,7 +9,7 @@ This space holds your weekly topics, exercises, shared resources, and assessment
 | Topic | Description | Notes | Exercises | Challenge Exercises |
 |:--|:--|:--|:--|:--|
 | t01 | Arrays | [Notes](notes/topics/t01_arrays/t01_arrays_notes.md) | [Exercises](notes/topics/t01_arrays/exercises/t01_arrays_exercises.md) | [Challenge Exercises](notes/topics/t01_arrays/challenges/ce01_array_of_suspects.md) | 
-| t02 | Equality & Hashing | [Notes](/mnt/data/t02_equality_hashing.md) | [Exercises](/mnt/data/t02_equality_hashing_exercises_synced.md) | None |
+| t02 | Equality & Hashing | [Notes](/notes/topics/t01_equality_hashing/t02_equality_hashing_notes.md) | [Exercises](/notes/topics/t01_equality_hashing/exercises/t02_equality_hashing_exercises.md) | None |
 
 ---
 
