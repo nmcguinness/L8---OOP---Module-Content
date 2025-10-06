@@ -4,8 +4,6 @@ public class Demo
 {
     public static void run()
     {
-        System.out.println("Hello!");
-
         int[] nums = {3, 5, 8, 12, 21, 67, 34, 56, 77};
 
         //forward with span
