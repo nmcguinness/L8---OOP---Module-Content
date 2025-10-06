@@ -11,6 +11,8 @@ public class Exercise {
             //helper to tell you what directory to put your data file in
             System.out.println("Put your data file in: " + System.getProperty("user.dir"));
 
+            long startTimeNS = System.nanoTime();
+
             //read all file contents
             char dataDelimiter = ',';
             String filePath = "data/ce01/ce01_data.txt";
@@ -40,5 +42,9 @@ public class Exercise {
                 if (isValid)
                     System.out.println("Found: " + l1);
             }
-        }
+
+        long finishTimeNS = System.nanoTime();
+        System.out.println("Execution time (ms): " + (finishTimeNS - startTimeNS)/1E6);
+
+    }
 }

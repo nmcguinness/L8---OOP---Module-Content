@@ -1,22 +1,27 @@
-# COMP C8Z03 – Object‑Oriented Programming (Year 2)
+# COMP C8Z03 – Object‑Oriented Programming
 
-Welcome to the module repo. This space holds your weekly topics, exercises, shared resources, and assessment briefs. Use it alongside Moodle and the official [module descriptor](https://courses.dkit.ie/index.cfm/page/module/moduleId/55497/deliveryperiodid/1066).
+This space holds your weekly topics, exercises, shared resources, and assessment briefs. Use it alongside Moodle and the official [module descriptor](https://courses.dkit.ie/index.cfm/page/module/moduleId/55497/deliveryperiodid/1066).
 
 ---
 
-## Folder Map (What goes where)
+## Module Content
+
+| Topic | Description | Notes | Exercises | Challenge Exercises |
+|:--|:--|:--|:--|:--|
+| t01 | Arrays | [Notes](notes/topics/t01_arrays/t01_arrays_notes.md) | [Exercises](notes/topics/t01_arrays/exercises/t01_arrays_exercises.md) | [Challenge Exercises](notes/topics/t01_arrays/challenges/ce01_array_of_suspects.md) | 
+| t02 | Equality & Hashing | [Notes](/mnt/data/t02_equality_hashing.md) | [Exercises](/mnt/data/t02_equality_hashing_exercises_synced.md) | None |
+
+---
+
+## Folder Map
 
 ```text
 /                                     # repo root (L8---OOP---Module-Content)
 ├─ README.md                          # overview + how to run
-├─ code/                              # runnable Java code (solutions, demos, harnesses)
+├─ code/                              # runnable Java code (solutions, demos)
 │  └─ src/
 │     ├─ common/                      # helpers used by multiple exercises/challenges
-│     └─ t01_arrays/                  # mirrors a topic in notes/topics
-│        ├─ exercises/
-│        │  └─ ex01_basics/           # package per exercise; safe to reuse class name Main
-│        └─ challenges/
-│           └─ ce01/
+│     └─ tNN-topic/                  # mirrors a topic in notes/topics
 │
 ├─ lecturer/                          # staff-only WIP (drafts, keys, lesson plans)
 │
@@ -28,15 +33,12 @@ Welcome to the module repo. This space holds your weekly topics, exercises, shar
    ├─ syllabus/
    ├─ assessments/
    │  └─ briefs/
-   └─ topics/
-      └─ t01_arrays/
-         ├─ exercises/                # task descriptions/prompts
-         └─ challenges/               # larger/open-ended problems
+   └─ topics/                         # notes, exercises, and challenges exercises for the module
 ```
 
 ---
 
-### How to use this repo
+## How to use this repo
 - Start with **syllabus/** to understand *what* we assess and *why*.
 - Check **assessments/briefs/** for the current CA/ICA brief and rubric.
 - Each week, open the matching folder in **topics/** (e.g., `t01-arrays/`):
@@ -81,6 +83,15 @@ public class Main {
 
 ---
 
+## Getting Started
+- Ensure a recent JDK is installed and selected in your IDE.
+- Use your IDE’s Markdown preview for `notes.md` and Mermaid diagrams, or view on GitHub.
+- Build and run small Java files directly in your IDE while working through exercises.
+
+> Tip: Keep a “bug diary”. For each bug you hit, note the cause and the fix. Patterns will emerge, and you’ll get faster.
+
+---
+
 ## General Directions to Improve as a Programmer
 
 - **Show up**: Consistent **class attendance** opens time for questions, feedback, and debugging together.
@@ -96,10 +107,3 @@ public class Main {
 - **Be patient**: Skill grows with time-on-task. Focus on steady improvement, not perfection on day one.
 
 ---
-
-## Getting Started (Plain Java)
-- Ensure a recent JDK is installed and selected in your IDE.
-- Use your IDE’s Markdown preview for `notes.md` and Mermaid diagrams, or view on GitHub.
-- Build and run small Java files directly in your IDE while working through exercises.
-
-> Tip: Keep a “bug diary”. For each bug you hit, note the cause and the fix. Patterns will emerge, and you’ll get faster.
