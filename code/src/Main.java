@@ -1,3 +1,5 @@
+import t01_arrays.demos.de01.Demo;
+
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
@@ -6,8 +8,30 @@ public class Main {
         app.run();
     }
 
-    public void run(){
-        System.out.println("Running challenge exercise 01...");
-        t01_arrays.challenges.ce01.Exercise.run();
+    public void run() {
+
+        System.out.println("Topic 01 - Arrays...\n");
+        runTopic01_Arrays();
     }
+
+    public void runTopic01_Arrays()
+    {
+        System.out.println("Demo 01...\n");
+        Demo.run();
+
+        //System.out.println("Challenge Exercise 01...");
+        //t01_arrays.challenges.ce01.Exercise.run();
+    }
+
+    public void runTopic02_EqualityHashing()
+    {
+
+    }
+
+    public void runTopic03_Ordering()
+    {
+
+    }
+
+
 }
