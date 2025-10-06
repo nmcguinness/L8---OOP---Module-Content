@@ -9,8 +9,8 @@ This space holds your weekly topics, exercises, shared resources, and assessment
 | Topic | Description | Notes | Exercises | Challenge Exercises |
 |:--|:--|:--|:--|:--|
 | t01 | Arrays | [Notes](notes/topics/t01_arrays/t01_arrays_notes.md) | [Exercises](notes/topics/t01_arrays/exercises/t01_arrays_exercises.md) | [Challenge Exercises](notes/topics/t01_arrays/challenges/ce01_array_of_suspects.md) | 
-| t02 | Equality & Hashing | [Notes](/notes/topics/t01_equality_hashing/t02_equality_hashing_notes.md) | [Exercises](/notes/topics/t01_equality_hashing/exercises/t02_equality_hashing_exercises.md) | None |
-
+| t02 | Equality & Hashing | [Notes](/notes/topics/t02_equality_hashing/t02_equality_hashing_notes.md) | [Exercises](/notes/topics/t02_equality_hashing/exercises/t02_equality_hashing_exercises.md) | None |
+| t03 | Ordering | [Notes](/notes/topics/t03_ordering/t03_ordering_notes.md) | [Exercises](/notes/topics/t03_ordering/exercises/t03_ordering_exercises.md) | None |
 ---
 
 ## Folder Map

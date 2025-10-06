@@ -7,11 +7,11 @@
 ## How to run
 Each exercise assumes a package like:
 ```
-t02_equality_hashing.exercises.exNN_name
+t02_equality_hashing.exercises.exNN
 ```
 Create a class `Exercise` in that package with a static entry point:
 ```java
-package t02_equality_hashing.exercises.ex01_identity_vs_equality;
+package t02_equality_hashing.exercises.ex01;
 
 public final class Exercise {
     public static void run() {

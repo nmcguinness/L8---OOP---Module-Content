@@ -8,11 +8,11 @@
 ## How to run
 Each exercise assumes a package like:
 ```
-t01_arrays.exercises.exNN_name
+t01_arrays.exercises.exNN
 ```
 Create a class `Exercise` in that package with a static entry point:
 ```java
-package t01_arrays.exercises.ex01_basics;
+package t01_arrays.exercises.ex01;
 
 public final class Exercise {
     public static void run() {
