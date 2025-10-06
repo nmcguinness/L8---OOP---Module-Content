@@ -1,5 +1,4 @@
-# COMP C8Z03 — Object-Oriented Programming  
-## Exercise: Array of Suspects - Crime License Plate Hunt
+## Challenge Exercise: Array of Suspects - Crime License Plate Hunt
 
 ### Scenario
 A tollbooth operator saw a suspicious car passing through the toll booth moments after a crime in the area. Strangely, they remember:
