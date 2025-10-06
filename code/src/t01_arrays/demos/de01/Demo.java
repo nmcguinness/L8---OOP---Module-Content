@@ -42,6 +42,9 @@ public class Demo
 
     public static float standardDeviation(int[] nums)
     {
+        if(nums == null || nums.length == 0)  //A
+            return 0;     //throw exception
+
         //get average
         float average = average(nums);
 
@@ -53,10 +56,11 @@ public class Demo
         }
 
         //divide by N-1
-        sumOfDifferences =  sumOfDifferences/(nums.length-1);
+        sumOfDifferences /=  (nums.length-1);
 
         //sqrt and return
-        return (float)Math.sqrt(sumOfDifferences);
+        float result = (float)Math.sqrt(sumOfDifferences);
+        return result;
     }
 
 }
