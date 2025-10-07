@@ -3,13 +3,15 @@ title: "Ordering in Java — Comparable & Comparator"
 subtitle: "COMP C8Z03 — Year 2 OOP"
 description: "A practical introduction using explicit Comparator classes and anonymous classes. ArrayList-only; ends with chaining user-defined comparators."
 created: 2025-10-06
-version: "v1.2"
+version: 1.0
+authors: ["Teaching Team"]
 tags: [java, ordering, sorting, comparable, comparator, arraylist]
 ---
 
-# Ordering in Java — Comparable & Comparator
+# Ordering — Comparable & Comparator
 
-> Prereqs: Classes/objects; Strings; basic ArrayList usage; loops. 
+> **Prequisities:**
+> - Classes/objects; Strings; basic ArrayList usage; loops 
 
 ---
 
@@ -187,3 +189,14 @@ class DemoComparatorC {
 
 - For one of your project classes, write a named Comparator class. What is the primary field and at least one tie-breaker?
 - What class in a project (if any) should define a natural order using Comparable?
+
+## Lesson Context 
+```yaml
+previous_lesson:
+  topic_code: t04_collections_2   # Collections II: LinkedList & iteration patterns
+  domain_emphasis: Balanced
+
+this_lesson:
+  primary_domain_emphasis: Balanced
+  difficulty_tier: Intermediate
+```

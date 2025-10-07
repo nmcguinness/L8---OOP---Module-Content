@@ -3,13 +3,15 @@ title: "Equality & Hashing in Java — Foundations"
 subtitle: "COMP C8Z03 — Year 2 OOP"
 description: "A practical introduction to identity vs value equality, the equals/hashCode contract, and how hashing works — without using collection types yet."
 created: 2025-10-06
-version: "v1.1"
+version: 1.0
+authors: ["Teaching Team"]
 tags: [java, equality, hashing, equals, hashcode]
 ---
 
-# Equality & Hashing in Java — Foundations
+# Equality & Hashing in Java
 
-> Prereqs: Classes/objects; Strings; basic method overriding.
+> **Prequisities:**
+> - Classes/objects; Strings; basic method overriding.
 
 ---
 
@@ -262,6 +264,20 @@ public class Demo {
 - Which types in your current codebase should behave like **values** (same data ⇒ equal)?  
 - Which fields define identity for those types? Should they be immutable?  
 - Where might a hashed lookup table (covered next) be useful in your project?
+
+---
+
+## Lesson Context 
+
+```yaml
+previous_lesson:
+  topic_code: t01_arrays
+  domain_emphasis: Balanced
+
+this_lesson:
+  primary_domain_emphasis: Balanced
+  difficulty_tier: Foundation
+```
 
 ---
 

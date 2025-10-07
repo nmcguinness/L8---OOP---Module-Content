@@ -3,13 +3,15 @@ title: "Arrays (1D & 2D)"
 subtitle: "COMP C8Z03 — Year 2 OOP"
 description: "Introduction to Java arrays: creating and indexing 1D/2D arrays, iterating with loops, common patterns (min/max, count, search), bounds checks, and typical pitfalls."
 created: 2025-10-01
-version: "v1.0"
+version: 1.0
+authors: ["Teaching Team"]
 tags: [java, arrays, 1d, 2d, loops, indexing, debugging]
 ---
 
 
 # Arrays (1D & 2D)
-> Prereqs: variables, `if`, loops, simple methods  
+> **Prequisities:** 
+> - variables, `if`, loops, simple methods  
 
 ---
 
@@ -25,7 +27,7 @@ A quick summary of what **you** should be able to do after this lesson:
 
 ---
 
-## Core Ideas — 1D Arrays (step by step)
+## Core Ideas — 1D Arrays
 
 ### 1) Create
 ```java
@@ -322,3 +324,14 @@ static void print2D(int[][] g) {
 - What naming choice did you change to make your code clearer? Why is the new name better for a future reader?
 - If you had to test your `min`, `indexOf`, or `find2D` methods, what **3 test cases** would you start with and why?
 
+## Lesson Context 
+
+```yaml
+previous_lesson:
+  topic_code: none
+  domain_emphasis: Balanced
+
+this_lesson:
+  primary_domain_emphasis: Balanced
+  difficulty_tier: Foundation
+```

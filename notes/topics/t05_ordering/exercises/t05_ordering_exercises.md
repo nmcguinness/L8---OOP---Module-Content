@@ -1,20 +1,16 @@
 
 # Ordering — Exercises (Comparable & Comparator) 
 
-> These exercises match the lesson **Ordering in Java — Comparable & Comparator (No Lambdas)**. 
-
-> You will write **named Comparator classes** or **anonymous classes** (no lambdas or method references). 
-
-> Keep your lists short so you can quickly see the effect of sorting.
+> These exercises match the lesson **Ordering in Java — Comparable & Comparator (No Lambdas)**. You will write **named Comparator classes** or **anonymous classes**.  Keep your lists short so you can quickly see the effect of sorting.
 
 ## How to run
 Create a package for each exercise:
 ```
-t03_ordering.exercises.exNN
+t05_ordering.exercises.exNN
 ```
 Each package should contain an `Exercise` class with a method you can call from `Main`:
 ```java
-package t03_ordering.exercises.ex01;
+package t05_ordering.exercises.ex01;
 
 public final class Exercise {
     public static void run() {
