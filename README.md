@@ -12,7 +12,7 @@ This space holds your weekly topics, exercises, shared resources, and assessment
 | t02 | Equality & Hashing | [Notes](/notes/topics/t02_equality_hashing/t02_equality_hashing_notes.md) | [Exercises](/notes/topics/t02_equality_hashing/exercises/t02_equality_hashing_exercises.md) | None |
 | t03 | Collections 1: ArrayList | [Notes](/notes/topics/t03_collections_1/t03_collections_1_notes.md) | [Exercise](/notes/topics/t03_collections_1/exercises/t03_collections_1_exercises.md) | None |
 | t04 | Collections 2: LinkedList & iteration patterns |[Notes](/notes/topics/t04_collections_2/t04_collections_2_notes.md) | [Exercise](/notes/topics/t04_collections_2/exercises/t04_collections_2_exercises.md) | None |
-| t05 | Ordering | [Notes](/notes/topics/t05_ordering/t05_ordering_notes.md) | [Notes](/notes/topics/t05_ordering/exercises/t05_ordering_exercises.md) | None |
+| t05 | Ordering | [Notes](/notes/topics/t05_ordering/t05_ordering_notes.md) | [Exercises](/notes/topics/t05_ordering/exercises/t05_ordering_exercises.md) | None |
 ---
 
 ## Folder Map
