@@ -226,7 +226,7 @@ class Backlog {
 ## Lesson Context 
 ```yaml
 previous_lesson:
-  topic_code: t02_equality_hashing
+  topic_code: t02_ordering_notes
   domain_emphasis: Balanced
 
 this_lesson:

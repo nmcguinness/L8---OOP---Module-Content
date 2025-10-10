@@ -193,7 +193,7 @@ class DemoComparatorC {
 ## Lesson Context 
 ```yaml
 previous_lesson:
-  topic_code: t04_collections_2   # Collections II: LinkedList & iteration patterns
+  topic_code: t01_arrays_notes  
   domain_emphasis: Balanced
 
 this_lesson:

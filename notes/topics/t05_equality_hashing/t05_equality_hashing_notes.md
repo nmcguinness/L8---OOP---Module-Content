@@ -271,7 +271,7 @@ public class Demo {
 
 ```yaml
 previous_lesson:
-  topic_code: t01_arrays
+  topic_code: t04_collections_2_notes
   domain_emphasis: Balanced
 
 this_lesson:
