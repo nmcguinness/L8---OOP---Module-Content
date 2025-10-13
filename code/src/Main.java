@@ -20,6 +20,11 @@ public class Main {
     public void run_t01_Arrays() {
         System.out.println("Demo 01...\n");
         t01_arrays.demos.de01.Demo.run();
+
+        System.out.println("Demo 02...\n");
+        t01_arrays.demos.de02.Demo.run();
+
+
     }
 
     public void runChallengeExercises()
