@@ -42,11 +42,16 @@ public class Exercise {
         int[] scores = {66, 7, 12, 15, 19, 33};
 
         try {
-            int[] bins = histogram(scores, 5);
+            int[] bins = histogram(scores, 0);
             printHistogram(bins);
-        }catch(Exception e)
+        }
+        catch(ArithmeticException e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Arithmetic: " + e.getMessage());
+        }
+        finally
+        {
+            System.out.println("Something bad happened!");
         }
     }
 }
