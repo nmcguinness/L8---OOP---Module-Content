@@ -1,5 +1,7 @@
 package t01_arrays.demos.de02;
 
+import java.util.ArrayList;
+
 public class Demo {
     public static void run()
     {
@@ -31,6 +33,13 @@ public class Demo {
         };
 
         print(students, "*** Names array ***");
+
+        Integer[][] myIntObjArray = {
+                {1,2,4,2},
+                {45,7,8,4},
+                {32,3,5,6,7}};
+        print(myIntObjArray, "Bla bla");
+         Double[][] myVars = {{23.4}, {567.34, 3434.8}};
     }
 
     /// Converts array from 2D to 1D
@@ -58,10 +67,17 @@ public class Demo {
         return flattened;
     }
 
+    public static <E> void print(ArrayList<E> stdList)
+    {
+
+    }
+
+
 
     // generic method in java - see w3schools
     public static <T> void print(T [][] array, String headerStr)
     {
+
         if(array == null || array.length == 0)
             return;
 
