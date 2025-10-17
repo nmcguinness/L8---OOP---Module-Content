@@ -12,32 +12,6 @@ license: CC BY-NC-SA 4.0
 file_name: defensive-coding-notes.md
 ---
 
-<style>
-/* Generic table styling */
-table { border-collapse: collapse; width: 100%; }
-th, td { padding: .55rem .7rem; border: 1px solid #e5e7eb; }
-
-/* Header color */
-thead th { background: #6ec56eff; color: #fff; }
-
-/* Justify normal body text (not headings) */
-p { text-align: justify; }
-
-/* Optional: better spacing & hyphenation */
-p {
-  hyphens: auto;          /* enable smart hyphenation */
-  overflow-wrap: anywhere;/* avoid overflow on long words/URLs */
-  line-height: 1.6;
-}
-
-/* Don’t justify code blocks/lists by mistake */
-pre, code, kbd, samp, li { text-align: left; }
-
-/* Zebra striping (even rows) 
-tbody tr:nth-child(even) { background: #f3f3f3ff; }
-*/
-</style>
-
 # Defensive Coding in Java
 
 ## Overview
