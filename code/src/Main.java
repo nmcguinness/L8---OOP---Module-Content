@@ -10,25 +10,15 @@ public class Main {
 
     public void run() {
 
-        System.out.println("Topics...\n");
-        run_t01_Arrays();
+//        System.out.println("******************** Topic:t01 ********************\n");
+//        run_t01_Arrays();
+//
+//        System.out.println("******************** Challenge Exercises:t01 ********************\n");
+//        runChallengeExercises();
 
-       /* System.out.println("Challenge Exercises...\n");
-        runChallengeExercises();*/
-    }
+          System.out.println("******************** Topic:t02 ********************\n");
+          run_t02_Ordering();
 
-    public void run_t01_Arrays() {
-        System.out.println("Demo 01...\n");
-        t01_arrays.demos.de01.Demo.run();
-
-        System.out.println("Demo 02...\n");
-        t01_arrays.demos.de02.Demo.run();
-
-        System.out.println("Exercise 01...\n");
-        t01_arrays.exercises.ex01.Exercise.run();
-
-        System.out.println("Exercise 04...\n");
-        t01_arrays.exercises.ex04.Exercise.run();
     }
 
     public void runChallengeExercises()
@@ -36,4 +26,39 @@ public class Main {
         System.out.println("Challenge Exercise 01...");
         t01_arrays.challenges.ce01.Exercise.run();
     }
+
+    public void run_t01_Arrays() {
+        System.out.println("********** Demo 01 **********\n");
+        t01_arrays.demos.de01.Demo.run();
+
+        System.out.println("********** Demo 02 **********\n");
+        t01_arrays.demos.de02.Demo.run();
+
+        System.out.println("********** Exercise 01 **********\n");
+        t01_arrays.exercises.ex01.Exercise.run();
+
+        System.out.println("********** Exercise 02 **********\n");
+        t01_arrays.exercises.ex02.Exercise.run();
+
+        System.out.println("********** Exercise 03 **********\n");
+        t01_arrays.exercises.ex03.Exercise.run();
+
+        System.out.println("********** Exercise 04 **********\n");
+        t01_arrays.exercises.ex04.Exercise.run();
+
+        System.out.println("********** Exercise 08 **********\n");
+        t01_arrays.exercises.ex08.Exercise.run();
+
+        System.out.println("********** Exercise 09 **********\n");
+        t01_arrays.exercises.ex09.Exercise.run();
+
+        System.out.println("********** Exercise 11 **********\n");
+        t01_arrays.exercises.ex11.Exercise.run();
+    }
+
+    public void run_t02_Ordering()
+    {
+
+    }
+
 }
