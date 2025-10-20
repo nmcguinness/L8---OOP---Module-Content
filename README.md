@@ -4,6 +4,12 @@ This space holds your weekly topics, exercises, shared resources, and assessment
 
 ---
 
+| CA                   | Summary                                                                                                                                                                                                                                               | Brief                                                                                               |
+| :------------------------ | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------- |
+| **GCA1** | Work in **pairs** to design and implement a small records system. Load a large CSV from GitHub, parse to in-memory structures, support searching/filtering/ordering and simple reporting. | [CA brief](/notes/syllabus/assessments/briefs/2025-26-l8-s2-oop-gca1.md) |
+
+---
+
 ## Module Content
 
 | Topic | Description | Notes | Exercises | Challenge Exercises |
