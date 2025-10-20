@@ -10,7 +10,7 @@ public class Main {
     public void run() {
 
         // 1 = t01 Arrays, 10 = t01 Challenge Exercises, 2 = t02 Ordering
-        int selection = 1; // <— set which block to run
+        int selection = 2; // <— set which block to run
 
         switch (selection) {
             case 1:
@@ -71,7 +71,8 @@ public class Main {
 
     public void run_t02_Ordering()
     {
-
+        System.out.println("********** Demo 01 **********\n");
+        t02_ordering.demos.de01.Demo.run();
     }
 
 }
