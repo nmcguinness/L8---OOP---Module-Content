@@ -9,17 +9,31 @@ public class Main {
     }
 
     public void run() {
+        // 1 = t01 Arrays, 10 = t01 Challenge Exercises, 2 = t02 Ordering
+        int selection = 1; // <— set which block to run
 
-//        System.out.println("******************** Topic:t01 ********************\n");
-//        run_t01_Arrays();
-//
-//        System.out.println("******************** Challenge Exercises:t01 ********************\n");
-//        runChallengeExercises();
+        switch (selection) {
+            case 1:
+                System.out.println("******************** Topic:t01 ********************\n");
+                run_t01_Arrays();
+                break;
 
-          System.out.println("******************** Topic:t02 ********************\n");
-          run_t02_Ordering();
+            case 2:
+                System.out.println("******************** Topic:t02 ********************\n");
+                run_t02_Ordering();
+                break;
 
+            case 10:
+                System.out.println("******************** Challenge Exercises ********************\n");
+                runChallengeExercises();
+                break;
+
+            default:
+                System.out.println("No matching topic block for selection: " + selection);
+                break;
+        }
     }
+
 
     public void runChallengeExercises()
     {
