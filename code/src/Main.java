@@ -1,4 +1,3 @@
-import t01_arrays.demos.de01.Demo;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -9,6 +8,7 @@ public class Main {
     }
 
     public void run() {
+
         // 1 = t01 Arrays, 10 = t01 Challenge Exercises, 2 = t02 Ordering
         int selection = 1; // <— set which block to run
 
@@ -33,7 +33,6 @@ public class Main {
                 break;
         }
     }
-
 
     public void runChallengeExercises()
     {
