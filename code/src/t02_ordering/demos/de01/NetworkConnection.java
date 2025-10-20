@@ -4,12 +4,23 @@ package t02_ordering.demos.de01;
 /*
  Represents network connection. It is IMMUTABLE.
  */
-public class NetworkConnection implements Comparable<NetworkConnection>
+public class NetworkConnection //implements Comparable<NetworkConnection>
 {
+    /*
     @Override
     public int compareTo(NetworkConnection o) {
-        return this.port - o.getPort();  //80 - 8080
+
+       // return Float.compare(this.pingMs, o.pingMs);
+
+        float delta = this.pingMs - o.getPingMs();
+        if(delta == 0)
+            return 0;
+        else if (delta > 0)
+            return 1;
+        else
+            return -1;
     }
+*/
 
     //region Fields
     private String ipAddress;

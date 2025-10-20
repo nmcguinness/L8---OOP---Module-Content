@@ -34,9 +34,9 @@ tags: [java, ordering, sorting, comparable, comparator, arraylist]
 import java.util.ArrayList;
 import java.util.List;
 
-final class Score implements Comparable<Score> {
-    private final String player;
-    private final int value;
+ class Score implements Comparable<Score> {
+    private String player;
+    private int value;
 
     public Score(String player, int value) {
         this.player = player;
@@ -86,17 +86,17 @@ We keep the class unchanged and supply an external ordering.
 ```java
 import java.util.Comparator;
 
-final class NameAscComparator implements Comparator<Product> {
+ class NameAscComparator implements Comparator<Product> {
     @Override
     public int compare(Product a, Product b) {
         return a.name().compareTo(b.name());
     }
 }
 
-final class Product {
-    private final String name;
-    private final double price;
-    private final double rating;
+ class Product {
+    private String name;
+    private double price;
+    private double rating;
 
     public Product(String name, double price, double rating) {
         this.name = name; this.price = price; this.rating = rating;
@@ -150,7 +150,7 @@ class DemoComparatorB {
 Order by rating descending, then by name ascending.
 
 ```java
-final class RatingDescThenNameAsc implements java.util.Comparator<Product> {
+ class RatingDescThenNameAsc implements java.util.Comparator<Product> {
     @Override
     public int compare(Product a, Product b) {
         // rating descending
