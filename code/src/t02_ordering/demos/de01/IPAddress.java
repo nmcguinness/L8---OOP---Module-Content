@@ -2,19 +2,59 @@ package t02_ordering.demos.de01;
 
 public class IPAddress
 {
-    //192.168.10.54
+    private static final String DELIMITER = "."; //static == shared
     private int ipA, ipB, ipC, ipD;
 
     public IPAddress(String strIPAddress)
     {
         strIPAddress.trim(); //white space
-        String[] parts = strIPAddress.split(".");
+        String[] parts = strIPAddress.split(DELIMITER);
         initializeParts(parts);
+    }
+
+    @Override
+    public String toString()
+    {
+        return "IPAddress[" + ipA + "."
+                            + ipB + "."
+                            + ipC + "."
+                            + ipD + "]";
     }
 
     private void initializeParts(String[] parts)
     {
-        //if int, then assign to part, if not then assign default (throw exception)
+        if(parts == null || parts.length != 4)
+            return;
+
+        this.ipA = clampIP(Integer.parseInt(parts[0]));
+        this.ipB = clampIP(Integer.parseInt(parts[1]));
+        this.ipC = clampIP(Integer.parseInt(parts[2]));
+        this.ipD = clampIP(Integer.parseInt(parts[3]));
+    }
+
+    public int clampIP(int value)
+    {
+        /*
+        boolean canEnter = age > 21 ? true : false;
+        String name = "jack";
+        String str = name.length() != 0 ? "valid" : "invalid";
+        ternary (boolean expression) ? <true value> : <false value>
+         */
+        return (value >= 0 && value <= 255) ? value : 0;
+
+        /*
+        * Unary operators:
+        *  ++, --
+        *
+        * Binary operators:
+        *   * / + - %
+        *   3 + 2
+        *   3, 2 are operands
+        *   + is the operator
+        *
+        * Ternary operators:
+        *   (boolean exp) ? <true> : <false>
+        * */
     }
 
     //toString
