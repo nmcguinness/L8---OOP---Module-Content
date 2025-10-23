@@ -13,6 +13,6 @@ public class PortComparator implements Comparator<NetworkConnection> {
 
     @Override
     public int compare(NetworkConnection o1, NetworkConnection o2) {
-        return sortDirection * Float.compare(o1.getPort(), o2.getPort());
+        return 0;
     }
 }

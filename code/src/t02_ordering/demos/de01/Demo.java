@@ -8,46 +8,103 @@ public class Demo {
 
     public static void run()
     {
-        //ordering = sorting (one or more fields)
-        ArrayList<NetworkConnection> netList = new ArrayList<>(
-          List.of(
-                  new NetworkConnection("A", 8080, "HTTPS"),
-                  new NetworkConnection("Z", 20, "FTP"),
-                  new NetworkConnection("R", 114, "SMTP"),
-                  new NetworkConnection("Q", 80, "HTTP"),
-                  new NetworkConnection("B", 21, "FTP")
-          )
-        );
+        NetworkConnection nc1 = new NetworkConnection(
+                ProtocolType.HTTP,
+                new IPAddress("192.1.2.3"),
+                TransportProtocolType.TCP);
 
-        //unsorted
-        System.out.println("Unsorted...");
-        for(NetworkConnection c: netList)
-            System.out.println(c);
+        System.out.println(nc1);
 
-        //sort by port comparator defined as external comparator
-        System.out.println("Port: sort by external comparator...");
-        var portComp = new PortComparator(-1);
-        netList.sort(portComp);
-        for(NetworkConnection c: netList)
-            System.out.println(c);
+        ArrayList<IPAddress> ipList = new ArrayList<>();
+        ipList.add(new IPAddress("192.1.2.3"));
+        ipList.add(new IPAddress("168.1.2.3"));
+        ipList.add(new IPAddress("192.1.2.3"));
+        ipList.add(new IPAddress("192.10.1.3"));
+        ipList.add(new IPAddress("192.10.5.3"));
+        ipList.add(new IPAddress("168.1.2.3"));
 
-        //sort by port comparator defined as an anonymous comparator
-        System.out.println("Port: sort by external comparator as an anonymous comparator...");
-        netList.sort(new Comparator<NetworkConnection>() {
+        //version 1
+        Comparator<IPAddress> compIP1 = new Comparator<IPAddress>() {
+            public int compare(IPAddress o1, IPAddress o2) {
+                return o1.getIpA() - o2.getIpA();
+            }
+        };
+        ipList.sort(compIP1);
+
+        //version 2 - lambda expression form
+        ipList.sort((IPAddress a, IPAddress b) -> a.getIpA() - b.getIpA());
+        System.out.println(ipList);
+
+        //version 3 - anonymous function
+        ipList.sort(new Comparator<IPAddress>() {
             @Override
-            public int compare(NetworkConnection o1, NetworkConnection o2) {
-                return Float.compare(o1.getPort(), o2.getPort());
+            public int compare(IPAddress o1, IPAddress o2) {
+                return o1.getIpA() - o2.getIpB();
             }
         });
-        for(NetworkConnection c: netList)
-            System.out.println(c);
 
-        //sort by port comparator defined as a lambda expression
-        System.out.println("Port: sort by external comparator as lambda expression...");
-        netList.sort((NetworkConnection a, NetworkConnection b) -> Float.compare(a.getPort(), b.getPort()));
-        for(NetworkConnection c: netList)
-            System.out.println(c);
+        //version 4 - user-defined class-level method
+        ipList.sort(Demo::mySorter);
+        System.out.println(ipList);
 
+        //version 5
+        ipList.sort( Comparator.comparing(IPAddress::getIpA)
+                .thenComparing(IPAddress::getIpB)
+                .thenComparing(IPAddress::getIpC)
+                .thenComparing(IPAddress::getIpD));
 
+        //interlude for a better print
+        ipList.forEach((IPAddress ip) -> System.out.println(ip));
+
+//        for(IPAddress ip : ipList)
+//            System.out.println(ip);
+//
+//        for(int i = 0; i < ipList.size(); i++)
+//            System.out.println(ipList.get(i));
+
+//        //ordering = sorting (one or more fields)
+//        ArrayList<NetworkConnection> netList = new ArrayList<>(
+//          List.of(
+//                  new NetworkConnection("A", 8080, "HTTPS"),
+//                  new NetworkConnection("Z", 20, "FTP"),
+//                  new NetworkConnection("R", 114, "SMTP"),
+//                  new NetworkConnection("Q", 80, "HTTP"),
+//                  new NetworkConnection("B", 21, "FTP")
+//          )
+//        );
+//
+//        //unsorted
+//        System.out.println("Unsorted...");
+//        for(NetworkConnection c: netList)
+//            System.out.println(c);
+//
+//        //sort by port comparator defined as external comparator
+//        System.out.println("Port: sort by external comparator...");
+//        var portComp = new PortComparator(-1);
+//        netList.sort(portComp);
+//        for(NetworkConnection c: netList)
+//            System.out.println(c);
+//
+//        //sort by port comparator defined as an anonymous comparator
+//        System.out.println("Port: sort by external comparator as an anonymous comparator...");
+//        netList.sort(new Comparator<NetworkConnection>() {
+//            @Override
+//            public int compare(NetworkConnection o1, NetworkConnection o2) {
+//                return Float.compare(o1.getPort(), o2.getPort());
+//            }
+//        });
+//        for(NetworkConnection c: netList)
+//            System.out.println(c);
+//
+//        //sort by port comparator defined as a lambda expression
+//        System.out.println("Port: sort by external comparator as lambda expression...");
+//        netList.sort((NetworkConnection a, NetworkConnection b) -> Float.compare(a.getPort(), b.getPort()));
+//        for(NetworkConnection c: netList)
+//            System.out.println(c);
+    }
+
+    public static int mySorter(IPAddress a, IPAddress b)
+    {
+        return a.getIpA() - b.getIpA();
     }
 }

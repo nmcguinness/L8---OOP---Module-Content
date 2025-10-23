@@ -3,12 +3,32 @@ package t02_ordering.demos.de01;
 public class IPAddress
 {
     private static final String DELIMITER = "."; //static == shared
-    private int ipA, ipB, ipC, ipD;
+    private int ipA;
+    private int ipB;
+
+    public int getIpD() {
+        return ipD;
+    }
+
+    public int getIpC() {
+        return ipC;
+    }
+
+    public int getIpB() {
+        return ipB;
+    }
+
+    public int getIpA() {
+        return ipA;
+    }
+
+    private int ipC;
+    private int ipD;
 
     public IPAddress(String strIPAddress)
     {
         strIPAddress.trim(); //white space
-        String[] parts = strIPAddress.split(DELIMITER);
+        String[] parts = strIPAddress.split("\\.");
         initializeParts(parts);
     }
 
