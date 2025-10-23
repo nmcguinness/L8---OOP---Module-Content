@@ -12,6 +12,9 @@ public class NetworkConnection
         this.protocolType = protocolType;
         this.ipAddress = ipAddress;
         this.transportProtocolType = transportProtocolType;
+
+        //TransportProtocolType.TCP => int => 4 bytes
+        //"TCP"                     => string => "TCP/0" => ASCII TABLE ==> 5 bytes
     }
 
     @Override
