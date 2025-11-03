@@ -26,8 +26,8 @@ A quick summary of what **you** should be able to do after this lesson:
 | Use | Construct and manipulate `ArrayList<T>` (`add`, `get`, `set`, `remove`, `addAll`, `toArray`). |
 | Use | Iterate with index `for`, enhanced `for`, and safely remove using an `Iterator`. |
 | Use | Convert between arrays and `ArrayList` and apply simple bulk operations. |
-| Analyze | Compare `ArrayList` vs `LinkedList` at a high level (random access, insertion/removal costs). |
-| Debug | Prevent and fix common issues (`IndexOutOfBoundsException`, `ConcurrentModificationException`, null handling). |
+| Use | Use Comparing and lambda functions to sort and sort by tie-breakers |
+| Debug | Prevent and fix common issues (`IndexOutOfBoundsException`, null handling). |
 
 ---
 
