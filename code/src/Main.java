@@ -21,7 +21,7 @@ public class Main {
             case 2:
                 System.out.println("******************** Topic:t02 ********************\n");
                 run_t02_Ordering();
-                
+
                 break;
 
             case 10:

@@ -24,6 +24,15 @@ This space holds your weekly topics, exercises, shared resources, and assessment
 
 ---
 
+## Cheatsheets
+
+| Topic | Description |
+|:--|:--|
+| [Writing JUnit tests in Intellij](notes/shared/cheat%20sheets/cheatsheet_junit_in_intellij.md) | A practical JUnit 5 “Snippet Gallery” for students: copy-pasteable assertion examples with brief explanations, plus real-world helper classes (`PricingUtils`, `DataUtils`) and complete test classes in the appendix. It also includes quick setup tips for adding JUnit to Maven/IntelliJ.
+|
+
+---
+
 ## Folder Map
 
 ```text
@@ -40,9 +49,8 @@ This space holds your weekly topics, exercises, shared resources, and assessment
    ├─ shared/
    │  ├─ cheat sheets/
    │  ├─ general/
-   │  └─ mind maps/
-   ├─ syllabus/
-   ├─ assessments/
+   │  └─ mind maps/                        
+   ├─ assessments/                    # continuous assessment documents for the module
    │  └─ briefs/
    └─ topics/                         # notes, exercises, and challenges exercises for the module
 ```
@@ -50,7 +58,7 @@ This space holds your weekly topics, exercises, shared resources, and assessment
 ---
 
 ## How to use this repo
-- Start with **syllabus/** to understand *what* we assess and *why*.
+- Start with the official [module descriptor](https://courses.dkit.ie/index.cfm/page/module/moduleId/55497/deliveryperiodid/1066) to understand *what* we cover in this module.
 - Check **assessments/briefs/** for the current CA/ICA brief and rubric.
 - Each week, open the matching folder in **topics/** (e.g., `t01-arrays/`):
   - Work through **exercises/** first (core skills), then try **challenges/** (apply + extend).
