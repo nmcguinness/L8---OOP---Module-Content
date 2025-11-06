@@ -9,8 +9,8 @@ public class Main {
 
     public void run() {
 
-        // 1 = t01 Arrays, 10 = t01 Challenge Exercises, 2 = t02 Ordering
-        int selection = 2; // <— set which block to run
+        // 1 = t01 Arrays, 2 = t02 Ordering, etc
+        int selection = 3; // <— set which block to run
 
         switch (selection) {
             case 1:
