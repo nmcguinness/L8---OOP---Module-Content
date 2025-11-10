@@ -245,7 +245,7 @@ void clamp_acceptsOnlyRange(int v) {
 
 ---
 
-# Appendix — Sample Test Class Scaffold (no `@Nested`)
+# Appendix — Sample Test Class 
 
 ```java
 package example;
