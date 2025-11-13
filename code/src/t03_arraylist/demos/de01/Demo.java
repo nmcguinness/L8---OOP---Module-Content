@@ -22,6 +22,11 @@ public class Demo {
         System.out.println("Return a list, use traditional for loop...");
         ArrayList<String> results2 = prettifyList_ver2(nList);
         results2.forEach((String s) -> System.out.println(s));
+
+        System.out.println("Mutate a list, use traditional for loop...");
+        prettifyList_ver3(nList);
+        nList.forEach((String s) -> System.out.println(s));
+
     }
     public ArrayList<String> prettifyList_ver1(ArrayList<String> list)      /// eg "BOB" -> "Bob"
     {
@@ -49,6 +54,20 @@ public class Demo {
             prettyList.add(finalName);
         }
         return prettyList.isEmpty() ? null : prettyList;
+    }
+
+    public void prettifyList_ver3(ArrayList<String> list)      /// eg "BOB" -> "Bob"
+    {
+        String finalName = "";
+        String s = "";
+        for(int i = 0; i < list.size(); i++)
+        {
+            s = list.get(i);
+            s = s.trim();
+            finalName = s.substring(0,1).toUpperCase()
+                    + s.substring(1).toLowerCase();
+            list.set(i, finalName);
+        }
     }
 
 }
