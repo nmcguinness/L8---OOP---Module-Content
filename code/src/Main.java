@@ -105,6 +105,9 @@ public class Main {
     public void run_t03_ArrayList() {
         System.out.println("\n********** Demo 01 - ArrayList basics **********\n");
         t03_arraylist.demos.de01.Demo.run();
+
+        System.out.println("\n********** Demo 02 - ArrayList basics **********\n");
+        t03_arraylist.demos.de02.Demo.run();
     }
 
 }
