@@ -155,7 +155,11 @@ var it = letters.listIterator();
 char prev = 0;
 while (it.hasNext()) {
     char cur = it.next();
-    if (prev != 0 && cur != prev) it.add('|'); // mark boundary
+    if (prev != 0 && cur != prev) {
+        it.previous();    // move back to insertion point
+        it.add('|');     // mark boundary by inserting bar character
+        iter.next();
+    }
     prev = cur;
 }
 // Example output list: a a a | b b | c c
