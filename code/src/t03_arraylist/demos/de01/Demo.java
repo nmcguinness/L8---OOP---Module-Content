@@ -96,7 +96,7 @@ public class Demo {
             System.out.println("This is unlikely, but it keeps the compiler honest.");
         }
 
-        return durationNanos / 1_000_000.0;
+        return durationNanos / 1_000_000.0;    //5/9 = 0
     }
 
     /**
@@ -169,7 +169,7 @@ public class Demo {
      */
     public ArrayList<String> prettifyList_ver2(ArrayList<String> list) {
         ArrayList<String> result = new ArrayList<>(list.size());
-        for (String name : list) {
+        for (String name : list) {   //read-only
             result.add(prettify(name));
         }
         return result;
@@ -195,7 +195,7 @@ public class Demo {
         ListIterator<String> it = list.listIterator();
         while (it.hasNext()) {
             String raw = it.next();
-            it.set(prettify(raw));
+            it.set(prettify(raw));  //get + set in original list => mutating
         }
         return list;
     }
