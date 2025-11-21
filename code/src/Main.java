@@ -10,7 +10,7 @@ public class Main {
     public void run() {
 
         // 1 = t01 Arrays, 2 = t02 Ordering, etc
-        int selection = 3; // <— set which block to run
+        int selection = 5; // <— set which block to run
 
         switch (selection) {
             case 1:
@@ -26,6 +26,16 @@ public class Main {
             case 3:
                 System.out.println("\n******************** Topic:t03 - arraylist ********************\n");
                 run_t03_ArrayList();
+                break;
+
+            case 4:
+                System.out.println("\n******************** Topic:t04 - linkedlist ********************\n");
+                run_t04_LinkedList();
+                break;
+
+            case 5:
+                System.out.println("\n******************** Topic:t05 - equality & hashing ********************\n");
+                run_t05_EqualityHashing();
                 break;
 
             case 10:
@@ -103,14 +113,105 @@ public class Main {
     }
 
     public void run_t03_ArrayList() {
-       // System.out.println("\n********** Demo 01 - ArrayList basics **********\n");
-       // t03_arraylist.demos.de01.Demo.run();
+        System.out.println("\n********** Demo 01 - ArrayList basics **********\n");
+        t03_arraylist.demos.de01.Demo.run();
 
-        //System.out.println("\n********** Demo 02 - ArrayList basics **********\n");
-        //t03_arraylist.demos.de02.Demo.run();
+        System.out.println("\n********** Demo 02 - ArrayList basics **********\n");
+        t03_arraylist.demos.de02.Demo.run();
 
         System.out.println("\n********** Demo 03 - ArrayList basics **********\n");
         t03_arraylist.demos.de03.Demo.run();
+
+        System.out.println("\n********** Exercise 01 — Basic ArrayList ops **********\n");
+        t03_arraylist.exercises.ex01.Exercise.run();
+
+        System.out.println("\n********** Exercise 02 — Convert between array & list **********\n");
+        t03_arraylist.exercises.ex02.Exercise.run();
+
+        System.out.println("\n********** Exercise 03 — Remove even numbers (iterator) **********\n");
+        t03_arraylist.exercises.ex03.Exercise.run();
+
+        System.out.println("\n********** Exercise 04 — Unique values, preserve order **********\n");
+        t03_arraylist.exercises.ex04.Exercise.run();
+
+        System.out.println("\n********** Exercise 05 — Time appends vs front inserts **********\n");
+        t03_arraylist.exercises.ex05.Exercise.run();
+
+        System.out.println("\n********** Exercise 06 — Find & update task by title **********\n");
+        t03_arraylist.exercises.ex06.Exercise.run();
+
+        System.out.println("\n********** Exercise 07 — Split into evens and odds **********\n");
+        t03_arraylist.exercises.ex07.Exercise.run();
+
+        System.out.println("\n********** Exercise 08 — Merge two sorted lists **********\n");
+        t03_arraylist.exercises.ex08.Exercise.run();
+
+        System.out.println("\n********** Exercise 09 — Group names by first letter **********\n");
+        t03_arraylist.exercises.ex09.Exercise.run();
+
+        System.out.println("\n********** Exercise 10 — Simple high-score leaderboard **********\n");
+        t03_arraylist.exercises.ex10.Exercise.run();
+    }
+
+    public void run_t04_LinkedList() {
+
+        System.out.println("\n********** Exercise 01 — Remove non-positive values **********\n");
+        t04_linkedlist.exercises.ex01.Exercise.run();
+
+        System.out.println("\n********** Exercise 02 — Insert group separators **********\n");
+        t04_linkedlist.exercises.ex02.Exercise.run();
+
+        System.out.println("\n********** Exercise 03 — Iterate forwards and backwards **********\n");
+        t04_linkedlist.exercises.ex03.Exercise.run();
+
+        System.out.println("\n********** Exercise 04 — Job queue with inserted tasks **********\n");
+        t04_linkedlist.exercises.ex04.Exercise.run();
+
+        System.out.println("\n********** Exercise 05 — Undo/redo using two stacks **********\n");
+        t04_linkedlist.exercises.ex05.Exercise.run();
+
+        System.out.println("\n********** Exercise 06 — Event list with inline edits **********\n");
+        t04_linkedlist.exercises.ex06.Exercise.run();
+
+        System.out.println("\n********** Exercise 07 — Josephus survivor index **********\n");
+        t04_linkedlist.exercises.ex07.Exercise.run();
+
+        System.out.println("\n********** Exercise 08 — In-place merge of sorted lists **********\n");
+        t04_linkedlist.exercises.ex08.Exercise.run();
+
+        System.out.println("\n********** Exercise 09 — Sliding window maximum **********\n");
+        t04_linkedlist.exercises.ex09.Exercise.run();
+
+        System.out.println("\n********** Exercise 10 — Priority turn scheduler **********\n");
+        t04_linkedlist.exercises.ex10.Exercise.run();
+
+    }
+
+    public void run_t05_EqualityHashing() {
+
+        System.out.println("\n********** Exercise 01 — Identity vs value equality **********\n");
+        t05_equality_hashing.exercises.ex01.Exercise.run();
+
+        System.out.println("\n********** Exercise 02 — equals/hashCode contract **********\n");
+        t05_equality_hashing.exercises.ex02.Exercise.run();
+
+        System.out.println("\n********** Exercise 03 — Hand-calculating a string hash **********\n");
+        t05_equality_hashing.exercises.ex03.Exercise.run();
+
+        System.out.println("\n********** Exercise 04 — Combining field hashes **********\n");
+        t05_equality_hashing.exercises.ex04.Exercise.run();
+
+        System.out.println("\n********** Exercise 05 — From hash value to bucket index **********\n");
+        t05_equality_hashing.exercises.ex05.Exercise.run();
+
+        System.out.println("\n********** Exercise 06 — equals/hashCode for Customer **********\n");
+        t05_equality_hashing.exercises.ex06.Exercise.run();
+
+        System.out.println("\n********** Exercise 07 — Hash collisions with sum hash **********\n");
+        t05_equality_hashing.exercises.ex07.Exercise.run();
+
+        System.out.println("\n********** Exercise 08 — Mutable keys in hashed collections **********\n");
+        t05_equality_hashing.exercises.ex08.Exercise.run();
     }
 
 }

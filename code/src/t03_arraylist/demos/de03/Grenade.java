@@ -36,6 +36,7 @@ public class Grenade extends Weapon{
         return "Grenade{" +
                 "explosiveType=" + explosiveType +
                 ", range=" + range +
+                "," + super.toString() +
                 '}';
     }
 }

@@ -8,6 +8,7 @@ public class Weapon {
     private float cost;
     private float weight;
     private boolean isOnceOnly;
+    private WeaponType weaponType = WeaponType.Default;
 
     public Weapon(String make, String model, float calibre,
                   int clipSize, float cost, float weight) {
@@ -23,6 +24,14 @@ public class Weapon {
         this.cost = cost;
         this.weight = weight;
         this.isOnceOnly = isOnceOnly;
+    }
+
+    public WeaponType getWeaponType() {
+        return weaponType;
+    }
+
+    public void setWeaponType(WeaponType weaponType) {
+        this.weaponType = weaponType;
     }
 
     public boolean isOnceOnly() {
@@ -84,6 +93,7 @@ public class Weapon {
     @Override
     public String toString() {
         return "Weapon{" +
+                "type=`" + weaponType+ '\'' +
                 "make='" + make + '\'' +
                 ", model='" + model + '\'' +
                 ", calibre=" + calibre +

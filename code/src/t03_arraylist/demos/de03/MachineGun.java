@@ -50,7 +50,7 @@ public class MachineGun extends Weapon{
         return "MachineGun{" +
                 "recoilRate='" + recoilRate + '\'' +
                 "fireMode='" + fireMode + '\'' +
-                super.toString() +
+                "," + super.toString() +
                 "}";
     }
 }
