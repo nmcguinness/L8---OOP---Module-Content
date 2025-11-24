@@ -158,7 +158,7 @@ while (it.hasNext()) {
     if (prev != 0 && cur != prev) {
         it.previous();    // move back to insertion point
         it.add('|');     // mark boundary by inserting bar character
-        iter.next();
+        it.next();
     }
     prev = cur;
 }
