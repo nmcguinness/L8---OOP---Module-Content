@@ -10,7 +10,7 @@ public class Main {
     public void run() {
 
         // 1 = t01 Arrays, 2 = t02 Ordering, etc
-        int selection = 5; // <— set which block to run
+        int selection = 6; // <— set which block to run
 
         switch (selection) {
             case 1:
@@ -38,6 +38,11 @@ public class Main {
                 run_t05_EqualityHashing();
                 break;
 
+            case 6:
+                System.out.println("\n******************** Topic:t06 - Inheritance ********************\n");
+                run_t06_Inheritance();
+                break;
+
             case 10:
                 System.out.println("\n******************** Challenge Exercises ********************\n");
                 runChallengeExercises();
@@ -50,7 +55,7 @@ public class Main {
     }
 
     public void runChallengeExercises() {
-        System.out.println("Challenge Exercise 01...");
+        System.out.println("Challenge Exercise t01...");
         t01_arrays.challenges.ce01.Exercise.run();
     }
 
@@ -122,6 +127,9 @@ public class Main {
         System.out.println("\n********** Demo 03 - ArrayList basics **********\n");
         t03_arraylist.demos.de03.Demo.run();
 
+        System.out.println("\n********** Demo 04 - ArrayList basics **********\n");
+        t03_arraylist.demos.de04.Demo.run();
+
         System.out.println("\n********** Exercise 01 — Basic ArrayList ops **********\n");
         t03_arraylist.exercises.ex01.Exercise.run();
 
@@ -154,6 +162,12 @@ public class Main {
     }
 
     public void run_t04_LinkedList() {
+
+        System.out.println("\n********** Demo 01 — LinkedList basics **********\n");
+        t04_linkedlist.demos.de01.Demo.run();
+
+        System.out.println("\n********** Demo 02 — LinkedList basics **********\n");
+        t04_linkedlist.demos.de02.Demo.run();
 
         System.out.println("\n********** Exercise 01 — Remove non-positive values **********\n");
         t04_linkedlist.exercises.ex01.Exercise.run();
@@ -213,5 +227,28 @@ public class Main {
         System.out.println("\n********** Exercise 08 — Mutable keys in hashed collections **********\n");
         t05_equality_hashing.exercises.ex08.Exercise.run();
     }
+
+    public void run_t06_Inheritance() 
+    {
+
+    System.out.println("\n********** Exercise 01 — is-a vs has-a & AdminUser **********\n");
+    t06_inheritance.exercises.ex01.Exercise.run();
+
+    System.out.println("\n********** Exercise 02 — Basic Entity / Player / Enemy hierarchy **********\n");
+    t06_inheritance.exercises.ex02.Exercise.run();
+
+    System.out.println("\n********** Exercise 03 — BossEnemy and constructor chaining **********\n");
+    t06_inheritance.exercises.ex03.Exercise.run();
+
+    System.out.println("\n********** Exercise 04 — Weapon polymorphism (Sword, Staff) **********\n");
+    t06_inheritance.exercises.ex04.Exercise.run();
+
+    System.out.println("\n********** Exercise 05 — Abstract GameEntity update/render loop **********\n");
+    t06_inheritance.exercises.ex05.Exercise.run();
+
+    System.out.println("\n********** Exercise 06 — Overriding vs overloading (Formatter) **********\n");
+    t06_inheritance.exercises.ex06.Exercise.run();
+}
+
 
 }

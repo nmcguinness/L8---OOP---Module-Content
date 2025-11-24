@@ -5,19 +5,6 @@ import java.util.ListIterator;
 
 public class Exercise {
 
-    private static class InputEvent {
-        String type;
-
-        InputEvent(String type) {
-            this.type = type;
-        }
-
-        @Override
-        public String toString() {
-            return type;
-        }
-    }
-
     public static void run() {
         LinkedList<InputEvent> events = new LinkedList<>();
         events.add(new InputEvent("Move"));
