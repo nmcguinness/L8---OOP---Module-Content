@@ -169,6 +169,9 @@ public class Main {
         System.out.println("\n********** Demo 02 — LinkedList basics **********\n");
         t04_linkedlist.demos.de02.Demo.run();
 
+        System.out.println("\n********** Demo 03 — LinkedList basics **********\n");
+        t04_linkedlist.demos.de03.Demo.run();
+
         System.out.println("\n********** Exercise 01 — Remove non-positive values **********\n");
         t04_linkedlist.exercises.ex01.Exercise.run();
 

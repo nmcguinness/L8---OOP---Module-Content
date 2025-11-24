@@ -10,56 +10,20 @@ public class Demo {
 
     public void start()
     {
-//        var linkedList = new LinkedList<String>(List.of("a","b","c"));
-//
-//        ListIterator<String> iter = linkedList.listIterator();
-//
-//        iter.next();  //a
-//        iter.next();  //b
-//        System.out.println(iter.next());  //c
-//
-//        iter.previous();
-//        System.out.println(iter.next()); //c
-//
-//        iter.previous();
-//        iter.set("C");                   //set() sets value in place and doesnt advance iterator
-//        System.out.println(iter.next());
+        var linkedList = new LinkedList<String>(List.of("a","b","c"));
 
+        ListIterator<String> iter = linkedList.listIterator();
 
-//        Deque<String> tasks = new LinkedList<>();
-//
-//        tasks.offer("load");       // enqueue (tail)
-//        tasks.offer("parse");
-//
-//        tasks.forEach(s -> System.out.println(s));
-//
-//        String t1 = tasks.poll();  // dequeue (head) → "load"
-//
-//        tasks.forEach(s -> System.out.println(s));
-//
-//        String t2 = tasks.peek();  // look at head → "parse"
-//
-//      //  Iterator<String> iterList = tasks.iterator();
-//       // Iterator<String> descIterLit = tasks.descendingIterator();
-//
-//        tasks.forEach(s -> System.out.println(s));
-//
+        iter.next();  //a
+        iter.next();  //b
+        System.out.println(iter.next());  //c
 
-        var letters = new LinkedList<Character>();
-        for (char c : "aaabbcc".toCharArray())
-            letters.add(c);
+        iter.previous();
+        System.out.println(iter.next()); //c
 
-        var it = letters.listIterator();
-        char prev = 0;
-        while (it.hasNext()) {
-            char cur = it.next();
-            if (prev != 0 && cur != prev) {
-                it.previous();    // move back to insertion point
-                it.add('|');     // mark boundary by inserting bar character
-                it.next();
-            }
-            prev = cur;
-        }
+        iter.previous();
+        iter.set("C");                   //set() sets value in place and doesnt advance iterator
+        System.out.println(iter.next());
 
     }
 }
