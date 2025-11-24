@@ -7,7 +7,7 @@ This space holds your weekly topics, exercises, shared resources, and assessment
 ## Continuous Assessment Briefs
 
 | CA                   | Summary                                                                                                                                                                                                                                               | Brief                                                                                               |
-| :------------------------ | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------- |
+|:-|:-|:-|
 | **GCA1** | Work in **pairs** to design and implement a small records system. Load a large CSV from GitHub, parse to in-memory structures, support searching/filtering/ordering and simple reporting. | [CA brief](/notes/assessments/briefs/2025-26-l8-s2-oop-gca1.md) |
 
 ---
@@ -22,7 +22,7 @@ This space holds your weekly topics, exercises, shared resources, and assessment
 | t04 | Collections 2: LinkedList & iteration patterns |[Notes](/notes/topics/t04_collections_2/t04_collections_2_notes.md) | [Exercise](/notes/topics/t04_collections_2/exercises/t04_collections_2_exercises.md) | None |
 | t05 | Equality & Hashing | [Notes](/notes/topics/t05_equality_hashing/t05_equality_hashing_notes.md) | [Exercises](/notes/topics/t05_equality_hashing/exercises/t05_equality_hashing_exercises.md) | None |
 | t06 | Inheritance | [Notes](/notes/topics/t06_inheritance/t06_inheritance_notes.md) | [Exercises](/notes/topics/t06_inheritance/exercises/t06_inheritance_exercises.md) | None |
-
+| t07 | Interface | [Notes](/notes/topics/t07_interface/t07_interface_notes.md) | None | None |
 
 ---
 
