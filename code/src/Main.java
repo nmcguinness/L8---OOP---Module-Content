@@ -1,3 +1,4 @@
+import java.util.HashSet;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -7,9 +8,10 @@ public class Main {
         app.run();
     }
 
-    public void run() {
+   public void run() {
 
-        // 1 = t01 Arrays, 2 = t02 Ordering, etc
+       HashSet<String> set = new HashSet<String>();
+       // 1 = t01 Arrays, 2 = t02 Ordering, etc
         int selection = 6; // <— set which block to run
 
         switch (selection) {

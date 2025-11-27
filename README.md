@@ -22,7 +22,7 @@ This space holds your weekly topics, exercises, shared resources, and assessment
 | t04 | Collections 2: LinkedList & iteration patterns |[Notes](/notes/topics/t04_collections_2/t04_collections_2_notes.md) | [Exercise](/notes/topics/t04_collections_2/exercises/t04_collections_2_exercises.md) | None |
 | t05 | Equality & Hashing | [Notes](/notes/topics/t05_equality_hashing/t05_equality_hashing_notes.md) | [Exercises](/notes/topics/t05_equality_hashing/exercises/t05_equality_hashing_exercises.md) | None |
 | t06 | Inheritance | [Notes](/notes/topics/t06_inheritance/t06_inheritance_notes.md) | [Exercises](/notes/topics/t06_inheritance/exercises/t06_inheritance_exercises.md) | None |
-| t07 | Interface | [Notes](/notes/topics/t07_interface/t07_interface_notes.md) | [Exercises](/notes/topics/t07_interface/exercises/t07_interface_exercises.md) | None |
+| t07 | Interface | [Notes](/notes/topics/t07_interface/t07_interface_notes.md) | [Exercises](/notes/topics/t07_interface/exercises/t07_interface_exercises.md) | [Challenge Exercises](notes/topics/t07_interface/challenges/ce02_the_directory_distillery.md)  |
 
 ---
 
