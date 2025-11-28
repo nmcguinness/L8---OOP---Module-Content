@@ -1,3 +1,5 @@
+import t07_interface.challenges.ce02.Exercise;
+
 import java.util.HashSet;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
@@ -12,7 +14,7 @@ public class Main {
 
        HashSet<String> set = new HashSet<String>();
        // 1 = t01 Arrays, 2 = t02 Ordering, etc
-        int selection = 6; // <— set which block to run
+        int selection = 7; // <— set which block to run
 
         switch (selection) {
             case 1:
@@ -43,6 +45,11 @@ public class Main {
             case 6:
                 System.out.println("\n******************** Topic:t06 - Inheritance ********************\n");
                 run_t06_Inheritance();
+                break;
+
+            case 7:
+                System.out.println("\n******************** Topic:t07 - Interface ********************\n");
+                run_t07_Interface();
                 break;
 
             case 10:
@@ -235,25 +242,29 @@ public class Main {
 
     public void run_t06_Inheritance() 
     {
+        System.out.println("\n********** Exercise 01 — is-a vs has-a & AdminUser **********\n");
+        t06_inheritance.exercises.ex01.Exercise.run();
 
-    System.out.println("\n********** Exercise 01 — is-a vs has-a & AdminUser **********\n");
-    t06_inheritance.exercises.ex01.Exercise.run();
+        System.out.println("\n********** Exercise 02 — Basic Entity / Player / Enemy hierarchy **********\n");
+        t06_inheritance.exercises.ex02.Exercise.run();
 
-    System.out.println("\n********** Exercise 02 — Basic Entity / Player / Enemy hierarchy **********\n");
-    t06_inheritance.exercises.ex02.Exercise.run();
+        System.out.println("\n********** Exercise 03 — BossEnemy and constructor chaining **********\n");
+        t06_inheritance.exercises.ex03.Exercise.run();
 
-    System.out.println("\n********** Exercise 03 — BossEnemy and constructor chaining **********\n");
-    t06_inheritance.exercises.ex03.Exercise.run();
+        System.out.println("\n********** Exercise 04 — Weapon polymorphism (Sword, Staff) **********\n");
+        t06_inheritance.exercises.ex04.Exercise.run();
 
-    System.out.println("\n********** Exercise 04 — Weapon polymorphism (Sword, Staff) **********\n");
-    t06_inheritance.exercises.ex04.Exercise.run();
+        System.out.println("\n********** Exercise 05 — Abstract GameEntity update/render loop **********\n");
+        t06_inheritance.exercises.ex05.Exercise.run();
 
-    System.out.println("\n********** Exercise 05 — Abstract GameEntity update/render loop **********\n");
-    t06_inheritance.exercises.ex05.Exercise.run();
+        System.out.println("\n********** Exercise 06 — Overriding vs overloading (Formatter) **********\n");
+        t06_inheritance.exercises.ex06.Exercise.run();
+    }
 
-    System.out.println("\n********** Exercise 06 — Overriding vs overloading (Formatter) **********\n");
-    t06_inheritance.exercises.ex06.Exercise.run();
-}
+    private void run_t07_Interface() {
+        System.out.println("\n********** Challenge Exercise 02 — Contact Consolidation Tool **********\n");
+        Exercise.run();
 
+    }
 
 }
