@@ -92,7 +92,7 @@ public class Exercise {
     }
 
     // -------------------------------------------------------------------------
-    // HTML building helpers (simple: headings + two tables, no CSS)
+    // HTML building helpers (simple: headings + two tables, CSS)
     // -------------------------------------------------------------------------
 
     private static String buildHtml(
@@ -144,7 +144,7 @@ public class Exercise {
         sb.append("<tr><td>Contacts interested in follow-up</td><td>")
           .append(followUpCount).append("</td></tr>\n");
 
-        sb.append("<tr><td>Total turnover (sum, millions of EUR)</td><td>")
+        sb.append("<tr><td>Total turnover (sum, thousands of EUR)</td><td>")
           .append(totalTurnoverK).append("</td></tr>\n");
 
         sb.append("</table>\n");
@@ -161,7 +161,7 @@ public class Exercise {
           .append("<th>Country</th>")
           .append("<th>Company</th>")
           .append("<th>Follow-up</th>")
-          .append("<th>Turnover (m EUR)</th>")
+          .append("<th>Turnover (k EUR)</th>")
           .append("</tr>\n");
 
         for (Contact c : contacts) {

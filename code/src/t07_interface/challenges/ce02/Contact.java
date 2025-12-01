@@ -82,7 +82,7 @@ public class Contact {
     }
 
     public String getNormalisedEmail() {
-        return email.trim().toLowerCase(Locale.ROOT);
+        return email.trim().toLowerCase();
     }
 
     public String getEmailDomain() {
@@ -90,7 +90,7 @@ public class Contact {
         if (atIndex < 0 || atIndex == email.length() - 1) {
             return "";
         }
-        return email.substring(atIndex + 1).toLowerCase(Locale.ROOT);
+        return email.substring(atIndex + 1).toLowerCase();
     }
 
     // "with" methods for formatters (name + email only are needed here)
