@@ -1,18 +1,22 @@
-# OOP - GCA - Stage 2 Report
-## Adil Orijeh, Tom Brown
+# Stage 2 Report – Implementation & Verification
+## COMP C8Z03 — Object-Oriented Programming (GCA1)
+## Student Name A, Student Name B
 
-## Report Components
+<!-- Code blocks or figures are now included in your word count.
+-->
 
-### Equality & Hashing Rationale	
+## 1. Equality & Hashing Rationale (180–300 words)
+<!-- student fills -->
 
-### Testing Summary	
+## 2. Testing Summary (180–300 words)
+<!-- student fills -->
 
-### Defensive Coding 
+## 3. Defensive Coding 2 (4–6 examples, 240–420 words total)
+<!-- student fills -->
 
-Here is an example us null checking in our solution
+> Here is an example us null checking in our solution. Obviously, you need to replace the code below with your own examples.
 
 ```java
-
 public Contact format(Contact input) {
         String email = input.getEmail();
         if (email == null || email.isBlank()) {
@@ -25,19 +29,30 @@ public Contact format(Contact input) {
     }
 ```
 
-### Reflections	
+## 4. Reflections (150–250 words)
+<!-- student fills -->
 
-### Commit Contributions
+## 5. Commit Contributions (60–120 words)
+<!-- student fills -->
 
-You just write your text and if I want *italics* and if I want **bold**.
+## 6. Final References (Harvard style)
+<!-- student fills -->
 
-### Contribution Matrix
+## 7. Implementation Matrix (Y/N)
 
-| Function | Adil | Tom |
-|:-|-:|:-:|
-| Write JUnit tests | [x] | []|
+| Component | Implemented? | Notes |
+|---|:--:|---|
+| Extended Dataset (1000 rows) |  |  |
+| Entity Enhancements |  |  |
+| Collections & Lookup |  |  |
+| Equality & Hashing |  |  |
+| Advanced Queries |  |  |
+| CSV Export |  |  |
+| Testing (JUnit + Coverage) |  |  |
+| Defensive Coding |  |  |
+
+## 8. Appendix (Optional)
+<!-- optional section -->
 
 
-### Final References
-
-- [Markdown Guide]([www.dkit.ie](https://www.markdownguide.org/)) [Accesssed: Nov 2025]
+> You may find the Markdown Guide located [here]([www.dkit.ie](https://www.markdownguide.org/)) useful in preparing your report.
