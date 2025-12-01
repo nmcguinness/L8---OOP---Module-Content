@@ -3,11 +3,11 @@
 
 ## Report Components
 
-### Equality & Hashing Rationale	
+### Equality & Hashing Rationale
 
-### Testing Summary	
+### Testing Summary
 
-### Defensive Coding 
+### Defensive Coding
 
 Here is an example us null checking in our solution
 
@@ -25,7 +25,7 @@ public Contact format(Contact input) {
     }
 ```
 
-### Reflections	
+### Reflections
 
 ### Commit Contributions
 
@@ -40,4 +40,4 @@ You just write your text and if I want *italics* and if I want **bold**.
 
 ### Final References
 
-- [Markdown Guide]([www.dkit.ie](https://www.markdownguide.org/)) [Accesssed: Nov 2025]
+- [Some web site](www.dkit.ie) [Accesssed: Nov 2025]
