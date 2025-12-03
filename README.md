@@ -32,6 +32,15 @@ This space holds your weekly topics, exercises, shared resources, and assessment
 |:--|:--|
 | [Writing JUnit tests in Intellij](notes/shared/cheat%20sheets/cheatsheet_junit_in_intellij.md) | A practical JUnit “Snippet Gallery” for students: copy-pasteable assertion examples with brief explanations, plus real-world helper classes (`PricingUtils`, `DataUtils`) and complete test classes in the appendix. It also includes quick setup tips for adding JUnit to Maven/IntelliJ. |
 | [Writing JUnit tests by parameter](/notes/shared/cheat%20sheets/cheatsheet_junit_asserts_by_parameter_type.md) |  A guide to choosing the right JUnit assertions by parameter type (primitives, strings, arrays, lists, mixed inputs), with edge-case checklists and copy-paste snippets—plus a ready-to-run scaffold test class in the appendix. |
+
+---
+
+## Mindmaps
+
+| Topics Covered | Summary | Link |
+|:--|:--|:--|
+| Topics 01–07 | Revision mindmaps covering Arrays, Ordering (Comparable/Comparator), Collections (ArrayList & LinkedList), Equality & Hashing, Inheritance, and Interfaces. Each topic includes visual mindmaps, code snippets, and self-assessment prompts. | [Revision Mindmaps](/notes/shared/mind%20maps/revision_t01_t07.md) |
+
 ---
 
 ## Folder Map
@@ -108,7 +117,7 @@ public class Main {
 - Use your IDE’s Markdown preview for `notes.md` and Mermaid diagrams, or view on GitHub.
 - Build and run small Java files directly in your IDE while working through exercises.
 
-> Tip: Keep a “bug diary”. For each bug you hit, note the cause and the fix. Patterns will emerge, and you’ll get faster.
+> :bulb: **Keep a “bug diary”.** For each bug you hit, note the cause and the fix. Patterns will emerge, and you’ll get faster.
 
 ---
 
