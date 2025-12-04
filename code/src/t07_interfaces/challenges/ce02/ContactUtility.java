@@ -1,4 +1,4 @@
-package t07_interface.challenges.ce02;
+package t07_interfaces.challenges.ce02;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

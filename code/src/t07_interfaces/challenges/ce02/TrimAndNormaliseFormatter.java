@@ -1,4 +1,4 @@
-package t07_interface.challenges.ce02;
+package t07_interfaces.challenges.ce02;
 
 /**
  * Trims whitespace from all String fields and lowercases the email.

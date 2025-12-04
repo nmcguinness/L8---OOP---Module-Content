@@ -12,11 +12,4 @@ public class FancyFormatter extends BaseFormatter {
         return prefix + " " + format();
     }
 
-    /*
-     * The original format(String prefix) did NOT override BaseFormatter.format()
-     * because the parameter list was different — that creates a new overload
-     * instead of matching the parent's signature. Adding @Override to the
-     * intended overriding method forces the compiler to check the signature
-     * and would have highlighted this bug immediately.
-     */
 }

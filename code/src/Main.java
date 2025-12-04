@@ -1,4 +1,4 @@
-import t07_interface.challenges.ce02.Exercise;
+import t07_interfaces.challenges.ce02.Exercise;
 
 import java.util.HashSet;
 
@@ -263,8 +263,31 @@ public class Main {
 
     private void run_t07_Interface() {
         System.out.println("\n********** Challenge Exercise 02 — Contact Consolidation Tool **********\n");
-        Exercise.run();
+        t07_interfaces.challenges.ce02.Exercise.run();
 
+        System.out.println("\n********** Exercise 01 - Basic Greeter interface with casual and formal implementations **********\n");
+        t07_interfaces.exercises.ex01.Exercise.run();
+
+        System.out.println("\n********** Exercise 02 - Interactable interface with doors, chests, and NPCs + interaction range **********\n");
+        t07_interfaces.exercises.ex02.Exercise.run();
+
+        System.out.println("\n********** (NOT IMPLEMENTED AS QUITE STRAIGHTFORWARD) Exercise 03 - Multiple interfaces (Moveable, Damageable) with Player and Enemy **********\n");
+
+        System.out.println("\n********** (NOT IMPLEMENTED AS QUITE STRAIGHTFORWARD) Exercise 04 - Strategy pattern for enemy attacks (swap melee/ranged behaviour) **********\n");
+
+        System.out.println("\n********** Exercise 05 - Named interface with Comparators for sorting by name and length **********\n");
+        t07_interfaces.exercises.ex05.Exercise.run();
+
+        System.out.println("\n********** Exercise 06 - Command interface for queued actions (execute() loop) **********\n");
+        t07_interfaces.exercises.ex06.Exercise.run();
+
+        System.out.println("\n********** Exercise 07 - XmlSerializable interface with PlayerProfile toXml()/fromXml **********\n");
+        t07_interfaces.exercises.ex07.Exercise.run();
+
+        System.out.println("\n********** Exercise 08 - TextFilter pipeline (trim, lowercase, regex highlight) **********\n");
+        t07_interfaces.exercises.ex08.Exercise.run();
+
+        System.out.println("\n********** Exercise 09 - TextFilter pipeline with profanity blacklist from CSV **********\n");
+        t07_interfaces.exercises.ex09.Exercise.run();
     }
-
 }

@@ -1,4 +1,4 @@
-package t07_interface.challenges.ce02;
+package t07_interfaces.challenges.ce02;
 
 /**
  * Wraps the email in a simple mailto: HTML link.
