@@ -24,7 +24,7 @@ public class Exercise {
         filters.add(new LowercaseFilter());
         filters.add(blacklistFilter);
 
-        String input = "   This is SOME veryBad text   ";
+        String input = "   This is SOME foo bar text and I dont give a DOODLE who reads it, you doodle!   ";
         String output = TextFilters.applyAll(filters, input);
 
         System.out.println("Original: [" + input + "]");

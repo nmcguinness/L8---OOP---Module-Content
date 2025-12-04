@@ -1,6 +1,6 @@
 package t07_interfaces.exercises.ex05;
 
-public class GameItem implements Named {
+public class GameItem implements Named {  //IHaveWeight::getWeight()
 
     private final String name;
 

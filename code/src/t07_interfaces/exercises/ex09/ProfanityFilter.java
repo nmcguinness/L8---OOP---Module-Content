@@ -30,9 +30,23 @@ public class ProfanityFilter implements TextFilter {
                 continue;
             }
 
-            result = result.replaceAll("(?i)" + badLower, "***");
+            result = result.replaceAll("(?i)" + badLower, redactWord(badLower));
         }
 
         return result;
     }
+
+    private String redactWord(String word)
+    {
+        if (word == null || word.isEmpty())
+            return word;
+
+        if (word.length() == 1)
+            return word;
+
+        // Keep the first char, replace the rest with '*'
+        int starCount = word.length() - 1;
+        return word.charAt(0) + "*".repeat(starCount);
+    }
+
 }

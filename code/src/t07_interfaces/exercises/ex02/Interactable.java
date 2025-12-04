@@ -2,7 +2,7 @@ package t07_interfaces.exercises.ex02;
 
 public interface Interactable {
 
-    int DEFAULT_INTERACTION_RANGE = 2;
+    /*public static final*/ int DEFAULT_INTERACTION_RANGE = 5;
 
     void interact();
 
