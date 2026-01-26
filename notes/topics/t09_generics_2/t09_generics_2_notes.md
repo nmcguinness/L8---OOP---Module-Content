@@ -390,30 +390,7 @@ classDiagram
     }
 ```
 
-## Appendix C — Mind map (Week 2)
-
-```mermaid
-mindmap
-  root((Generics II))
-    Problem
-      invariance["Invariance: List<Enemy> != List<Entity>"]
-    Wildcards
-      unknown["List<?> unknown type"]
-      extendsUse["List<? extends T> producer"]
-      superUse["List<? super T> consumer"]
-    PECS
-      pecsText["Producer Extends, Consumer Super"]
-      readRule["Read: extends"]
-      writeRule["Write: super"]
-    Patterns
-      copyPattern["copy(src extends T, dst super T)"]
-      comparatorPattern["Comparator<? super T>"]
-      capturePattern["Wildcard capture via helper <T>"]
-    Debugging
-      rawTypes["Avoid raw types"]
-      addExtends["Can't add to extends (except null)"]
-      readSuper["Reads from super are Object"]
-```
+---
 
 ## Lesson Context
 

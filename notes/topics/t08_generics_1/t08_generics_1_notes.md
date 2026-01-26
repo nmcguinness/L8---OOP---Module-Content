@@ -448,78 +448,16 @@ The caller gets strong typing for the success value (`T`) while still having a p
 - Why is the compiler refusing `Box<Integer> c = new Box<>("oops")`? What bug did it prevent?
 - If you were designing an API for students, what generic types would you expose, and what would you hide?
 
-## Appendix A — Mermaid diagrams (generic class structure)
-
-```mermaid
-classDiagram
-    class Box~T~ {
-        -T value
-        +Box(T)
-        +T value()
-    }
-```
-
-```mermaid
-classDiagram
-    class Item {
-        <<interface>>
-        +String name()
-    }
-
-    class Potion
-    class Sword
-
-    class Slot~T~ {
-        -T _item
-        +void put(T)
-        +T take()
-    }
-
-    class T
-
-    Item <|.. Potion
-    Item <|.. Sword
-    Slot~T~ o-- T : holds
-    note for Slot~T~ "Generic constraint: T extends Item"
-```
-
-## Appendix B — Mind map
-
-```mermaid
-mindmap
-  root((Generics I))
-    Why
-      Object + cast
-      Compile-time safety
-      Reusable containers
-    Syntax
-      Generic class Box<T>
-      Collections List<T>
-      Map<K,V>
-      Generic method <T> first(List<T>)
-    Bounds
-      T extends Comparable<T>
-      T extends Item
-    Erasure
-      noNewT["No new T()"]
-      noTArray["No T[]"]
-      Wrapper types for primitives
-    Next week
-      Wildcards ? extends / ? super
-      Invariance problems
-      PECS idea
-```
+---
 
 ## Lesson Context
 
 ```yaml
 previous_lesson:
-  topic_code: t07_interfaces
+  topic_code:  t07_interfaces
   domain_emphasis: Balanced
 
 this_lesson:
-  topic_code: t08_generics
   primary_domain_emphasis: Balanced
   difficulty_tier: Intermediate
-  week_in_topic: 1_of_2
 ```

@@ -288,7 +288,7 @@ In real applications, interface constants are commonly used for **log levels, fo
 
 ```yaml
 previous_lesson:
-  topic_code: t06_inheritance
+  topic_code:  t07_interfaces
   domain_emphasis: Balanced
 
 this_lesson:
