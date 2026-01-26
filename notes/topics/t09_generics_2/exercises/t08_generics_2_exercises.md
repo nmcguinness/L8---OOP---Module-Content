@@ -12,7 +12,6 @@ tags: [java, generics, wildcards, pecs, variance, exercises]
 # Generics II — Exercises 
 
 > These exercises build directly on the **Generics II** notes.  
-> Each exercise includes a **software dev** hook and a **games dev** hook.
 
 ## Ground rules
 
