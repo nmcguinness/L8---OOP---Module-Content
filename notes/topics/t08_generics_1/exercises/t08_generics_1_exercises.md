@@ -24,13 +24,13 @@ tags: [java, generics, exercises, type-safety, collections]
 Each exercise assumes a package like:
 
 ```java
-t08_generics.exercises.w1.exNN
+t08_generics.exercises.exNN
 ```
 
 Create a class `Exercise` in that package with a static entry point:
 
 ```java
-package t08_generics.exercises.w1.ex01;
+package t08_generics.exercises.ex01;
 
 public final class Exercise {
     public static void run() {
