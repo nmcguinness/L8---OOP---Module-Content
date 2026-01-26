@@ -371,25 +371,6 @@ This pattern appears constantly in real code (queues, pipelines, logging, batchi
 | `List<? extends T>` | some subtype of T | read-only producer |
 | `List<? super T>` | T or supertype of T | write-focused consumer |
 
-## Appendix B — Mermaid diagrams
-
-```mermaid
-classDiagram
-    class Entity
-    class Enemy
-    class Pickup
-
-    Entity <|-- Enemy
-    Entity <|-- Pickup
-```
-
-```mermaid
-classDiagram
-    class CopyUtil {
-        +copy(src,dst)
-    }
-```
-
 ---
 
 ## Lesson Context
