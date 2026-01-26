@@ -23,6 +23,8 @@ This space holds your weekly topics, exercises, shared resources, and assessment
 | t05 | Equality & Hashing | [Notes](/notes/topics/t05_equality_hashing/t05_equality_hashing_notes.md) | [Exercises](/notes/topics/t05_equality_hashing/exercises/t05_equality_hashing_exercises.md) | None |
 | t06 | Inheritance | [Notes](/notes/topics/t06_inheritance/t06_inheritance_notes.md) | [Exercises](/notes/topics/t06_inheritance/exercises/t06_inheritance_exercises.md) | None |
 | t07 | Interface | [Notes](/notes/topics/t07_interface/t07_interface_notes.md) | [Exercises](/notes/topics/t07_interface/exercises/t07_interface_exercises.md) | [Challenge Exercises](notes/topics/t07_interface/challenges/ce02_the_directory_distillery.md)  |
+| t08 | Generics 1: Type Parameters & Type Safety | [Notes](/notes/topics/t08_generics_1/t08_generics_1_notes.md) | [Exercises](/notes/topics/t08_generics_1/exercises/t08_generics_1_exercises.md) | None |
+| t09 | Generics 2: Wildcards, Variance & PECS | [Notes](/notes/topics/t08_generics_2/t08_generics_2_notes.md) | [Exercises](/notes/topics/t08_generics_2/exercises/t08_generics_2_exercises.md) | None |
 
 ---
 
@@ -62,7 +64,7 @@ This space holds your weekly topics, exercises, shared resources, and assessment
    │  └─ mind maps/                        
    ├─ assessments/                    # continuous assessment documents for the module
    │  └─ briefs/
-   └─ topics/                         # notes, exercises, and challenges exercises for the module
+   └─ topics/                         # notes, exercises, applied case studies, and challenges exercises for the module
 ```
 
 ---
