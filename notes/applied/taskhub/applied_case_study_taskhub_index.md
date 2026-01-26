@@ -12,7 +12,7 @@ TaskHub is a **longitudinal applied case study** that runs alongside the core te
 
 This document serves as an index to all parts of the case study and provides guidance on how to use it.
 
-The complete TaskHub implementation (all layers, tests, Docker configuration) is maintained in a separate repository and is available to students here.
+The complete TaskHub implementation (all layers, tests, Docker configuration) is maintained in a separate repository and is available to students [here](https://github.com/nmcguinness/L8-OOP-Module-Content-Applied-Case-Study.git).
 
 
 ---
