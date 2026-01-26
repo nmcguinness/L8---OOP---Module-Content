@@ -24,13 +24,13 @@ tags: [java, generics, wildcards, pecs, variance, exercises]
 Each exercise assumes a package like:
 
 ```java
-t08_generics.exercises.exNN
+t09_generics.exercises.exNN
 ```
 
 Create a class `Exercise` in that package with a static entry point:
 
 ```java
-package t08_generics.exercises.ex01;
+package t09_generics.exercises.ex01;
 
 public final class Exercise {
     public static void run() {

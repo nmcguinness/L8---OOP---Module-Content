@@ -12,7 +12,6 @@ tags: [java, generics, exercises, type-safety, collections]
 # Generics I — Exercises
 
 > These exercises build directly on the **Generics I** notes. Work from top to bottom.  
-> Each exercise includes a **software dev** example *and* a **games dev** example, so you always have a familiar frame of reference.
 
 ## Ground rules
 
