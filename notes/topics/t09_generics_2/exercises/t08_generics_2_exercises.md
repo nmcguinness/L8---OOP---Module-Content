@@ -19,6 +19,26 @@ tags: [java, generics, wildcards, pecs, variance, exercises]
 - Don’t use raw types.
 - When an exercise is compile-time focused, keep the “failing line” commented out.
 
+## How to run
+
+Each exercise assumes a package like:
+
+```java
+t08_generics.exercises.w1.exNN
+```
+
+Create a class `Exercise` in that package with a static entry point:
+
+```java
+package t08_generics.exercises.w1.ex01;
+
+public final class Exercise {
+    public static void run() {
+        // call your methods here; print results for quick checks
+    }
+}
+```
+
 ---
 
 ## Exercise 01 — Prove invariance (compile-time)
