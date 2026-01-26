@@ -424,7 +424,7 @@ previous_lesson:
   week_in_topic: 1_of_2
 
 this_lesson:
-  topic_code: t08_generics
+  topic_code: t09_generics
   primary_domain_emphasis: Balanced
   difficulty_tier: Intermediate
   week_in_topic: 2_of_2
