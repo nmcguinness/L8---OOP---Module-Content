@@ -1,5 +1,5 @@
 ---
-title: "Generics II — Wildcards, Variance & PECS (Week 2 of 2)"
+title: "Generics II — Wildcards, Variance & PECS"
 subtitle: "COMP C8Z03 — Year 2 OOP"
 description: "Invariance, wildcards (? extends / ? super), the PECS rule, and how to design flexible, type-safe generic APIs."
 created: 2026-01-22
@@ -12,7 +12,7 @@ prerequisites:
   - Comparable / Comparator basics
 ---
 
-# Generics II — Wildcards, Variance & PECS (Week 2 of 2)
+# Generics II — Wildcards, Variance & PECS
 
 > **Prerequisites:**
 > - You understand `Box<T>`, generic methods, and bounds like `T extends Comparable<T>`
