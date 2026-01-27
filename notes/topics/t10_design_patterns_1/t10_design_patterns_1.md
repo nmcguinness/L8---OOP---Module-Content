@@ -1,5 +1,3 @@
-(file regenerated to refresh sandbox link)
-
 # Design Patterns I — Behaviour & Decoupling
 
 > **Prerequisites:**
