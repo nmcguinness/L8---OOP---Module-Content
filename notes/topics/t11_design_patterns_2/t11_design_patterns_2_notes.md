@@ -281,8 +281,6 @@ If you control the code, redesign may be better.
 
 ---
 
-## 🌍 Real-world: Coordinated task processing
-
 <details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px; padding:0.9rem 1rem; margin:1rem 0;">
   <summary style="cursor:pointer; font-weight:800; list-style:none; margin:0;">
     🌍 Real-world: Coordinated task processing
