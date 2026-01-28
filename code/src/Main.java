@@ -305,6 +305,11 @@ public class Main {
 
         System.out.println("\n********** Demo 03 — Diamond operator **********\n");
         t08_generics.demos.de03.Demo.run();
-    }
 
+        System.out.println("\n********** Demo 04 — Generic methods (first) **********\n");
+        t08_generics.demos.de04.Demo.run();
+
+        System.out.println("\n********** Demo 05 — Generic methods (max) **********\n");
+        t08_generics.demos.de05.Demo.run();
+    }
 }
