@@ -52,9 +52,9 @@ Even if `Enemy` is an `Entity`, a `List<Enemy>` is *not* a `List<Entity>`.
 Why? Because if it were allowed, you could do this:
 
 ```java
-final class Entity { }
-final class Enemy extends Entity { }
-final class Pickup extends Entity { }
+class Entity { }
+class Enemy extends Entity { }
+class Pickup extends Entity { }
 
 public static void demo() {
     java.util.List<Enemy> enemies = new java.util.ArrayList<>();
@@ -140,8 +140,8 @@ Because the list might actually be `List<Integer>`, and adding a `Double` would 
 This is used when you want to **add T values into** the list (the list *consumes* values).
 
 ```java
-final class Entity { }
-final class Enemy extends Entity { }
+class Entity { }
+class Enemy extends Entity { }
 
 public static void addEnemies(java.util.List<? super Enemy> out) {
     out.add(new Enemy());
@@ -223,10 +223,10 @@ This is PECS in practice.
 A `Comparator<Animal>` can compare `Dog` objects too. So APIs often accept `Comparator<? super T>`.
 
 ```java
-final class Animal { }
-final class Dog extends Animal { }
+class Animal { }
+class Dog extends Animal { }
 
-final class AnimalNameComparator implements java.util.Comparator<Animal> {
+class AnimalNameComparator implements java.util.Comparator<Animal> {
     @Override
     public int compare(Animal a, Animal b) {
         return 0;
@@ -328,8 +328,8 @@ Imagine an event system where listeners read events and handlers push events int
 
 ```java
 interface GameEvent { }
-final class DamageEvent implements GameEvent { }
-final class PickupEvent implements GameEvent { }
+class DamageEvent implements GameEvent { }
+class PickupEvent implements GameEvent { }
 
 public static void publishAll(java.util.List<? extends GameEvent> events,
                               java.util.List<? super GameEvent> outQueue) {

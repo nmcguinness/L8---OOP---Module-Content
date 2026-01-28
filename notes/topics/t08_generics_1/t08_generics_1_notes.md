@@ -61,8 +61,8 @@ Before generics (or when you avoid them), a common workaround is: “just store 
 That forces the caller to **cast** back to the expected type.
 
 ```java
-final class BoxObject {
-    private final Object value;
+ class BoxObject {
+    private Object value;
 
     public BoxObject(Object value) {
         this.value = value;
@@ -98,8 +98,8 @@ A generic class uses a **type parameter** (like `T`) to represent “the type th
 - it’s a placeholder that gets replaced with a real type when you use the class
 
 ```java
-final class Box<T> {
-    private final T value;
+ class Box<T> {
+    private T value;
 
     public Box(T value) {
         this.value = value;
@@ -229,13 +229,13 @@ This explains several rules you’ll meet in practice:
 - you can’t use primitives as type arguments (use `Integer`, `Double`, etc.)
 
 ```java
-final class Factory<T> {
+ class Factory<T> {
 
     // This is NOT allowed:
     // public T make() { return new T(); }
 
     // One common workaround is to pass in a supplier:
-    private final java.util.function.Supplier<T> _supplier;
+    private java.util.function.Supplier<T> _supplier;
 
     public Factory(java.util.function.Supplier<T> supplier) {
         _supplier = supplier;
@@ -330,8 +330,8 @@ interface Item {
     String name();
 }
 
-final class Potion implements Item {
-    private final String _name;
+ class Potion implements Item {
+    private String _name;
 
     public Potion(String name) {
         _name = name;
@@ -343,8 +343,8 @@ final class Potion implements Item {
     }
 }
 
-final class Sword implements Item {
-    private final String _name;
+ class Sword implements Item {
+    private String _name;
 
     public Sword(String name) {
         _name = name;
@@ -356,7 +356,7 @@ final class Sword implements Item {
     }
 }
 
-final class Slot<T extends Item> {
+ class Slot<T extends Item> {
     private T _item; // can be null for “empty”
 
     public void put(T item) {
@@ -390,9 +390,9 @@ This removes an entire category of bugs (“wrong item type”) without any runt
 In software systems, you often return “a result + maybe an error” from many different operations.
 
 ```java
-final class Result<T> {
-    private final T _value;
-    private final String _error;
+ class Result<T> {
+    private T _value;
+    private String _error;
 
     private Result(T value, String error) {
         _value = value;
