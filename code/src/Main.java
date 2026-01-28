@@ -14,7 +14,7 @@ public class Main {
 
        HashSet<String> set = new HashSet<String>();
        // 1 = t01 Arrays, 2 = t02 Ordering, etc
-        int selection = 7; // <— set which block to run
+        int selection = 8; // <— set which block to run
 
         switch (selection) {
             case 1:
@@ -50,6 +50,11 @@ public class Main {
             case 7:
                 System.out.println("\n******************** Topic:t07 - Interface ********************\n");
                 run_t07_Interface();
+                break;
+
+            case 8:
+                System.out.println("\n******************** Topic:t08 - Generics I ********************\n");
+                run_t08_Generics();
                 break;
 
             case 10:
@@ -290,4 +295,16 @@ public class Main {
         System.out.println("\n********** Exercise 09 - TextFilter pipeline with profanity blacklist from CSV **********\n");
         t07_interfaces.exercises.ex09.Exercise.run();
     }
+
+    private void run_t08_Generics() {
+        System.out.println("\n********** Demo 01 — BoxObject **********\n");
+        t08_generics.demos.de01.Demo.run();
+
+        System.out.println("\n********** Demo 02 — Box **********\n");
+        t08_generics.demos.de02.Demo.run();
+
+        System.out.println("\n********** Demo 03 — Diamond operator **********\n");
+        t08_generics.demos.de03.Demo.run();
+    }
+
 }
