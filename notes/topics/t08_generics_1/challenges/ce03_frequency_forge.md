@@ -186,7 +186,7 @@ Now we switch from “toy data” to realistic data.
 
 You are given:
 
-- `country_codes.csv`
+- [country_codes.csv](https://github.com/nmcguinness/L8---OOP---Module-Content/blob/main/code/data/ce03/country_codes.csv)
 
 **Important:** this file contains codes separated by commas (often on one line), so your CSV reading must collect **every token**, not just the first column.
 
@@ -194,7 +194,7 @@ You are given:
 
 You are given:
 
-- `weapon_inventory.xml`
+- [weapon_inventory.xml](https://github.com/nmcguinness/L8---OOP---Module-Content/blob/main/code/data/ce03/weapon_inventory.xml)
 
 This represents a factory inventory in a game. Each weapon has:
 
