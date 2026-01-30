@@ -311,5 +311,8 @@ public class Main {
 
         System.out.println("\n********** Demo 05 — Generic methods (max) **********\n");
         t08_generics.demos.de05.Demo.run();
+
+        System.out.println("\n********** Challenge Exercise — Frequency Counter **********\n");
+        t08_generics.challenges.ce03.Exercise.run();
     }
 }
