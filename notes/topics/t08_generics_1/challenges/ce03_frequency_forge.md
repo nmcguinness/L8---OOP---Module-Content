@@ -1,21 +1,47 @@
 ---
-title: "CE09 – Frequency Forge"
-module: COMP C8Z03 Object-Oriented Programming
-level: Year 2
-type: Challenge Exercise
+title: "Challenge Exercise: Frequency Forge"
+topic: "Generics"
+language: "Java"
+estimated_lab_time: "2–3 weeks (approx. 2–3 hours active coding)"
+prerequisites:
+  - "Classes & objects"
+  - "ArrayList/List basics"
+  - "HashMap basics"
+  - "Methods + overloading"
 ---
 
-# CE09 – Frequency Forge 
+# Challenge Exercise: Frequency Forge 
+
+## Scenario
+
+You are working as a junior developer on a mixed **software and games development** team.  
+Your team has been asked to build a small analysis tool that can **count and report how often certain items appear in a dataset**.
+
+At first, the data is tiny — just a short list of country codes used for testing a new feature. But very quickly, the requirements grow. The same logic is needed to process **real datasets** coming from files, including a **CSV export** and an **XML inventory** from a game factory system that tracks weapon production.
+
+Your task is not just to make the code *work*, but to **improve it step by step**:
+- start with a simple, brute-force solution,
+- recognise its limitations,
+- refactor to a more efficient approach using collections,
+- generalise the logic so it can be reused,
+- and finally test it against realistic data while measuring performance.
+
+This mirrors how real systems evolve: quick prototypes first, then cleaner, faster, more reusable designs as requirements and data scale up.
 
 ## Overview
 
-In this challenge, you will build a **frequency analysis tool** using Java **Maps** and **Generics**.
-The scenario is grounded in both **software systems** and **game development**:
+This challenge starts small and grows on purpose.
 
-- Counting country codes from a real CSV dataset
-- Taking stock of weapon inventory in a game factory from an XML file
+You will begin with a **tiny list of 12 country codes** and a deliberately **naive** approach. Then you will progressively improve the solution until you end up with:
 
-The same *core algorithm* is reused in both contexts.
+- A clean **Map-based** frequency counter (fast + readable)
+- A reusable **generic** frequency counter (one algorithm, many data types)
+- A realistic test using:
+  - a **CSV dataset** of country codes
+  - an **XML dataset** of weapons from a game factory inventory
+- Basic benchmarking using `System.nanoTime()` (reported in **milliseconds**)
+
+The end result is a mini “pipeline” you can reuse in real software and game projects.
 
 ---
 
@@ -23,57 +49,186 @@ The same *core algorithm* is reused in both contexts.
 
 By completing this exercise, you should be able to:
 
-- Use `Map<K, V>` to count frequencies
+- Explain why a naive frequency counter is inefficient
+- Use `Map<K, V>` to count frequencies efficiently
 - Apply generics to avoid code duplication
 - Read structured data from CSV and XML files
-- Measure execution time using `System.nanoTime()`
-- Produce sorted reports from map data
+- Measure runtime using `System.nanoTime()` and report in milliseconds
+- Output a sorted report from a map
 
 ---
 
-## Part A – Country Code Frequency (CSV)
+## Stage 0 – Starter dataset 
 
-You are given a CSV file:
+Use this hard-coded starter list first:
+
+```java
+List<String> codes = List.of(
+  "ie","gb","ie","us",
+  "ch","ua","ie","cz",
+  "gb","ie","ch","ua"
+);
+```
+
+Your output should look like:
 
 ```
-country_codes.csv
+ch: 2
+cz: 1
+gb: 2
+ie: 4
+ua: 2
+us: 1
 ```
 
-This file contains a list of country codes separated by commas.
-
-### Task A.1
-- Load the country codes from the CSV file into a `List<String>`
-- Count how often each country code appears
-- Print the results sorted alphabetically by country code
+Order: **sorted by code**.
 
 ---
 
-## Part B – Weapon Inventory Frequency (XML)
+## Stage 1 – Naive frequency counting (inefficient on purpose)
 
-A game factory stores weapons in an XML file:
+### What you are building
 
-```
-weapon_inventory.xml
-```
+A frequency counter that works **without Maps**.
 
-Each weapon has:
+This is the “brute force” version:
+- For each code, count how many times it appears by scanning the entire list again.
+
+This works fine for 12 values, but becomes slow as the dataset grows.
+
+### Tasks
+
+1. Write a method:
+
+   - `public static void printFrequenciesNaive(List<String> codes)`
+
+2. For each *unique* code:
+   - count how many times it appears (nested loops)
+   - print one line per code
+
+3. Ensure you do **not** print duplicates (you can use an extra `List<String>` to remember what you've already printed).
+
+### Use case
+
+In a small prototype (or a quick “hack day” script), brute force counting might be acceptable.
+But once your data grows (log files, analytics, player telemetry), you need better tools.
+
+---
+
+## Stage 2 – Use a Map (efficient frequency counting)
+
+### What you are building
+
+A frequency counter using:
+
+- `Map<String, Integer>`
+
+You will do the counting in a **single pass**:
+
+- If the code has not been seen before → insert with count 1
+- Otherwise → increment the count
+
+### Tasks
+
+1. Write a method:
+
+   - `public static Map<String, Integer> countFrequenciesMap(List<String> codes)`
+
+2. Use a `HashMap<String, Integer>` internally.
+3. Return the map.
+
+### Use case
+
+This is the standard solution for:
+- counting user actions
+- counting errors by type
+- counting inventory items by ID
+- counting achievements earned
+
+---
+
+## Stage 3 – Make it generic (one algorithm, many types)
+
+### What you are building
+
+A **generic** method that can count *anything*.
+
+Instead of hard-coding `String`, you will accept:
+
+- a list of items `T`
+- a way to extract a key `K` from each item
+
+This is where generics provide huge value: one method can count country codes, weapon names, enemy types, achievements, etc.
+
+### Tasks
+
+1. Implement:
+
+   - `public static <T, K> Map<K, Integer> countByKey(Iterable<T> items, Function<T, K> keySelector)`
+
+2. Use it for country codes by using `s -> s` as the key selector.
+
+### Use case
+
+In games dev:
+- Count enemy spawns by enemy type
+- Count loot drops by rarity
+- Count player actions by input type
+
+In software dev:
+- Count HTTP responses by status code
+- Count records by category
+- Count events by source
+
+---
+
+## Stage 4 – Trial with real datasets (CSV + XML)
+
+Now we switch from “toy data” to realistic data.
+
+### Dataset A (CSV): Country codes
+
+You are given:
+
+- `country_codes.csv`
+
+**Important:** this file contains codes separated by commas (often on one line), so your CSV reading must collect **every token**, not just the first column.
+
+### Dataset B (XML): Weapon inventory
+
+You are given:
+
+- `weapon_inventory.xml`
+
+This represents a factory inventory in a game. Each weapon has:
+
 - `name` (String)
 - `strength` (int)
 
-### Task B.1
-- Load the weapon data from XML into a `List<Weapon>`
-- Count how many weapons exist for each weapon name
-- Print the results sorted alphabetically by weapon name
+You will load weapons from XML into a `List<Weapon>` then count by weapon name.
 
 ---
 
-## Part C – Benchmarking
+## Stage 5 – Benchmarking (nanoTime → milliseconds)
 
-For **both parts**, measure the time taken to perform the frequency count:
+For both datasets:
 
-- Use `System.nanoTime()`
-- Convert the result to milliseconds
-- Output the elapsed time
+1. Record start time using `System.nanoTime()`
+2. Run the frequency counting step
+3. Record end time using `System.nanoTime()`
+4. Convert to milliseconds:
+
+   - `double ms = (end - start) / 1_000_000.0;`
+
+5. Print the elapsed time in **ms**
+
+### Use case
+
+Benchmarking is how you validate performance claims.
+Even simple counters can become bottlenecks when:
+- you run them every frame
+- you process big datasets
+- you perform repeated queries
 
 ---
 
@@ -305,14 +460,9 @@ public class PrintHelper
 
 ---
 
-## Your Task
+## Your Implementation File
 
-Complete the `Exercise.java` file by:
-
-1. Loading the CSV and XML datasets
-2. Applying a generic frequency-counting method
-3. Printing sorted reports
-4. Displaying benchmark timings in milliseconds
+Complete the exercise in `Exercise.java` by working through the stages above.
 
 <details>
 <summary><strong>Exercise.java</strong></summary>
@@ -421,15 +571,18 @@ public class Exercise {
 
 ---
 
-## Note
+## Submission Notes
 
-- Do **not** hard-code data
-- Focus on clarity, correctness, and reuse
+- Do **not** hard-code dataset contents (beyond the Stage 0 starter list).
+- Your final solution should reuse the **generic** counter for both:
+  - country codes (`String`)
+  - weapons (`Weapon`)
+- Keep output sorted using the provided printing helper.
 
 ---
 
 ## Stretch Ideas (Optional)
 
-- Compare `HashMap` vs `TreeMap`
-- Count weapons by *strength* instead of name
-- Increase dataset size and observe benchmark changes
+- Compare `HashMap` vs `TreeMap` for ordering
+- Count weapons by *strength* (you will need to decide how to group strengths)
+- Increase dataset size (duplicate the list) and observe benchmark changes
