@@ -58,7 +58,11 @@ By completing this exercise, you should be able to:
 
 ---
 
-## Stage 0 – Starter dataset 
+## Stage 1 – Naive frequency counting (inefficient on purpose)
+
+### What you are building
+
+A frequency counter that works **without Maps**.
 
 Use this hard-coded starter list first:
 
@@ -82,16 +86,6 @@ ie: 4
 ua: 2
 us: 1
 ```
-
-Order: **sorted by code**.
-
----
-
-## Stage 1 – Naive frequency counting (inefficient on purpose)
-
-### What you are building
-
-A frequency counter that works **without Maps**.
 
 This is the “brute force” version:
 - For each code, count how many times it appears by scanning the entire list again.
