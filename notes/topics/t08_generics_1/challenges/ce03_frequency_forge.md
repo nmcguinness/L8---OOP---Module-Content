@@ -70,6 +70,8 @@ List<String> codes = List.of(
 );
 ```
 
+Write code, in any way you see fit, to count the frequency of occurence of each country code and output the frequencies in alphabetical order. 
+
 Your output should look like:
 
 ```
