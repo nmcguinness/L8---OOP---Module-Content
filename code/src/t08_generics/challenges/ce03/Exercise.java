@@ -63,13 +63,11 @@ public class Exercise {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-
+        
         long start = System.nanoTime();
         Map<Weapon, Integer> counts = countByKey(weapons);
         long end = System.nanoTime();
 
-        System.out.println("=== Weapon inventory frequency (XML) ===");
         System.out.println("Weapons read: " + weapons.size());
         System.out.println("Unique weapon names: " + counts.size());
         long elapsedNs = end - start;
