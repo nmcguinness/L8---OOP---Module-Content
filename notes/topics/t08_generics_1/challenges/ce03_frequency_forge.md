@@ -186,7 +186,7 @@ Now we switch from “toy data” to realistic data.
 
 You are given:
 
-- [country_codes.csv](https://github.com/nmcguinness/L8---OOP---Module-Content/blob/main/code/data/ce03/country_codes.csv)
+- [country_codes](https://github.com/nmcguinness/L8---OOP---Module-Content/blob/main/code/data/ce03/country_codes.csv)
 
 **Important:** this file contains codes separated by commas (often on one line), so your CSV reading must collect **every token**, not just the first column.
 
@@ -194,7 +194,7 @@ You are given:
 
 You are given:
 
-- [weapon_inventory.xml](https://github.com/nmcguinness/L8---OOP---Module-Content/blob/main/code/data/ce03/weapon_inventory.xml)
+- [weapon_inventory](https://github.com/nmcguinness/L8---OOP---Module-Content/blob/main/code/data/ce03/weapon_inventory.xml)
 
 This represents a factory inventory in a game. Each weapon has:
 
@@ -234,7 +234,7 @@ You are provided with the following helper and model classes.
 You should **not modify** these files.
 
 <details>
-<summary><strong>Weapon.java</strong></summary>
+<summary><strong>Weapon</strong></summary>
 
 ```java
 package t08_generics.challenges.ce03;
@@ -290,7 +290,7 @@ public class Weapon {
 </details>
 
 <details>
-<summary><strong>FileHelper.java</strong></summary>
+<summary><strong>FileHelper</strong></summary>
 
 ```java
 package t08_generics.challenges.ce03;
@@ -419,7 +419,7 @@ public class FileHelper
 </details>
 
 <details>
-<summary><strong>PrintHelper.java</strong></summary>
+<summary><strong>PrintHelper</strong></summary>
 
 ```java
 package t08_generics.challenges.ce03;
@@ -461,7 +461,7 @@ public class PrintHelper
 Complete the exercise in `Exercise.java` by working through the stages above.
 
 <details>
-<summary><strong>Exercise.java</strong></summary>
+<summary><strong>Exercise</strong></summary>
 
 ```java
 package t08_generics.challenges.ce03;

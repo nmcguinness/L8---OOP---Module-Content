@@ -63,7 +63,7 @@ public class Exercise {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        
+
         long start = System.nanoTime();
         Map<Weapon, Integer> counts = countByKey(weapons);
         long end = System.nanoTime();
