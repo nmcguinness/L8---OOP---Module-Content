@@ -165,13 +165,16 @@ Your method should behave like:
   <div style="margin-top:0.8rem;">
 
 ```java
-public class Lists {
+
+class Entity { }
+
+class Lists {
     public static void printAll(java.util.List<?> items) {
         if (items == null)
             return;
 
-        for (Object x : items)
-            System.out.println(x);
+        for (Object obj : items)
+            System.out.println(obj);
     }
 }
 
