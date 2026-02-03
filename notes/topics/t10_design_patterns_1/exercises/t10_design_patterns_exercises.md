@@ -44,7 +44,15 @@ public class Exercise {
 
 ## Exercise 01 — Combat AI attack behaviour (Strategy)
 
-**Objective:** Replace “distance-based if/else” with a Strategy so enemies can swap attack behaviour without changing the enemy class.
+**Objective:** Build a tiny combat model where an `Enemy` can attack at a given distance, but the **rules for how damage is computed** live outside the `Enemy` class.
+
+Your finished solution should let you:
+- create multiple enemies using the **same** `Enemy` class
+- give each enemy a different `AttackStrategy` (e.g., melee vs ranged)
+- call `enemy.attack(distanceMeters)` and get damage back based on that strategy’s rules
+
+In other words: `Enemy` should *not* contain “if melee then … else if ranged then …”. Instead, the `Enemy` delegates damage calculation to the strategy object you supplied. In `run()`, you should be able to show the *same distances* producing different results for different enemy strategies.
+
 
 **Context (software + games):**
 
@@ -184,7 +192,14 @@ class Enemy
 
 ## Exercise 02 — Pricing rules (Strategy)
 
-**Objective:** Encapsulate pricing/discount rules so checkout code never becomes a giant conditional blob.
+**Objective:** Build a checkout/pricing component where the **final price calculation** is fully controlled by a `PriceStrategy`.
+
+Your finished solution should let you:
+- take a `basePrice` and produce a `finalPrice` using a chosen pricing rule
+- swap pricing rules without changing the `Checkout` class (only swap the strategy object)
+- keep “special business rules” (like a minimum price floor) inside the strategy that owns that rule
+
+In `run()`, you should be able to compute prices for the same base value using multiple strategies and clearly see different results (including a case that triggers the “never below €5.00” behaviour).
 
 **Context (software + games):**
 
@@ -315,7 +330,16 @@ class Checkout
 
 ## Exercise 03 — Execute a task with a policy (Strategy + Command)
 
-**Objective:** Combine both patterns: represent work as a Command, and represent “how to run it” as a Strategy.
+**Objective:** Build a mini job runner where:
+- a **Command** represents “a piece of work that can be triggered”
+- a **Strategy** represents “the policy for how that work is executed”
+
+Your finished solution should let you:
+- define one `Task` (the thing that ultimately runs)
+- execute the *same* task under different policies (e.g., fast vs safe)
+- keep the policy decision out of the task itself (the task should not decide whether it runs validated or unchecked)
+
+In `run()`, you should execute the same task twice and show different behaviour/output depending on whether you chose a “fast/unchecked” execution strategy or a “safe/validated” execution strategy.
 
 **Context (software + games):**
 
@@ -471,7 +495,14 @@ class Task
 
 ## Exercise 04 — MacroCommand (commands as building blocks)
 
-**Objective:** Build a MacroCommand so many small commands can be treated as one larger command.
+**Objective:** Build a `MacroCommand` that behaves like a normal `Command`, but internally runs **a list of commands in order**.
+
+Your finished solution should let you:
+- create small commands that each perform one step (here: printing a message)
+- combine them into a macro that represents a larger workflow
+- execute the macro with one call to `execute()`, producing the same order of steps you added
+
+In `run()`, calling `macro.execute()` once should produce a clear multi-step output (e.g., `start → validate → execute → done`). The key requirement is that the macro is treated just like any other command, meaning it implements the same interface.
 
 **Context (software + games):**
 
@@ -582,7 +613,17 @@ class MacroCommand implements Command
 
 ## Exercise 05 — Undoable commands (undo stack)
 
-**Objective:** Implement undo by storing commands that know how to reverse themselves.
+**Objective:** Build an undo system where each user action is represented as an object that can both:
+- apply the change (`execute()`)
+- reverse the same change (`undo()`)
+
+Your finished solution should let you:
+- apply multiple changes to a shared receiver object (a `Counter`)
+- push each executed command onto a history stack
+- undo the *most recent* command(s) in reverse order (LIFO)
+- verify that state returns to the correct previous values after each undo
+
+In `run()`, you should demonstrate a sequence like “+5, +2, +10” and then undo the last two actions, showing the counter stepping back correctly. The undo logic should not “guess” — it should be the exact inverse of what was executed.
 
 **Context (software + games):**
 
@@ -733,7 +774,11 @@ class Counter
 
 ## Exercise 06 — Café order tickets dispatcher (Command + Strategy)
 
-**Objective:** Queue work as commands, and choose a processing policy with a strategy selector—while keeping selection logic out of the queue.
+**Objective:** Build a simple order-ticket dispatcher where:
+- each ticket is processed via a **Command** (so tickets can be queued and executed later)
+- the processing behaviour is selected via a **Strategy** (so different tickets can be handled differently)
+
+In `run()`, you should enqueue multiple tickets that trigger each policy and show distinct outputs (`IMMEDIATE MAKE ...`, `VALIDATED MAKE ...`, `REJECT ...`, `TRAINING ...`). The important part is that the queue does not contain the selection logic — it simply runs commands — and the strategy selection is done in one place (the selector).
 
 **Context:**
 
