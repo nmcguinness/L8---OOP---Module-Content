@@ -12,11 +12,15 @@ public class Main {
 
    public void run() {
 
-       HashSet<String> set = new HashSet<String>();
        // 1 = t01 Arrays, 2 = t02 Ordering, etc
         int selection = 8; // <— set which block to run
 
         switch (selection) {
+            case 0:
+                System.out.println("\n******************** Challenge Exercises ********************\n");
+                runChallengeExercises();
+                break;
+
             case 1:
                 System.out.println("\n******************** Topic:t01 - arrays ********************\n");
                 run_t01_Arrays();
@@ -57,9 +61,14 @@ public class Main {
                 run_t08_Generics();
                 break;
 
+            case 9:
+                System.out.println("\n******************** Topic:t09 - Generics 2 ********************\n");
+                run_t09_Generics();
+                break;
+
             case 10:
-                System.out.println("\n******************** Challenge Exercises ********************\n");
-                runChallengeExercises();
+                System.out.println("\n******************** Topic:t10 - Design Patterns I ********************\n");
+                run_t10_DesignPatterns();
                 break;
 
             default:
@@ -314,5 +323,13 @@ public class Main {
 
         System.out.println("\n********** Challenge Exercise — Frequency Counter **********\n");
         t08_generics.challenges.ce03.Exercise.run();
+    }
+
+    private void run_t09_Generics(){
+        System.out.println("Students will review this material during their project");
+    }
+
+    private void run_t10_DesignPatterns(){
+
     }
 }

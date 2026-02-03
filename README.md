@@ -25,7 +25,7 @@ This space holds your weekly topics, exercises, shared resources, and assessment
 | t07 | Interface | [Notes](/notes/topics/t07_interface/t07_interface_notes.md) | [Exercises](/notes/topics/t07_interface/exercises/t07_interface_exercises.md) | [Challenge Exercises](notes/topics/t07_interface/challenges/ce02_the_directory_distillery.md)  |
 | t08 | Generics 1: Type Parameters & Type Safety | [Notes](/notes/topics/t08_generics_1/t08_generics_1_notes.md) | [Exercises](/notes/topics//t08_generics_1/exercises/t08_generics_1_exercises.md) | [Challenge Exercises - Frequency forge](notes/topics/t08_generics_1/challenges/ce03_frequency_forge.md), [Challenge Exercises - Cargo manifest](notes/topics/t08_generics_1/challenges/ce04_cargo_manifest.md) |
 | t09 | Generics 2: Wildcards, Variance & PECS | [Notes](/notes/topics/t09_generics_2/t09_generics_2_notes.md) | [Exercises](/notes/topics/t09_generics_2/exercises/t09_generics_2_exercises.md) | None |
-| t10 | Design Patterns I: Behaviour & Decoupling | [Notes](/notes/topics/t10_design_patterns_1/t10_design_patterns_1.md) | None | None |
+| t10 | Design Patterns I: Behaviour & Decoupling | [Notes](/notes/topics/t10_design_patterns_1/t10_design_patterns_1.md) | [Exercises](/notes/topics/t10_design_patterns_1/exercises/t10_design_patterns_exercises.md) | None |
 | t11 | Design Patterns II: Structure & Coordination | [Notes](/notes/topics/t11_design_patterns_2/t11_design_patterns_2_notes.md) | None | None |
 
 
