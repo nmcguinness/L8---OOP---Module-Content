@@ -1,4 +1,4 @@
-```yaml
+---
 title: "DB Connectivity I — JDBC + DAO (Data Access Object)"
 subtitle: "Local dev using phpMyAdmin"
 created: 2026-02-04
@@ -8,7 +8,7 @@ tags: ["java", "mysql", "phpmyadmin", "jdbc", "dao", "n-tier"]
 related_notes:
   - "t10_design_patterns_1_notes.md"
   - "t11_design_patterns_2_notes.md"
-```
+---
 
 # DB Connectivity I — JDBC + DAO (Data Access Object)
 
