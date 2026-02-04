@@ -58,14 +58,14 @@ This topic uses those same ideas in a very practical way:
 - Your service layer depends on the interface, not the concrete class.
 
 This connects directly to:
-- **Design Patterns I — Behaviour & Decoupling** (`t10_design_patterns_1.md`)  
+- **Design Patterns I — Behaviour & Decoupling** 
   Focus: programming to an interface, reducing conditionals, composition over inheritance.
-- **Design Patterns II — Structure, Coordination & Extension** (`t11_design_patterns_2_notes.md`)  
+- **Design Patterns II — Structure, Coordination & Extension**
   Focus: structuring larger systems, coordinating components, preparing for extension and deployment.
 
 ---
 
-## Key terms (explained)
+## Key terms
 
 ### Database
 A **database** is a managed store of data. Here, your database system is **MySQL**.
@@ -204,7 +204,7 @@ Key parts:
 
 ---
 
-## Step 5 — Your MySQL connection string (explained)
+## Step 5 — Your MySQL connection string 
 
 Example:
 
@@ -222,7 +222,7 @@ Breakdown:
 
 ---
 
-## Step 6 — Connection smoke test (confirm you can connect)
+## Step 6 — Connection smoke test 
 
 Before writing a DAO, confirm you can connect and run a trivial query.
 
@@ -232,7 +232,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public final class DbSmokeTest {
+public class DbSmokeTest {
 
     public static void main(String[] args) throws Exception {
 
@@ -257,17 +257,17 @@ public final class DbSmokeTest {
 
 ---
 
-# Building the DAO (worked example)
+# Building the DAO 
 
 ## Step 7 — Domain class: `Task`
 
 A domain class represents something meaningful in your system. Here: a task you want to store in MySQL.
 
 ```java
-public final class Task {
-    private final int id;
-    private final String title;
-    private final String status;
+public class Task {
+    private int id;
+    private String title;
+    private String status;
 
     public Task(int id, String title, String status) {
         if (id < 0)
@@ -425,11 +425,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public final class JdbcTaskDao implements TaskDao {
+public class JdbcTaskDao implements TaskDao {
 
-    private final String _url;
-    private final String _user;
-    private final String _pass;
+    private String _url;
+    private String _user;
+    private String _pass;
 
     public JdbcTaskDao(String url, String user, String pass) {
         if (url == null || url.isBlank())
@@ -567,11 +567,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-public final class TaskService {
+public class TaskService {
 
-    private static final Set<String> ALLOWED = Set.of("TODO", "DOING", "DONE");
+    private static Set<String> ALLOWED = Set.of("TODO", "DOING", "DONE");
 
-    private final TaskDao _dao;
+    private TaskDao _dao;
 
     public TaskService(TaskDao dao) {
         if (dao == null)
@@ -609,7 +609,7 @@ public final class TaskService {
 ## Step 11 — Presentation layer: console demo
 
 ```java
-public final class Main {
+public class Main {
     public static void main(String[] args) throws Exception {
 
         String url = "jdbc:mysql://localhost:3306/taskhub?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
