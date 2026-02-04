@@ -27,7 +27,7 @@ This space holds your weekly topics, exercises, shared resources, and assessment
 | t09 | Generics 2: Wildcards, Variance & PECS | [Notes](/notes/topics/t09_generics_2/t09_generics_2_notes.md) | [Exercises](/notes/topics/t09_generics_2/exercises/t09_generics_2_exercises.md) | None |
 | t10 | Design Patterns I: Behaviour & Decoupling | [Notes](/notes/topics/t10_design_patterns_1/t10_design_patterns_1_notes.md) | [Exercises](/notes/topics/t10_design_patterns_1/exercises/t10_design_patterns_exercises.md) | None |
 | t11 | Design Patterns II: Structure & Coordination | [Notes](/notes/topics/t11_design_patterns_2/t11_design_patterns_2_notes.md) | None | None |
-| t12 | DB Connectivity I — JDBC + DAO (Data Access Object) | [Notes](/notes/topics/t12_dao/t12_db_connectivity_dao.md) | None | None |
+| t12 | DB Connectivity I — JDBC + DAO (Data Access Object) | [Notes](/notes/topics/t12_dao/t12_db_connectivity_dao.md) | [Exercises](/notes/topics/t12_dao/exercises/t12_db_connectivity_exercises.md)  | None |
 
 ---
 
