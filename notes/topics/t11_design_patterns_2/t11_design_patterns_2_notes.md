@@ -1,3 +1,18 @@
+---
+title: "Design Patterns II — Structure, Coordination & Extension"
+subtitle: "COMP C8Z03 — Year 2 OOP"
+description: "How creation and coordination become design problems at scale, and how Factory, Observer, and Adapter help systems evolve without collapsing into coupling and conditionals."
+created: 2026-02-04
+version: 1.0
+authors: ["OOP Teaching Team"]
+tags: [java, design-patterns, factory, observer, adapter, coordination, architecture, oop, year2, comp-c8z03]
+prerequisites:
+  - Design Patterns I (Strategy and Command)
+  - Interfaces and composition
+  - Recognising tight coupling and conditional logic smells
+  - Collections (basic collections and queues)
+---
+
 # Design Patterns II — Structure, Coordination & Extension
 
 > **Prerequisites:**
