@@ -83,8 +83,8 @@ Your `run()` must print the **required outputs** listed below.
 ## Source data
 Use **both** JSON files as your input datasets:
 
-- [ce13_incidents_08.json](/ce13_incidents_08.json) (small test set)
-- [ce13_incidents_100](/ce13_incidents_100.json) larger set)
+- [ce13_incidents_08.json](ce13_incidents_08.json) (small test set)
+- [ce13_incidents_100](ce13_incidents_100.json) (larger set)
 
 Your code should be able to run against either dataset without changes (e.g., by switching a file path).
 
