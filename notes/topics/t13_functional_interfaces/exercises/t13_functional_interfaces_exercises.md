@@ -3,9 +3,6 @@ title: "t13 Functional Interfaces — Exercises"
 subtitle: "Predicate, Consumer, BiConsumer, Function, Supplier"
 description: "Eight progressive exercises for practising Java functional interfaces with collections and comparator factories."
 created: 2026-02-12
-generated_at: "2026-02-12T11:59:31Z"
-version: 1.0
-authors: ["OOP Teaching Team"]
 tags: ["java", "oop", "functional-interfaces", "java.util.function", "collections", "comparator"]
 prerequisites:
   - "t13_functional_interfaces.md"

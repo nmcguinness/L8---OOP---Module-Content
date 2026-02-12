@@ -1,16 +1,13 @@
 ---
 title: "Challenge Exercise: Alien vs Predicate — Shipboard Incident Triage"
 subtitle: "Functional interfaces + Comparator factory + one design pattern"
-description: "Build a playful but realistic incident triage pipeline on a spaceship. Ingest JSON incidents, filter with predicates, prioritise via a comparator factory, and execute responses using one design pattern."
+description: "Build a playful incident triage system on a spaceship. Ingest JSON incidents, filter using predicates, prioritise using comparator factory, and execute responses using a design pattern from Design Patterns I/II."
 created: 2026-02-11
-generated_at: "2026-02-12T10:45:03Z"
+generated_at: "2026-02-12T14:32:15Z"
 version: 1.0
 authors: ["OOP Teaching Team"]
 tags: ["java", "challenge", "functional-interfaces", "java.util.function", "comparator", "collections", "design-patterns", "year2", "comp-c8z03"]
-prerequisites:
-  - "t13_functional_interfaces.md"
-  - "Design Patterns I/II notes"
-  - "Collections I/II"
+prerequisites: ["t13_functional_interfaces.md", "t11_design_patterns_2_exercises.md"]
 ---
 
 # Challenge Exercise: Alien vs Predicate — Shipboard Incident Triage
@@ -22,300 +19,148 @@ Some incidents are harmless ship noise. Some are crew error. Some… look *alien
 
 Your job is to build a small **incident triage** system that:
 
-1. loads incidents from JSON,
-2. filters them using configurable rules,
-3. prioritises them using a chosen priority mode,
-4. executes a response plan made of small actions.
+1. **loads** incidents from JSON,
+2. **filters** them using configurable rules,
+3. **prioritises** them using a chosen strategy,
+4. **executes** a response plan made of small actions.
 
-<details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px; padding:0.9rem 1rem; margin:1rem 0;">
-  <summary style="cursor:pointer; font-weight:800; list-style:none; margin:0;">Definition: What does “triage” mean here?</summary>
-  <div style="margin-top:0.8rem;">
-
-In this challenge, **triage** means:
-
-1. **Sort the incoming reports into groups**
-   - *ignore* (safe / not important)
-   - *review* (unclear / low confidence)
-   - *act* (important enough to respond to)
-
-2. **Decide what to deal with first**
-   - use a prioritisation rule (for example: highest threat first)
-
-3. **Apply a response**
-   - log it, raise an alert, quarantine a zone, etc.
-
-This is the same idea used in real systems (monitoring and alerting): lots of incoming events arrive, and your software helps decide **what matters**, **what comes first**, and **what happens next**.
-
-  </div>
-</details>
-
+Keep it funny. Keep it professional. Treat the data as messy and untrusted.
 
 ---
 
-## Ground rules
-- Prefer simple loops over streams unless explicitly asked.
-- Validate inputs defensively (null checks, range checks).
-- Choose the **most appropriate** functional interface:
-  - `Predicate<T>` for yes/no tests
-  - `Function<T, R>` for transformations
-  - `Consumer<T>`/`BiConsumer<T, U>` for side effects
-  - `Supplier<T>` for defaults / object creation
-- Predicates should be *pure* (no mutation). Put side effects in Consumers or Commands.
-- Do not use `record` or `final`.
+## Starter Tasks
 
----
+### Model the data (`Incident`)
+Create a class to represent an incident report with fields such as:
 
-## How to run
-Create a class per exercise package with a single entry point:
-
-```java
-public class Exercise {
-    public static void run() {
-        // load, filter, sort, report
-    }
-}
-```
-
-Your `run()` must print the **required outputs** listed below.
-
----
-
-## Source data
-Use **both** JSON files as your input datasets:
-
-- [ce13_incidents_08.json](ce13_incidents_08.json) (small test set)
-- [ce13_incidents_100](ce13_incidents_100.json) (larger set)
-
-Your code should be able to run against either dataset without changes (e.g., by switching a file path).
-
-**Important:** These datasets intentionally contain messy cases (duplicates, blanks, out-of-range values) so you can demonstrate defensive coding.
-
----
-
-## What you are building
-You are building a small program that does this:
-
-1. **Read** incidents from a JSON file.
-2. **Clean/validate** them (because real data is messy).
-3. **Decide** which incidents matter (using **predicates**).
-4. **Sort** the important ones (using a **comparator factory**).
-5. **Carry out a response** (using **Consumers** OR your chosen design pattern).
-6. **Print a clear report** so someone can understand what happened.
-
----
-
-## Tasks 
-
-### Task 01 — Create the `Incident` class
-Make a normal Java class called `Incident`. It should store the incident data from JSON.
-
-**Minimum fields to include**
 - `id` (String)
 - `timestampUtc` (long)
 - `deck` (int)
 - `zone` (String)
 - `type` (String)
-- `threat` (int)
-- `confidence` (int)
+- `threat` (int 0–100)
+- `confidence` (int 0–100)
 - `notes` (String)
 
-**What you must do in this task**
-- Add a constructor (or a static factory) so you can create an `Incident`.
-- Add a `toString()` that prints something readable (not every field if you don’t want).
-- Decide how you will handle bad data. Pick **one** approach:
-  - **Reject** bad incidents (skip them and count them), OR
-  - **Fix** minor issues (trim strings, clamp ranges) and still accept them.
-
-**Examples of “bad data” you should expect**
-- `zone` might have extra spaces at the start/end
-- `notes` might be blank
-- `threat` or `confidence` might be outside `0..100`
-- duplicate `id` values may appear
-
-**Good sign you’re done**
-- You can create 3–5 `Incident` objects in code and print them nicely.
+**Add methods** that help your triage logic (examples):
+- Validate ranges (`threat`, `confidence`)
+- Normalize strings (trim/blank handling)
+- A readable `toString()` for log output
 
 ---
 
-### Task 02 — Load incidents from JSON
-Load incidents from the provided files:
+### Choose a collection you’ve studied and justify it
+Pick **one** primary structure to organise your work:
 
-- [ce13_incidents_08.json](ce13_incidents_08.json)
-- [ce13_incidents_100.json](ce13_incidents_100.json)
+- `ArrayList<Incident>` for the full feed + `Map<String, List<Incident>>` grouped by zone  
+- `LinkedList<Incident>` as a processing queue (FIFO)  
+- `Map<String, List<Incident>>` as the primary store (zone → incidents)  
+- `Set<String>` to deduplicate incident IDs (recommended if your feed can repeat)
 
-**What “load” means here**
-- Read the JSON file from disk
-- Parse it into objects your program can use
-- Convert each JSON entry into an `Incident`
-
-**Rules**
-- Your program must not crash if the data is messy.
-- If an incident is invalid, skip it and record that you skipped it.
-
-See Appendix B below for a helper class to read/write a list of objects of type `T` to/from a JSON file.
-
-**Tip**: Start with the **08** file first. Only move to **100** when your logic works.
+Write a 1–2 line comment explaining why your choice fits your design.
 
 ---
 
-### Task 03 — Choose ONE main collection and say why
-Pick one main collection you’ve studied and use it as your “main way of storing/organising” incidents.
+### Functional interfaces: rule → score → action
+You must use:
 
-Choose one:
-- `ArrayList<Incident>` (good general-purpose choice)
-- `LinkedList<Incident>` (nice if you treat it like a queue)
-- `Map<String, List<Incident>>` (good for grouping by zone)
-- `Set<String>` (good for tracking duplicate ids)
+- `Predicate<Incident>` for “is this relevant / suspicious?”
+- `Function<Incident, ?>` for extracting values (key selection, scoring, categorisation)
+- `Consumer<Incident>` (or `BiConsumer<K, V>`) for side effects (logging, counters, state updates)
+- A **Comparator factory** (see below)
 
-**What you must write**
-Add a short comment in your code (1–2 lines):
-- which one you chose
-- why it makes sense for your solution
-
-You can still use other collections where needed, but one should be clearly your main one.
+**Important:** Predicates should be *pure* (no mutation). Put side effects in Consumers.
 
 ---
 
-### Task 04 — Write rules using `Predicate<Incident>`
-Write at least **two** rules using `Predicate<Incident>`.
+### Comparator factory (required)
+Create a small factory that returns a `Comparator` based on a mode string (or enum).  
+It must support at least **3** prioritisation modes, for example:
 
-Example rule ideas (you may invent your own):
-- Keep incidents where `threat >= 70`
-- Keep incidents where `type` is `"ACID"` or `"MOTION"`
-- Keep incidents where `confidence >= 60`
-- Keep incidents in certain zones (e.g., `"MedBay"`, `"Airlock"`)
-
-**Important**
-- A predicate should only **check** and return true/false.
-- Do not print, count, or modify collections inside the predicate.
-
-**You must also do**
-Combine rules using:
-- `.and(...)`
-- `.or(...)`
-- `.negate()`
-
-**Good sign you’re done**
-- You can filter a list of incidents and the result “makes sense”.
-
----
-
-### Task 05 — Comparator factory (required)
-Create a class that can return different comparators based on a mode.
-
-**What a comparator mode means**
-It is a named sorting rule, e.g.:
-- sort by threat (highest first)
-- sort by confidence (highest first)
-- sort by time (newest first)
-
-**Requirements**
-- At least **3** modes
-- At least **1** mode must be a chained comparator (e.g., zone then threat)
-
-Example mode names (you may use different names):
 - `"threat_desc"`
 - `"confidence_desc"`
 - `"timestamp_desc"`
-- `"zone_then_threat"`
+- `"zone_then_threat"` (bonus)
 
-**Good sign you’re done**
-- You can sort the same list in two different ways by changing the mode.
-
----
-
-### Task 06 — Use ONE design pattern (Strategy OR Command)
-Pick **one** design pattern from your Design Patterns notes and use it properly.
-
-You must have at least **two concrete versions** of the pattern.
-
-#### If you choose Strategy
-Use Strategy to represent different “ship operating modes” (policies).
-
-Example idea (you choose your own names):
-- “Stealth Mode” (only react to very high threat)
-- “Quarantine Mode” (react to more types of incidents)
-
-A strategy should be able to change things like:
-- which incidents you keep (rule), OR
-- how you sort, OR
-- which response approach you choose
-
-**Key point**
-You must be able to switch strategies without rewriting your main engine.
-
-#### If you choose Command
-Use Command to represent actions as objects.
-
-Example actions:
-- “Log incident”
-- “Raise alert”
-- “Quarantine zone”
-- “Increase danger score”
-
-**Key point**
-Your main engine should not be one huge `switch` that does every action.
+You must demonstrate changing the mode changes the order of incidents shown in the report.
 
 ---
 
-### Task 07 — Produce a clear report in `Exercise.run()`
-Your `Exercise.run()` must show your system working.
+### Design pattern requirement (pick ONE)
+Your solution must clearly apply **one** design pattern from Design Patterns I or II notes.  
+Choose **Strategy** or **Command**, but do **not** use both.
 
-It must print:
-- total incidents loaded
-- total incidents rejected (invalid) **with a short summary reason**
-- total incidents discarded by your rules (not important)
-- top 5 incidents after sorting (show: id, zone, type, threat, confidence, timestamp)
-- one grouped summary (e.g., count per zone OR highest-risk zone)
-- a short summary of what response happened
+- **If you choose Strategy:** it must switch between **at least two** different triage policies (e.g., “Quarantine Mode” vs “Stealth Mode”) without editing the core triage engine.
+- **If you choose Command:** it must represent responses as objects that can be **queued** and executed without putting special-case logic in your engine.
 
-**Output should be readable**
-A human should be able to look at your console output and understand what your program did.
+Write a short comment in code explaining where the pattern lives and why.
 
 ---
 
-## Required outputs
-Your `Exercise.run()` must print:
+### Demonstrate your triage in `run()`
+In your `Exercise.run()` demonstrate:
+
+1. Load a list of incidents (from the JSON helper or local fallback).
+2. Apply your **Predicate** to select which incidents matter.
+3. Prioritise them using your **Comparator factory**.
+4. Apply **actions** (Consumers or pattern-based actions) to produce an outcome.
+5. Print a small triage report.
+
+---
+
+## Required outputs (what your run should show)
+Your printed output must include:
 
 - Total incidents loaded
-- Total incidents rejected (invalid) and why (summary count, not spam)
-- Total incidents discarded by rules (non-actionable)
-- Top 5 incidents after sorting (show key fields: id, zone, type, threat, confidence, timestamp)
-- One grouped summary (e.g., incidents per zone, or highest-risk zone)
-- A clear indication of what response happened (summarised)
-
----
-
-## Suggested build order
-1. Get loading working with `ce13_incidents_08.json`.
-2. Convert JSON entries into valid `Incident` objects (skip bad ones).
-3. Make your predicates filter incidents correctly.
-4. Implement the comparator factory and verify each mode.
-5. Add your chosen design pattern (Strategy or Command).
-6. Run on `ce13_incidents_100.json` and keep the output readable.
+- Total incidents discarded by rules
+- Top 5 incidents after sorting (with key details)
+- At least one grouped summary (e.g., incidents per zone, or highest-risk zone)
+- A clear indication of what “response” happened (without spamming console)
 
 ---
 
 ## Hints
-- Treat JSON fields as untrusted: blanks, duplicates, missing data, and bad ranges are normal.
-- Keep predicates pure. If you need counters/logging, do it outside the predicate.
-- Keep your console output readable: summaries beat spam.
-- If you’re stuck: make your triage pipeline work first without the design pattern, then refactor to introduce the pattern cleanly.
+- Start by hard-coding 6–10 sample incidents **in code**, then swap to JSON once the logic works.
+- Treat the JSON feed as untrusted: expect missing fields, blanks, duplicates, and weird ranges.
+- Keep your comparator modes small and test them with the same dataset.
+- If your system grows, ask: “What should be a pure function?” vs “What should cause side effects?”
+- Keep selection logic out of your core engine (avoid one giant `switch` that does everything).
 
 ---
 
-## Extensions
-- Add a “manual review” lane for incidents that are suspicious but low confidence.
-- Add a cooldown escalation rule: repeated incidents in the same zone within a time window.
-- Add a second feed and merge incidents (dedupe by id).
-- Add a small text menu: choose dataset + policy + comparator mode at runtime.
+## Extensions (optional)
+- Add a “manual review” lane: incidents that are not discarded, but not actionable.
+- Add a deduplication rule: ignore incidents with repeated IDs.
+- Add a “cooldown”: if the same zone triggers 3 incidents in a short window, escalate.
+- Add a second data source (another JSON feed) and merge results.
+- Add a tiny UI: print a menu allowing the user to choose policy + comparator mode.
 
 ---
 
-## Appendix A: Real-World Parallels
+## Utility: Loading incidents from JSON (starter helper)
+You may use a helper class to load incidents from a remote URL that returns JSON.  
+If you don’t want networking in your submission, provide a fallback that loads from a local JSON string/file.
 
-This challenge is playful, but the architecture mirrors real incident triage systems (monitoring/alerting/response).  
-This table is here so you can see the *application* of what you’re building, not to suggest a specific implementation.
+**You must not rely on perfect input.** Validate and skip bad incidents.
+
+Suggested helper API:
+
+```java
+import java.util.List;
+
+class IncidentFeedClient {
+    static List<Incident> fetch(String url);
+}
+```
+
+Suggested behaviour:
+- return an empty list on failure (and print a single warning)
+- skip invalid incidents rather than crashing the whole run
+
+---
+
+## Real-World Parallels: How this maps to incident triage
+This challenge is playful, but the architecture mirrors real incident triage systems (monitoring + alerting + response).
 
 | In-story concept | Real-world analogue | What the concept represents |
 | :- | :- | :- |
@@ -342,163 +187,149 @@ This table is here so you can see the *application* of what you’re building, n
 | Consumer / BiConsumer | Action | Perform an effect (log, count, update state) |
 | Supplier | Default provider | Create defaults when data/state is missing |
 
----
+## Appendix B: Gson helper for reading JSON from a file
 
-## Appendix B: Useful Code
+This appendix shows one simple way to load a JSON **array of objects** from disk using **Gson**.
+The demo uses a `Book` class so you can test the helper without touching your Alien challenge code.
+
+### Setup (Maven / pom.xml)
+
+Add this dependency inside `<dependencies>`:
+
+```xml
+<dependency>
+  <groupId>com.google.code.gson</groupId>
+  <artifactId>gson</artifactId>
+  <version>2.11.0</version>
+</dependency>
+```
+
+Reload Maven in IntelliJ:
+- Maven tool window → **Reload All Maven Projects**, or
+- right-click `pom.xml` → **Maven** → **Reload project**
+
+### Create the demo JSON file
+
+Create this file in your project:
+
+- `data/books_12_sample.json`
+
+Example contents:
+
+```json
+[
+  { "_title": "Dune", "_author": "Frank Herbert", "_year": 1965 },
+  { "_title": "The Left Hand of Darkness", "_author": "Ursula K. Le Guin", "_year": 1969 },
+  { "_title": "Neuromancer", "_author": "William Gibson", "_year": 1984 },
+  { "_title": "Snow Crash", "_author": "Neal Stephenson", "_year": 1992 },
+  { "_title": "Foundation", "_author": "Isaac Asimov", "_year": 1951 },
+  { "_title": "I, Robot", "_author": "Isaac Asimov", "_year": 1950 },
+  { "_title": "Do Androids Dream of Electric Sheep?", "_author": "Philip K. Dick", "_year": 1968 },
+  { "_title": "The Martian", "_author": "Andy Weir", "_year": 2011 },
+  { "_title": "Project Hail Mary", "_author": "Andy Weir", "_year": 2021 },
+  { "_title": "The Hobbit", "_author": "J. R. R. Tolkien", "_year": 1937 },
+  { "_title": "1984", "_author": "George Orwell", "_year": 1949 },
+  { "_title": "Brave New World", "_author": "Aldous Huxley", "_year": 1932 }
+]
+```
+
+### Helper: GsonFileReader
 
 ```java
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JSONSerialiser<T> implements AutoCloseable {
-    private final ObjectMapper _mapper;
+public class GsonFileReader<T> {
+    private final Gson _gson;
     private final Class<T> _elementType;
 
-    private Path _path;
-    private boolean _isOpen;
-
     /// <summary>
-    /// Creates a JSON list session for reading/writing a JSON array of objects of type <typeparamref name="T"/>.
+    /// Creates a JSON file reader that can parse a JSON array into a List of <typeparamref name="T"/>.
     /// </summary>
-    /// <param name="elementType">The class type of the list element.</param>
-    public JSONSerialiser(Class<T> elementType) {
+    /// <param name="elementType">The element class (e.g., Book.class).</param>
+    public GsonFileReader(Class<T> elementType) {
         if (elementType == null)
             throw new IllegalArgumentException("elementType is null.");
 
         _elementType = elementType;
-        _mapper = new ObjectMapper();
-    }
-
-    /// <summary>
-    /// Opens the session for a given file path. You must call this before reading or writing.
-    /// </summary>
-    /// <param name="path">Path to a JSON file that contains a JSON array.</param>
-    public void open(Path path) {
-        if (path == null)
-            throw new IllegalArgumentException("path is null.");
-
-        if (_isOpen)
-            throw new IllegalStateException("session is already open.");
-
-        _path = path;
-        _isOpen = true;
+        _gson = new Gson();
     }
 
     /// <summary>
     /// Reads a JSON file containing a JSON array and returns a list of <typeparamref name="T"/>.
     /// </summary>
-    /// <returns>A new list containing the loaded elements.</returns>
-    public List<T> readList() {
-        ensureOpen();
+    /// <param name="path">Path to the JSON file.</param>
+    /// <returns>A new ArrayList containing the loaded items (empty if file is blank).</returns>
+    public List<T> readList(Path path) {
+        if (path == null)
+            throw new IllegalArgumentException("path is null.");
 
-        if (!Files.exists(_path))
-            throw new IllegalArgumentException("file does not exist: " + _path);
+        if (!Files.exists(path))
+            throw new IllegalArgumentException("file does not exist: " + path);
 
         try {
-            JavaType listType = _mapper.getTypeFactory()
-                .constructCollectionType(List.class, _elementType);
+            String json = Files.readString(path, StandardCharsets.UTF_8);
 
-            List<T> data = _mapper.readValue(_path.toFile(), listType);
+            if (json == null || json.isBlank())
+                return new ArrayList<>();
 
-            // Jackson may return an internal list type; return a plain ArrayList for students.
+            Type listType = TypeToken.getParameterized(List.class, _elementType).getType();
+            List<T> data = _gson.fromJson(json, listType);
+
+            if (data == null)
+                return new ArrayList<>();
+
             return new ArrayList<>(data);
         } catch (IOException ex) {
-            throw new IllegalArgumentException("failed to read json list: " + _path, ex);
+            throw new IllegalArgumentException("failed to read json: " + path, ex);
         }
     }
+}
+```
 
-    /// <summary>
-    /// Writes a list of <typeparamref name="T"/> to the opened path as a formatted JSON array.
-    /// </summary>
-    /// <param name="items">The items to write.</param>
-    public void writeList(List<T> items) {
-        ensureOpen();
+### Demo usage (Book)
 
-        if (items == null)
-            throw new IllegalArgumentException("items is null.");
+```java
+import java.nio.file.Path;
+import java.util.List;
 
-        try {
-            if (_path.getParent() != null)
-                Files.createDirectories(_path.getParent());
+public class DemoBooksFromFile {
+    public static void main(String[] args) {
 
-            _mapper.writerWithDefaultPrettyPrinter().writeValue(_path.toFile(), items);
-        } catch (IOException ex) {
-            throw new IllegalArgumentException("failed to write json list: " + _path, ex);
-        }
+        //helper to tell you what directory to put your data file in
+        System.out.println("Put your data file in: " + System.getProperty("user.dir"));
+
+        GsonFileReader<Book> reader = new GsonFileReader<>(Book.class);
+        List<Book> books = reader.readList(Path.of("data/books_12_sample.json"));
+
+        System.out.println("Loaded: " + books.size());
+        for (int i = 0; i < books.size() && i < 3; i++)
+            System.out.println(books.get(i));
     }
-
-    /// <summary>
-    /// Closes the session and clears the currently opened path.
-    /// </summary>
-    @Override
-    public void close() {
-        _path = null;
-        _isOpen = false;
-    }
-
-    /// <summary>
-    /// Ensures the session has been opened before performing any file operations.
-    /// </summary>
-    private void ensureOpen() {
-        if (!_isOpen)
-            throw new IllegalStateException("session is not open.");
-    }
-
-    // -------------------------------------------------------------------------
-    // Demo (commented out)
-    // -------------------------------------------------------------------------
-    /*
-    import java.util.ArrayList;
-
-    public static class Book {
-        private String _title;
-        private String _author;
-        private int _year;
-
-        public Book() { } // Jackson needs a no-arg constructor
-
-        public Book(String title, String author, int year) {
-            _title = title;
-            _author = author;
-            _year = year;
-        }
-
-        public String getTitle() { return _title; }
-        public void setTitle(String title) { _title = title; }
-
-        public String getAuthor() { return _author; }
-        public void setAuthor(String author) { _author = author; }
-
-        public int getYear() { return _year; }
-        public void setYear(int year) { _year = year; }
-
-        @Override
-        public String toString() {
-            return _title + " (" + _year + "), by " + _author;
-        }
-    }
-
-    public static void demo() {
-        List<Book> books = new ArrayList<>();
-        books.add(new Book("Dune", "Frank Herbert", 1965));
-        books.add(new Book("The Left Hand of Darkness", "Ursula K. Le Guin", 1969));
-
-        try (JSONSerialiser<Book> session = new JSONSerialiser<>(Book.class)) {
-            session.open(Path.of("data/books.json"));
-            session.writeList(books);
-
-            List<Book> loaded = session.readList();
-            for (Book b : loaded)
-                System.out.println(b);
-        }
-    }
-    */
 }
 
+class Book {
+    private String _title;
+    private String _author;
+    private int _year;
+
+    public Book() { }
+
+    public String getTitle() { return _title; }
+    public String getAuthor() { return _author; }
+    public int getYear() { return _year; }
+
+    @Override
+    public String toString() {
+        return _title + " (" + _year + "), by " + _author;
+    }
+}
 ```
