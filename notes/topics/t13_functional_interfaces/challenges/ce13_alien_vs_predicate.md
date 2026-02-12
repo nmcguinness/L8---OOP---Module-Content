@@ -140,8 +140,8 @@ Make a normal Java class called `Incident`. It should store the incident data fr
 ### Task 02 — Load incidents from JSON
 Load incidents from the provided files:
 
-- [ce13_incidents_08.json](/ce13_incidents_08.json)
-- [ce13_incidents_100](/ce13_incidents_100.json)
+- [ce13_incidents_08.json](ce13_incidents_08.json)
+- [ce13_incidents_100.json](ce13_incidents_100.json)
 
 **What “load” means here**
 - Read the JSON file from disk
@@ -152,9 +152,9 @@ Load incidents from the provided files:
 - Your program must not crash if the data is messy.
 - If an incident is invalid, skip it and record that you skipped it.
 
-**Tip**
-Start with the **08** file first. Only move to **100** when your logic works.
-
+> **Tip**
+> Start with the **08** file first. Only move to **100** when your logic works.
+> See Appendix B below for a helper class to read/write a list of objects of type `T` to/from a JSON file.
 ---
 
 ### Task 03 — Choose ONE main collection and say why
