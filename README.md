@@ -28,6 +28,8 @@ This space holds your weekly topics, exercises, shared resources, and assessment
 | t10 | Design Patterns I: Behaviour & Decoupling | [Notes](/notes/topics/t10_design_patterns_1/t10_design_patterns_1_notes.md) | [Exercises](/notes/topics/t10_design_patterns_1/exercises/t10_design_patterns_exercises.md) | None |
 | t11 | Design Patterns II: Structure & Coordination | [Notes](/notes/topics/t11_design_patterns_2/t11_design_patterns_2_notes.md) | [Exercises](/notes/topics/t11_design_patterns_2/exercises/t11_design_patterns_2_exercises.md) | None |
 | t12 | DB Connectivity I — JDBC + DAO (Data Access Object) | [Notes](/notes/topics/t12_dao/t12_db_connectivity_dao.md) | [Exercises](/notes/topics/t12_dao/exercises/t12_db_connectivity_exercises.md)  | None |
+| t13 | Functional Interfaces | [Notes](/notes/topics/t13_functional_interfaces/t13_functional_interfaces.md) | [Exercises](/notes/topics/t13_functional_interfaces/exercises/t13_functional_interfaces_exercises.md) | [Challenge Exercises](notes/topics/t13_functional_interfaces/challenges/ce13_alien_vs_predicate.md) |
+
 
 ---
 
