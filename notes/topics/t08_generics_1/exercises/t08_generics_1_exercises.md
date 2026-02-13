@@ -33,7 +33,7 @@ Create a class `Exercise` in that package with a static entry point:
 ```java
 package t08_generics.exercises.ex01;
 
-public final class Exercise {
+public class Exercise {
     public static void run() {
         // call your methods here; print results for quick checks
     }
@@ -69,12 +69,12 @@ You will then demonstrate the key difference:
 Implement these two classes:
 
 ```java
-final class InventoryLegacy {
+class InventoryLegacy {
     public void add(Object item) { }
     public Object get(int index) { }
 }
 
-final class Inventory<T> {
+class Inventory<T> {
     public void add(T item) { }
     public T get(int index) { }
 }
@@ -89,7 +89,7 @@ final class Inventory<T> {
    - Add a **commented-out** cast line that *could* crash at runtime (and explain why in a short comment).
 
 2. **Refactor to generics**
-   - Create `final class Inventory<T>`.
+   - Create `class Inventory<T>`.
    - Use `ArrayList<T>` internally (not a raw `ArrayList`).
    - Implement `add` and `get`.
 
@@ -109,8 +109,8 @@ final class Inventory<T> {
   <div style="margin-top:0.8rem;">
 
 ```java
-final class InventoryLegacy {
-    private final java.util.ArrayList _items = new java.util.ArrayList();
+class InventoryLegacy {
+    private java.util.ArrayList _items = new java.util.ArrayList();
 
     public void add(Object item) {
         _items.add(item);
@@ -121,8 +121,8 @@ final class InventoryLegacy {
     }
 }
 
-final class Inventory<T> {
-    private final java.util.ArrayList<T> _items = new java.util.ArrayList<>();
+class Inventory<T> {
+    private java.util.ArrayList<T> _items = new java.util.ArrayList<>();
 
     public void add(T item) {
         _items.add(item);
@@ -133,7 +133,7 @@ final class Inventory<T> {
     }
 }
 
-public final class Exercise {
+public class Exercise {
     public static void run() {
         InventoryLegacy legacy = new InventoryLegacy();
         legacy.add("hi");
@@ -178,7 +178,7 @@ You must decide and document the empty behaviour:
 ### Required API
 
 ```java
-final class UndoStack<T> {
+class UndoStack<T> {
     public void push(T item) { }
     public T pop() { }     // null if empty
     public T peek() { }    // null if empty
@@ -217,8 +217,8 @@ final class UndoStack<T> {
   <div style="margin-top:0.8rem;">
 
 ```java
-final class UndoStack<T> {
-    private final java.util.ArrayList<T> _items = new java.util.ArrayList<>();
+class UndoStack<T> {
+    private java.util.ArrayList<T> _items = new java.util.ArrayList<>();
 
     public void push(T item) {
         _items.add(item);
@@ -241,7 +241,7 @@ final class UndoStack<T> {
     }
 }
 
-public final class Exercise {
+public class Exercise {
     public static void run() {
         UndoStack<String> s = new UndoStack<>();
         s.push("MoveLeft");
@@ -308,7 +308,7 @@ public static <T, R> java.util.ArrayList<R> map(
   <div style="margin-top:0.8rem;">
 
 ```java
-public final class Maps {
+public class Maps {
     public static <T, R> java.util.ArrayList<R> map(
             java.util.List<T> items,
             java.util.function.Function<T, R> transform) {
@@ -328,7 +328,7 @@ public final class Maps {
     }
 }
 
-public final class Exercise {
+public class Exercise {
     public static void run() {
         java.util.ArrayList<Integer> lengths =
                 Maps.map(java.util.List.of("ant", "zebra"), String::length);
@@ -395,7 +395,7 @@ public static <T> java.util.ArrayList<T> where(
   <div style="margin-top:0.8rem;">
 
 ```java
-public final class Filters {
+public class Filters {
     public static <T> java.util.ArrayList<T> where(
             java.util.List<T> items,
             java.util.function.Predicate<T> predicate) {
@@ -417,7 +417,7 @@ public final class Filters {
     }
 }
 
-public final class Exercise {
+public class Exercise {
     public static void run() {
         java.util.ArrayList<String> a =
                 Filters.where(java.util.List.of("Amy", "Bob", "Ada"), s -> s.startsWith("A"));
@@ -453,7 +453,7 @@ This is your first “mini data structure” built with generics and constraints
 ### Required API
 
 ```java
-final class TopN<T extends Comparable<T>> {
+class TopN<T extends Comparable<T>> {
     public TopN(int capacity) { }
     public void add(T item) { }
     public java.util.ArrayList<T> valuesDescending() { } // returns defensive copy
@@ -492,9 +492,9 @@ final class TopN<T extends Comparable<T>> {
   <div style="margin-top:0.8rem;">
 
 ```java
-final class TopN<T extends Comparable<T>> {
-    private final int _capacity;
-    private final java.util.ArrayList<T> _values = new java.util.ArrayList<>();
+class TopN<T extends Comparable<T>> {
+    private int _capacity;
+    private java.util.ArrayList<T> _values = new java.util.ArrayList<>();
 
     public TopN(int capacity) {
         if (capacity < 1)
@@ -529,7 +529,7 @@ final class TopN<T extends Comparable<T>> {
     }
 }
 
-public final class Exercise {
+public class Exercise {
     public static void run() {
         TopN<Integer> best = new TopN<>(3);
         best.add(10);
@@ -567,7 +567,7 @@ A tiny wrapper around `HashMap<K, V>` that enforces one rule:
 ### Required API
 
 ```java
-final class Registry<K, V> {
+class Registry<K, V> {
     public void put(K key, V value) { }
     public V get(K key) { }
     public boolean containsKey(K key) { }
@@ -600,8 +600,8 @@ final class Registry<K, V> {
   <div style="margin-top:0.8rem;">
 
 ```java
-final class Registry<K, V> {
-    private final java.util.HashMap<K, V> _map = new java.util.HashMap<>();
+class Registry<K, V> {
+    private java.util.HashMap<K, V> _map = new java.util.HashMap<>();
 
     public void put(K key, V value) {
         if (key == null)
@@ -622,7 +622,7 @@ final class Registry<K, V> {
     }
 }
 
-public final class Exercise {
+public class Exercise {
     public static void run() {
         Registry<String, Integer> scores = new Registry<>();
         scores.put("Zara", 100);
@@ -655,7 +655,7 @@ A FIFO (first-in-first-out) message bus backed by `ArrayList<T>`.
 ### Required API
 
 ```java
-final class MessageBus<T> {
+class MessageBus<T> {
     public void enqueue(T msg) { }
     public T dequeue() { }   // null if empty
     public int size() { }
@@ -694,8 +694,8 @@ final class MessageBus<T> {
   <div style="margin-top:0.8rem;">
 
 ```java
-final class MessageBus<T> {
-    private final java.util.ArrayList<T> _queue = new java.util.ArrayList<>();
+class MessageBus<T> {
+    private java.util.ArrayList<T> _queue = new java.util.ArrayList<>();
 
     public void enqueue(T msg) {
         _queue.add(msg);
@@ -716,7 +716,7 @@ final class MessageBus<T> {
     }
 }
 
-public final class Exercise {
+public class Exercise {
     public static void run() {
         MessageBus<String> bus = new MessageBus<>();
         bus.enqueue("A");
@@ -783,7 +783,7 @@ public static <T> T[] newArray(Class<T> elementType, int length)
   <div style="margin-top:0.8rem;">
 
 ```java
-public final class ArraysEx {
+public class ArraysEx {
     @SuppressWarnings("unchecked")
     public static <T> T[] newArray(Class<T> elementType, int length) {
         if (elementType == null)
@@ -797,7 +797,7 @@ public final class ArraysEx {
     }
 }
 
-public final class Exercise {
+public class Exercise {
     public static void run() {
         String[] names = ArraysEx.newArray(String.class, 3);
         System.out.println(names.length); // 3
@@ -836,7 +836,7 @@ An immutable `Result<T>` with two states:
 ### Required API
 
 ```java
-final class Result<T> {
+class Result<T> {
     public static <T> Result<T> ok(T value) { }
     public static <T> Result<T> fail(String error) { }
 
@@ -875,9 +875,9 @@ final class Result<T> {
   <div style="margin-top:0.8rem;">
 
 ```java
-final class Result<T> {
-    private final T _value;
-    private final String _error;
+class Result<T> {
+    private T _value;
+    private String _error;
 
     private Result(T value, String error) {
         _value = value;
@@ -917,7 +917,7 @@ final class Result<T> {
     }
 }
 
-public final class Exercise {
+public class Exercise {
     public static void run() {
         Result<Integer> hp = Result.ok(10);
         Result<String> label = hp.map(n -> "HP:" + n);
@@ -957,7 +957,7 @@ A pool with two operations:
 ### Required API
 
 ```java
-final class ObjectPool<T> {
+class ObjectPool<T> {
     public ObjectPool(java.util.function.Supplier<T> factory) { }
     public T acquire() { }
     public void release(T obj) { }
@@ -992,9 +992,9 @@ final class ObjectPool<T> {
   <div style="margin-top:0.8rem;">
 
 ```java
-final class ObjectPool<T> {
-    private final java.util.function.Supplier<T> _factory;
-    private final java.util.ArrayList<T> _pool = new java.util.ArrayList<>();
+class ObjectPool<T> {
+    private java.util.function.Supplier<T> _factory;
+    private java.util.ArrayList<T> _pool = new java.util.ArrayList<>();
 
     public ObjectPool(java.util.function.Supplier<T> factory) {
         if (factory == null)
@@ -1016,7 +1016,7 @@ final class ObjectPool<T> {
     }
 }
 
-public final class Exercise {
+public class Exercise {
     public static void run() {
         ObjectPool<StringBuilder> pool = new ObjectPool<>(StringBuilder::new);
 
