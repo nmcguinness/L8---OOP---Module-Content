@@ -16,19 +16,19 @@ This space holds your weekly topics, exercises, shared resources, and assessment
 
 | Topic | Description | Notes | Exercises | Challenge Exercises |
 |:--|:--|:--|:--|:--|
-| t01 | Arrays | [Notes](notes/topics/t01_arrays/t01_arrays_notes.md) | [Exercises](notes/topics/t01_arrays/exercises/t01_arrays_exercises.md) | [Challenge Exercises](notes/topics/t01_arrays/challenges/ce01_array_of_suspects.md) | 
+| t01 | Arrays | [Notes](notes/topics/t01_arrays/t01_arrays_notes.md) | [Exercises](notes/topics/t01_arrays/exercises/t01_arrays_exercises.md) | [Challenge Exercises - Array of Suspects](notes/topics/t01_arrays/challenges/ce01_array_of_suspects.md) | 
 | t02 | Ordering | [Notes](/notes/topics/t02_ordering/t02_ordering_notes.md) | [Exercises](/notes/topics/t02_ordering/exercises/t02_ordering_exercises.md) | None |
 | t03 | Collections 1: ArrayList | [Notes](/notes/topics/t03_collections_1/t03_collections_1_notes.md) | [Exercise](/notes/topics/t03_collections_1/exercises/t03_collections_1_exercises.md) | None |
 | t04 | Collections 2: LinkedList & iteration patterns |[Notes](/notes/topics/t04_collections_2/t04_collections_2_notes.md) | [Exercise](/notes/topics/t04_collections_2/exercises/t04_collections_2_exercises.md) | None |
 | t05 | Equality & Hashing | [Notes](/notes/topics/t05_equality_hashing/t05_equality_hashing_notes.md) | [Exercises](/notes/topics/t05_equality_hashing/exercises/t05_equality_hashing_exercises.md) | None |
 | t06 | Inheritance | [Notes](/notes/topics/t06_inheritance/t06_inheritance_notes.md) | [Exercises](/notes/topics/t06_inheritance/exercises/t06_inheritance_exercises.md) | None |
-| t07 | Interface | [Notes](/notes/topics/t07_interface/t07_interface_notes.md) | [Exercises](/notes/topics/t07_interface/exercises/t07_interface_exercises.md) | [Challenge Exercises](notes/topics/t07_interface/challenges/ce02_the_directory_distillery.md)  |
+| t07 | Interface | [Notes](/notes/topics/t07_interface/t07_interface_notes.md) | [Exercises](/notes/topics/t07_interface/exercises/t07_interface_exercises.md) | [Challenge Exercises - Directory Distillery](notes/topics/t07_interface/challenges/ce02_the_directory_distillery.md)  |
 | t08 | Generics 1: Type Parameters & Type Safety | [Notes](/notes/topics/t08_generics_1/t08_generics_1_notes.md) | [Exercises](/notes/topics//t08_generics_1/exercises/t08_generics_1_exercises.md) | [Challenge Exercises - Frequency forge](notes/topics/t08_generics_1/challenges/ce03_frequency_forge.md), [Challenge Exercises - Cargo manifest](notes/topics/t08_generics_1/challenges/ce04_cargo_manifest.md) |
 | t09 | Generics 2: Wildcards, Variance & PECS | [Notes](/notes/topics/t09_generics_2/t09_generics_2_notes.md) | [Exercises](/notes/topics/t09_generics_2/exercises/t09_generics_2_exercises.md) | None |
 | t10 | Design Patterns I: Behaviour & Decoupling | [Notes](/notes/topics/t10_design_patterns_1/t10_design_patterns_1_notes.md) | [Exercises](/notes/topics/t10_design_patterns_1/exercises/t10_design_patterns_exercises.md) | None |
 | t11 | Design Patterns II: Structure & Coordination | [Notes](/notes/topics/t11_design_patterns_2/t11_design_patterns_2_notes.md) | [Exercises](/notes/topics/t11_design_patterns_2/exercises/t11_design_patterns_2_exercises.md) | None |
 | t12 | DB Connectivity I — JDBC + DAO (Data Access Object) | [Notes](/notes/topics/t12_dao/t12_db_connectivity_dao.md) | [Exercises](/notes/topics/t12_dao/exercises/t12_db_connectivity_exercises.md)  | None |
-| t13 | Functional Interfaces | [Notes](/notes/topics/t13_functional_interfaces/t13_functional_interfaces.md) | [Exercises](/notes/topics/t13_functional_interfaces/exercises/t13_functional_interfaces_exercises.md) | [Challenge Exercises - Alien vs Predicate](notes/topics/t13_functional_interfaces/challenges/ce13_alien_vs_predicate.md) |
+| t13 | Functional Interfaces | [Notes](/notes/topics/t13_functional_interfaces/t13_functional_interfaces.md) | [Exercises](/notes/topics/t13_functional_interfaces/exercises/t13_functional_interfaces_exercises.md) | [Challenge Exercises - Alien vs Predicate](notes/topics/t13_functional_interfaces/challenges/ce05_alien_vs_predicate.md), [Challenge Exercises - Accumulator Ops](notes/topics/t13_functional_interfaces/challenges/ce06_accumulator_ops.md) |
 
 
 ---
