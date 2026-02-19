@@ -2,6 +2,10 @@
 title: "Challenge Exercise: Accumulator Ops — Telemetry Triage"
 subtitle: "One reusable Accumulator + functional interfaces in the wild"
 description: "Build a small telemetry triage tool. Use one generic Accumulator driven by functional interfaces (Predicate, Function/ToDoubleFunction, Consumer, Comparator). Produce a concise report that works for both games and software telemetry."
+created: 2026-02-17
+generated_at: "2026-02-19T10:30:00Z"
+version: 1.2
+authors: ["OOP Teaching Team"]
 tags: ["java", "challenge", "functional-interfaces", "java.util.function", "comparator", "collections", "generics", "pecs", "year2", "comp-c8z03"]
 prerequisites: ["t13_functional_interfaces.md", "t02_ordering_notes.md", "t08_generics_1_notes.md", "t09_generics_2_notes.md"]
 ---
@@ -39,7 +43,7 @@ By completing this challenge, you should be able to:
 
 ---
 
-## Starter data model 
+## Starter data model (required)
 
 Create a class:
 
@@ -57,7 +61,7 @@ Suggested fields (you may add more):
 - `unit` (String)
 - `notes` (String)
 
-### Validation helpers
+### Validation helpers (required)
 Add methods that help your triage logic, for example:
 
 - `boolean hasValidId()`
@@ -74,33 +78,42 @@ Your code must handle:
 
 ## The Accumulator 
 
-Create a generic class:
+For this challenge you **do not** write a new accumulator from scratch.
 
-```java
-import java.util.function.ToDoubleFunction;
+Instead, you must use the **starter** `Accumulator` provided in the appendices of this brief.
 
-class Accumulator<T> {
-    Accumulator(ToDoubleFunction<T> measure);
-    void update(T item);
-    void reset();
+- Class: `org.example.GenericAccumulator`
 
-    int getCount();
-    double getMin();
-    double getMax();
-    double getAverage();
-    double getStdDev(); // choose population or sample, document it
+### How to include the starter code
 
-    String toString();
-}
-```
+1) Create the package folders shown above in your project:
+- `src/main/java/org/example/`
+
+2) Copy the source code from:
+- **Appendix B — Accumulator (starter code)**
+
+1) Ensure your own classes import and use these exactly as shown in the requirements below.
+
+### Minimum API you must use
+
+You must use the accumulator in a “pipeline” style by supplying:
+
+- a **measurer** function (extracts a numeric value from an event), and
+- a **filter** predicate (accept/reject rules).
+
+> You are allowed to extend the accumulator (e.g., improve `reset()`, add better validation, or switch to `ToDoubleFunction<T>`),  
+> but your solution must still run using the provided accumulator as the starting point.
 
 ### Correctness requirement 
-Your standard deviation must be **mathematically correct** for a streaming update.
-Use a correct online method (e.g., Welford).
+
+- Your stats must be correct for the data you accept (count/min/max/mean/std dev).
+- **Bonus**: improve standard deviation to a mathematically robust streaming method (e.g., Welford) and document the change.
 
 ---
 
-## Choose your primary collection 
+
+## Choose your primary collection
+
 Pick **one** primary structure and justify it in a 1–2 line comment:
 
 - `ArrayList<TelemetryEvent>` as your main store
@@ -111,7 +124,7 @@ You may use additional collections where appropriate (e.g., `Set<String>` for de
 
 ---
 
-## Functional interface requirements 
+## Functional interface requirements
 
 Your solution must include all of the following. The aim is that your program reads like a **pipeline**:
 
@@ -215,7 +228,7 @@ You must compute stats per **category**.
 
 Recommended approach:
 
-- Use a `Map<String, Accumulator<TelemetryEvent>>`
+- Use a `Map<TelemetryCategory, GenericAccumulator>`
 - Use `computeIfAbsent(category, ...)` to create an accumulator when needed
 
 ### Step B — Produce a summary row type
@@ -241,14 +254,14 @@ Use a clean console output or markdown-like output such as:
 
 ---
 
-## Required run behaviour (what your `run()` must show)
+## Required run behaviour
 
 Your `run()` (or `main`) must:
 
-1. Create at least **20** telemetry events (use helper code in Appendix A to load from CSV file sample(s)).
+1. Create at least **20** telemetry events (hard-coded is fine).
 2. Include at least **5** events that should be discarded (invalid ID/category/value, etc).
 3. Apply your **Predicate** rules to filter.
-4. Accumulate per category using your `Accumulator<T>`.
+4. Accumulate per category using your `GenericAccumulator`.
 5. Print a report including:
    - counts loaded/accepted/discarded
    - top categories sorted by **one** comparator mode
@@ -265,15 +278,23 @@ Your `run()` (or `main`) must:
 
 ---
 
-## Extensions (optional)
-Pick any 2:
+### Provided sample CSV files
 
-- Deduplicate events by `id` using a `Set<String>`
-- Add `Predicate<TelemetryEvent> isGameEvent` and print separate reports for game vs software
-- Add a unit conversion function (ms → s, kb → mb) and demonstrate it
-- Add a “manual review” lane: events that are not discarded but also not accumulated
-- Add a `SummaryRow` field for `range = max - min` and a comparator mode for it
-- Implement a second accumulator for *derived* metric (e.g., z-score of values inside a category)
+Two sample datasets are provided alongside this brief:
+
+- [ce06_telemetry_10](/notes/topics/t13_functional_interfaces/challenges/ce06_telemetry_10.csv) — small dataset for quick testing (includes a couple of discard candidates)
+- [ce06_telemetry_100](/notes/topics/t13_functional_interfaces/challenges/ce06_telemetry_100.csv) — larger dataset for more realistic output (includes multiple discard candidates)
+
+Place either file in your chosen `data/` folder (or update the `Path.of(...)` accordingly), then load with:
+
+```java
+List<TelemetryEvent> events =
+    TelemetryHelper.loadTelemetryEventsFromCsv(Path.of("data", "telemetry_10.csv"));
+// or:
+List<TelemetryEvent> events =
+    TelemetryHelper.loadTelemetryEventsFromCsv(Path.of("data", "telemetry_100.csv"));
+```
+
 
 ---
 
@@ -425,21 +446,212 @@ List<TelemetryEvent> events =
 System.out.println("Loaded: " + events.size());
 ```
 
+---
 
-### Provided sample CSV files
+## Appendix B — Accumulator (starter code)
 
-Two sample datasets are provided alongside this brief:
+Copy this class into: `src/main/java/org/example/Accumulator.java`
 
-- [ce06_telemetry_10](/notes/topics/t13_functional_interfaces/challenges/ce06_telemetry_10.csv) — small dataset for quick testing (includes a couple of discard candidates)
-- [ce06_telemetry_100](/notes/topics/t13_functional_interfaces/challenges/ce06_telemetry_100.csv) — larger dataset for more realistic output (includes multiple discard candidates)
-
-Place either file in your chosen `data/` folder (or update the `Path.of(...)` accordingly), then load with:
+> This is the **starter** accumulator that measures **string length** only.
+> Your job in the main exercise is to evolve the idea into a **GenericAccumulator** driven by functional interfaces.
 
 ```java
-List<TelemetryEvent> events =
-    TelemetryHelper.loadTelemetryEventsFromCsv(Path.of("data", "telemetry_10.csv"));
-// or:
-List<TelemetryEvent> events =
-    TelemetryHelper.loadTelemetryEventsFromCsv(Path.of("data", "telemetry_100.csv"));
+package org.example;
+
+import java.text.DecimalFormat;
+
+public class Accumulator {
+
+    //region Class Variables
+
+    /// <summary>
+    /// Shared formatter used to present numeric values with a small number of decimals.
+    /// </summary>
+    /// <see cref="DecimalFormat"/>
+    private static DecimalFormat df = new DecimalFormat("###.###");
+
+    //endregion
+
+    //region Instance Variables (one of each variable per instance of Accumulator)
+
+    /// <summary>
+    /// The smallest string length observed so far.
+    /// Starts at <see cref="Double.POSITIVE_INFINITY"/> so the first update becomes the new minimum.
+    /// </summary>
+    private double min = Double.POSITIVE_INFINITY;
+
+    /// <summary>
+    /// The largest string length observed so far.
+    /// Starts at <see cref="Double.NEGATIVE_INFINITY"/> so the first update becomes the new maximum.
+    /// </summary>
+    private double max = Double.NEGATIVE_INFINITY;
+
+    /// <summary>
+    /// The running mean (average) of string lengths.
+    /// </summary>
+    private double mean = 0;
+
+    /// <summary>
+    /// The running sum of all string lengths processed so far.
+    /// </summary>
+    private double sum = 0;
+
+    /// <summary>
+    /// The number of strings processed so far (excluding null inputs).
+    /// </summary>
+    private int count = 0;
+
+    /// <summary>
+    /// The running standard deviation of string lengths.
+    /// </summary>
+    private double stdDev = 0;
+
+    /// <summary>
+    /// Running total of squared differences used to compute standard deviation.
+    /// </summary>
+    private double sumStdDev = 0;
+
+    //endregion
+
+    //region Constructors
+
+    /// <summary>
+    /// Creates a new accumulator with default initial state.
+    /// </summary>
+    public Accumulator() {
+        // Defaults are set in field initialisers.
+    }
+
+    //endregion
+
+    //region Getters
+
+    /// <summary>
+    /// Gets the minimum string length observed so far.
+    /// </summary>
+    public double getMin() {
+        return min;
+    }
+
+    /// <summary>
+    /// Gets the maximum string length observed so far.
+    /// </summary>
+    public double getMax() {
+        return max;
+    }
+
+    /// <summary>
+    /// Gets the running mean string length.
+    /// </summary>
+    public double getMean() {
+        return mean;
+    }
+
+    /// <summary>
+    /// Gets the sum of all processed string lengths.
+    /// </summary>
+    public double getSum() {
+        return sum;
+    }
+
+    /// <summary>
+    /// Gets the number of processed strings.
+    /// </summary>
+    public int getCount() {
+        return count;
+    }
+
+    /// <summary>
+    /// Gets the running standard deviation of string lengths.
+    /// </summary>
+    public double getStdDev() {
+        return stdDev;
+    }
+
+    //endregion
+
+    //region Methods
+
+    /// <summary>
+    /// Updates the accumulator with one string (measuring by string length).
+    /// Null strings are ignored.
+    /// </summary>
+    /// <param name="data">The string to process.</param>
+    public void update(String data) {
+
+        if (data == null)
+            return;
+
+        double measure = data.length();
+
+        if (measure < min)
+            min = measure;
+
+        if (measure > max)
+            max = measure;
+
+        count++;
+        sum += measure;
+        mean = sum / count;
+
+        double diff = measure - mean;
+        sumStdDev += diff * diff;
+        stdDev = Math.sqrt(sumStdDev / count);
+    }
+
+    /// <summary>
+    /// Resets the accumulator back to its initial state.
+    /// </summary>
+    public void reset() {
+
+        this.min = Double.POSITIVE_INFINITY;
+        this.max = Double.NEGATIVE_INFINITY;
+        this.mean = 0;
+        this.count = 0;
+        this.sum = 0;
+        this.sumStdDev = 0;
+        this.stdDev = 0;
+    }
+
+    //endregion
+
+    //region Overrides
+
+    /// <summary>
+    /// Returns a readable multi-line string of stats.
+    /// </summary>
+    @Override
+    public String toString() {
+        return  "min: " + df.format(min) + "\n" +
+                "max: " + df.format(max) + "\n" +
+                "mean: " + df.format(mean) + "\n" +
+                "sum: " + df.format(sum) + "\n" +
+                "count: " + count + "\n" +
+                "stdDev: " + df.format(stdDev) + "\n";
+    }
+
+    /// <summary>
+    /// Returns a neatly aligned version of the stats for console output.
+    /// </summary>
+    public String toPrettyString() {
+        return String.format(
+                "  %-10s %10s%n" +
+                "  %-10s %10s%n" +
+                "  %-10s %10s%n" +
+                "  %-10s %10s%n" +
+                "  %-10s %10d%n" +
+                "  %-10s %10s%n",
+                "min:", df.format(min),
+                "max:", df.format(max),
+                "mean:", df.format(mean),
+                "sum:", df.format(sum),
+                "count:", count,
+                "stdDev:", df.format(stdDev)
+        );
+    }
+
+    //endregion
+}
 ```
+
 
