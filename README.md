@@ -8,7 +8,8 @@ This space holds your weekly topics, exercises, shared resources, and assessment
 
 | CA                   | Summary                                                                                                                                                                                                                                               | Brief                                                                                               |
 |:-|:-|:-|
-| **GCA1** | Work in **pairs** to design and implement a small records system. Load a large CSV from GitHub, parse to in-memory structures, support searching/filtering/ordering and simple reporting. | [CA brief](/notes/assessments/briefs/2025-26-l8-s2-oop-gca1.md) ,[Stage 2 Report Template](/notes/assessments/briefs/2025-26-l8-s2-oop-gca1-sample-report.md)|
+| **GCA1** | Work in **pairs** to design and implement a small records system. Load a large CSV from GitHub, parse to in-memory structures, support searching/filtering/ordering and simple reporting. | [CA brief](/notes/assessments/briefs/2025-26-l8-s2-oop-gca1.md), [Stage 2 Report Template](/notes/assessments/briefs/2025-26-l8-s2-oop-gca1-sample-report.md) |
+| **GCA2** | Work in **groups** to design and implement a multi-tier client-server system with a JDBC DAO layer, JSON socket protocol, binary file (BLOB) storage, and a full JUnit test suite with ≥70% coverage. | [CA brief](/notes/assessments/briefs/2025-26-l8-s2-oop-gca2.md), [Sample README](/notes/assessments/briefs/2025-26-l8-s2-oop-gca2-sample-readme.md) |
 
 ---
 
@@ -29,7 +30,9 @@ This space holds your weekly topics, exercises, shared resources, and assessment
 | t11 | Design Patterns II: Structure & Coordination | [Notes](/notes/topics/t11_design_patterns_2/t11_design_patterns_2_notes.md) | [Exercises](/notes/topics/t11_design_patterns_2/exercises/t11_design_patterns_2_exercises.md) | None |
 | t12 | DB Connectivity I — JDBC + DAO (Data Access Object) | [Notes](/notes/topics/t12_dao/t12_db_connectivity_dao.md) | [Exercises](/notes/topics/t12_dao/exercises/t12_db_connectivity_exercises.md)  | None |
 | t13 | Functional Interfaces | [Notes](/notes/topics/t13_functional_interfaces/t13_functional_interfaces.md) | [Exercises](/notes/topics/t13_functional_interfaces/exercises/t13_functional_interfaces_exercises.md) | [Challenge Exercises - Alien vs Predicate](notes/topics/t13_functional_interfaces/challenges/ce05_alien_vs_predicate.md), [Challenge Exercises - Accumulator Ops](notes/topics/t13_functional_interfaces/challenges/ce06_accumulator_ops.md) |
-
+| t14 | Concurrency I — Threads and the ExecutorService | [Notes](/notes/topics/t14_concurrency/t14_concurrency_notes.md) | [Exercises](/notes/topics/t14_concurrency/exercises/t14_concurrency_exercises.md) | None |
+| t15 | Networking I — TCP Sockets and the Client-Server Protocol | [Notes](/notes/topics/t15_networking/t15_networking_notes.md) | [Exercises](/notes/topics/t15_networking/exercises/t15_networking_exercises.md) | None |
+| t16 | Binary I/O — Streams, BLOBs, and File Storage | [Notes](/notes/topics/t16_binary_io/t16_binary_io_notes.md) | [Exercises](/notes/topics/t16_binary_io/exercises/t16_binary_io_exercises.md) | None |
 
 ---
 
@@ -62,6 +65,8 @@ This space holds your weekly topics, exercises, shared resources, and assessment
 │
 ├─ lecturer/                          # staff-only WIP (drafts, keys, lesson plans)
 │
+├─ descriptors/                       # official module and programme descriptor PDFs
+│
 └─ notes/                             # student-facing learning material (non-runnable)
    ├─ shared/
    │  ├─ cheat sheets/
@@ -70,6 +75,9 @@ This space holds your weekly topics, exercises, shared resources, and assessment
    ├─ assessments/                    # continuous assessment documents for the module
    │  └─ briefs/
    └─ topics/                         # notes, exercises, applied case studies, and challenges exercises for the module
+      └─ tNN-topic/                   # one folder per topic (e.g. t14_concurrency)
+         ├─ challenges/               # challenge exercises for the topic
+         └─ exercises/                # standard exercises for the topic
 ```
 
 ---
