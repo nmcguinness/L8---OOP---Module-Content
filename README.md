@@ -9,7 +9,7 @@ This space holds your weekly topics, exercises, shared resources, and assessment
 | CA                   | Summary                                                                                                                                                                                                                                               | Brief                                                                                               |
 |:-|:-|:-|
 | **GCA1** | Work in **pairs** to design and implement a small records system. Load a large CSV from GitHub, parse to in-memory structures, support searching/filtering/ordering and simple reporting. | [CA brief](/notes/assessments/briefs/2025-26-l8-s2-oop-gca1.md), [Stage 2 Report Template](/notes/assessments/briefs/2025-26-l8-s2-oop-gca1-sample-report.md) |
-| **GCA2** | Work in **groups** to design and implement a multi-tier client-server system with a JDBC DAO layer, JSON socket protocol, binary file (BLOB) storage, and a full JUnit test suite with ≥70% coverage. | [CA brief](/notes/assessments/briefs/2025-26-l8-s2-oop-gca2.md), [Sample README](/notes/assessments/briefs/2025-26-l8-s2-oop-gca2-sample-readme.md) |
+| **GCA2** | Work in **groups** to design and implement a multi-tier client-server system with a JDBC DAO layer, JSON socket protocol, binary file (BLOB) storage, and a full JUnit test suite with ≥70% coverage. | CA brief - see Moodle, [Sample README](/notes/assessments/briefs/GCA2_README_SAMPLE.md) |
 
 ---
 
