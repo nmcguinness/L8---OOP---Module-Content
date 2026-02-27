@@ -32,7 +32,7 @@ This space holds your weekly topics, exercises, shared resources, and assessment
 | t13 | Functional Interfaces | [Notes](/notes/topics/t13_functional_interfaces/t13_functional_interfaces.md) | [Exercises](/notes/topics/t13_functional_interfaces/exercises/t13_functional_interfaces_exercises.md) | [Challenge Exercises - Alien vs Predicate](notes/topics/t13_functional_interfaces/challenges/ce05_alien_vs_predicate.md), [Challenge Exercises - Accumulator Ops](notes/topics/t13_functional_interfaces/challenges/ce06_accumulator_ops.md) |
 | t14 | Concurrency I — Threads and the ExecutorService | [Notes](/notes/topics/t14_concurrency/t14_concurrency_notes.md) | [Exercises](/notes/topics/t14_concurrency/exercises/t14_concurrency_exercises.md) | None |
 | t15 | Networking I — TCP Sockets and the Client-Server Protocol | [Notes](/notes/topics/t15_networking/t15_networking_notes.md) | [Exercises](/notes/topics/t15_networking/exercises/t15_networking_exercises.md) | None |
-| t16 | Binary I/O — Streams, BLOBs, and File Storage | [Notes](/notes/topics/t16_binary_io/t16_binary_io_notes.md) | [Exercises](/notes/topics/t16_binary_io/exercises/t16_binary_io_exercises.md) | None |
+| t16 | JSON in Java — From Format Basics to Socket Communication | [Notes](/notes/topics/t16_json_notes/t16_json_notes.md) | None | None |
 
 ---
 
