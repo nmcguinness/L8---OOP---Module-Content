@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd \"E:/2025-26/Yearlong/OOP/Repos/L8---OOP---Module-Content\" && git status --short && find lecturer/briefs/GCA2 -name \"*.java\" -path \"*/test/*\" | head -10 && ls lecturer/briefs/GCA2/*.md 2>/dev/null)"
+    ]
+  }
+}
