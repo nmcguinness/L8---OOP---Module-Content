@@ -17,22 +17,47 @@ This space holds your weekly topics, exercises, shared resources, and assessment
 
 | Topic | Description | Notes | Exercises | Challenge Exercises |
 |:--|:--|:--|:--|:--|
-| t01 | Arrays | [Notes](notes/topics/t01_arrays/t01_arrays_notes.md) | [Exercises](notes/topics/t01_arrays/exercises/t01_arrays_exercises.md) | [Challenge Exercises - Array of Suspects](notes/topics/t01_arrays/challenges/ce01_array_of_suspects.md) | 
-| t02 | Ordering | [Notes](/notes/topics/t02_ordering/t02_ordering_notes.md) | [Exercises](/notes/topics/t02_ordering/exercises/t02_ordering_exercises.md) | None |
-| t03 | Collections 1: ArrayList | [Notes](/notes/topics/t03_collections_1/t03_collections_1_notes.md) | [Exercise](/notes/topics/t03_collections_1/exercises/t03_collections_1_exercises.md) | None |
-| t04 | Collections 2: LinkedList & iteration patterns |[Notes](/notes/topics/t04_collections_2/t04_collections_2_notes.md) | [Exercise](/notes/topics/t04_collections_2/exercises/t04_collections_2_exercises.md) | None |
-| t05 | Equality & Hashing | [Notes](/notes/topics/t05_equality_hashing/t05_equality_hashing_notes.md) | [Exercises](/notes/topics/t05_equality_hashing/exercises/t05_equality_hashing_exercises.md) | None |
-| t06 | Inheritance | [Notes](/notes/topics/t06_inheritance/t06_inheritance_notes.md) | [Exercises](/notes/topics/t06_inheritance/exercises/t06_inheritance_exercises.md) | None |
-| t07 | Interface | [Notes](/notes/topics/t07_interface/t07_interface_notes.md) | [Exercises](/notes/topics/t07_interface/exercises/t07_interface_exercises.md) | [Challenge Exercises - Directory Distillery](notes/topics/t07_interface/challenges/ce02_the_directory_distillery.md)  |
-| t08 | Generics 1: Type Parameters & Type Safety | [Notes](/notes/topics/t08_generics_1/t08_generics_1_notes.md) | [Exercises](/notes/topics//t08_generics_1/exercises/t08_generics_1_exercises.md) | [Challenge Exercises - Frequency forge](notes/topics/t08_generics_1/challenges/ce03_frequency_forge.md), [Challenge Exercises - Cargo manifest](notes/topics/t08_generics_1/challenges/ce04_cargo_manifest.md) |
-| t09 | Generics 2: Wildcards, Variance & PECS | [Notes](/notes/topics/t09_generics_2/t09_generics_2_notes.md) | [Exercises](/notes/topics/t09_generics_2/exercises/t09_generics_2_exercises.md) | None |
-| t10 | Design Patterns I: Behaviour & Decoupling | [Notes](/notes/topics/t10_design_patterns_1/t10_design_patterns_1_notes.md) | [Exercises](/notes/topics/t10_design_patterns_1/exercises/t10_design_patterns_exercises.md) | None |
-| t11 | Design Patterns II: Structure & Coordination | [Notes](/notes/topics/t11_design_patterns_2/t11_design_patterns_2_notes.md) | [Exercises](/notes/topics/t11_design_patterns_2/exercises/t11_design_patterns_2_exercises.md) | None |
-| t12 | DB Connectivity I — JDBC + DAO (Data Access Object) | [Notes](/notes/topics/t12_dao/t12_db_connectivity_dao_notes.md) | [Exercises](/notes/topics/t12_dao/exercises/t12_db_connectivity_exercises.md)  | None |
-| t13 | Functional Interfaces | [Notes](/notes/topics/t13_functional_interfaces/t13_functional_interfaces_notes.md) | [Exercises](/notes/topics/t13_functional_interfaces/exercises/t13_functional_interfaces_exercises.md) | [Challenge Exercises - Alien vs Predicate](notes/topics/t13_functional_interfaces/challenges/ce05_alien_vs_predicate.md), [Challenge Exercises - Accumulator Ops](notes/topics/t13_functional_interfaces/challenges/ce06_accumulator_ops.md) |
-| t14 | Concurrency I — Threads and the ExecutorService | [Notes](/notes/topics/t14_concurrency_notes/t14_concurrency_notes.md) | [Exercises](/notes/topics/t14_concurrency_notes/exercises/t14_concurrency_exercises.md) | None |
-| t15 | Networking I — TCP Sockets and the Client-Server Protocol | [Notes](/notes/topics/t15_networking_notes/t15_networking_notes.md) | [Exercises](/notes/topics/t15_networking_notes/exercises/t15_networking_exercises.md) | None |
-| t16 | Binary I/O — Streams, BLOBs, and File Storage | [Notes](/notes/topics/t16_binary_io/t16_binary_io_notes.md) | [Exercises](/notes/topics/t16_binary_io/exercises/t16_binary_io_exercises.md) | None |
+| t01 | **Arrays** — create, fill, iterate, and debug fixed-size 1D and 2D arrays | [Notes](notes/topics/t01_arrays/t01_arrays_notes.md) | [Exercises](notes/topics/t01_arrays/exercises/t01_arrays_exercises.md) | [Array of Suspects](notes/topics/t01_arrays/challenges/ce01_array_of_suspects.md) |
+| t02 | **Ordering** — sort objects by natural order (Comparable) or custom rules (Comparator) | [Notes](/notes/topics/t02_ordering/t02_ordering_notes.md) | [Exercises](/notes/topics/t02_ordering/exercises/t02_ordering_exercises.md) | — |
+| t03 | **Collections I** — dynamic lists with ArrayList; add, remove, and iterate safely | [Notes](/notes/topics/t03_collections_1/t03_collections_1_notes.md) | [Exercises](/notes/topics/t03_collections_1/exercises/t03_collections_1_exercises.md) | — |
+| t04 | **Collections II** — LinkedList as list and deque; mutation-safe iteration with ListIterator | [Notes](/notes/topics/t04_collections_2/t04_collections_2_notes.md) | [Exercises](/notes/topics/t04_collections_2/exercises/t04_collections_2_exercises.md) | — |
+| t05 | **Equality & Hashing** — implement equals/hashCode correctly; understand identity vs value equality | [Notes](/notes/topics/t05_equality_hashing/t05_equality_hashing_notes.md) | [Exercises](/notes/topics/t05_equality_hashing/exercises/t05_equality_hashing_exercises.md) | — |
+| t06 | **Inheritance** — extend classes, override methods, and model hierarchies with abstract types | [Notes](/notes/topics/t06_inheritance/t06_inheritance_notes.md) | [Exercises](/notes/topics/t06_inheritance/exercises/t06_inheritance_exercises.md) | — |
+| t07 | **Interfaces** — define shared behaviour contracts; enable polymorphism without inheritance | [Notes](/notes/topics/t07_interface/t07_interface_notes.md) | [Exercises](/notes/topics/t07_interface/exercises/t07_interface_exercises.md) | [Directory Distillery](notes/topics/t07_interface/challenges/ce02_the_directory_distillery.md) |
+| t08 | **Generics I** — write type-safe reusable classes and methods using type parameters | [Notes](/notes/topics/t08_generics_1/t08_generics_1_notes.md) | [Exercises](/notes/topics/t08_generics_1/exercises/t08_generics_1_exercises.md) | [Frequency Forge](notes/topics/t08_generics_1/challenges/ce03_frequency_forge.md), [Cargo Manifest](notes/topics/t08_generics_1/challenges/ce04_cargo_manifest.md) |
+| t09 | **Generics II** — use wildcards (`? extends` / `? super`) and apply the PECS rule | [Notes](/notes/topics/t09_generics_2/t09_generics_2_notes.md) | [Exercises](/notes/topics/t09_generics_2/exercises/t09_generics_2_exercises.md) | — |
+| t10 | **Design Patterns I** — replace conditional logic with Strategy and Command patterns | [Notes](/notes/topics/t10_design_patterns_1/t10_design_patterns_1_notes.md) | [Exercises](/notes/topics/t10_design_patterns_1/exercises/t10_design_patterns_exercises.md) | — |
+| t11 | **Design Patterns II** — decouple creation and events with Factory, Observer, and Adapter | [Notes](/notes/topics/t11_design_patterns_2/t11_design_patterns_2_notes.md) | [Exercises](/notes/topics/t11_design_patterns_2/exercises/t11_design_patterns_2_exercises.md) | — |
+| t12 | **DB Connectivity** — connect to MySQL with JDBC; implement the DAO pattern for N-tier apps | [Notes](/notes/topics/t12_dao/t12_db_connectivity_dao_notes.md) | [Exercises](/notes/topics/t12_dao/exercises/t12_db_connectivity_exercises.md) | — |
+| t13 | **Functional Interfaces** — pass behaviour as data using Consumer, Function, Predicate, Supplier | [Notes](/notes/topics/t13_functional_interfaces/t13_functional_interfaces_notes.md) | [Exercises](/notes/topics/t13_functional_interfaces/exercises/t13_functional_interfaces_exercises.md) | [Alien vs Predicate](notes/topics/t13_functional_interfaces/challenges/ce05_alien_vs_predicate.md), [Accumulator Ops](notes/topics/t13_functional_interfaces/challenges/ce06_accumulator_ops.md) |
+| t14 | **Concurrency** — run tasks in parallel with Runnable threads and ExecutorService pools | [Notes](/notes/topics/t14_concurrency_notes/t14_concurrency_notes.md) | [Exercises](/notes/topics/t14_concurrency_notes/exercises/t14_concurrency_exercises.md) | — |
+| t15 | **Networking** — build a multi-client TCP server with a JSON request/response protocol | [Notes](/notes/topics/t15_networking_notes/t15_networking_notes.md) | [Exercises](/notes/topics/t15_networking_notes/exercises/t15_networking_exercises.md) | — |
+| t16 | **JSON** — serialise and deserialise Java objects with Jackson; send JSON over sockets | [Notes](/notes/topics/t16_json_notes/t16_json_notes.md) | [Exercises](/notes/topics/t16_json_notes/exercises/t16_binary_io_exercises.md) | — |
+
+---
+
+## Study Progress Checklist
+
+Work through each topic in order — **notes first, exercises next, challenges last**.
+Copy this list into a GitHub issue or your own notes and tick items off as you go.
+
+- [ ] **t01 — Arrays** · [notes](notes/topics/t01_arrays/t01_arrays_notes.md) · [exercises](notes/topics/t01_arrays/exercises/t01_arrays_exercises.md) · [challenge](notes/topics/t01_arrays/challenges/ce01_array_of_suspects.md)
+- [ ] **t02 — Ordering** · [notes](/notes/topics/t02_ordering/t02_ordering_notes.md) · [exercises](/notes/topics/t02_ordering/exercises/t02_ordering_exercises.md)
+- [ ] **t03 — Collections I** · [notes](/notes/topics/t03_collections_1/t03_collections_1_notes.md) · [exercises](/notes/topics/t03_collections_1/exercises/t03_collections_1_exercises.md)
+- [ ] **t04 — Collections II** · [notes](/notes/topics/t04_collections_2/t04_collections_2_notes.md) · [exercises](/notes/topics/t04_collections_2/exercises/t04_collections_2_exercises.md)
+- [ ] **t05 — Equality & Hashing** · [notes](/notes/topics/t05_equality_hashing/t05_equality_hashing_notes.md) · [exercises](/notes/topics/t05_equality_hashing/exercises/t05_equality_hashing_exercises.md)
+- [ ] **t06 — Inheritance** · [notes](/notes/topics/t06_inheritance/t06_inheritance_notes.md) · [exercises](/notes/topics/t06_inheritance/exercises/t06_inheritance_exercises.md)
+- [ ] **t07 — Interfaces** · [notes](/notes/topics/t07_interface/t07_interface_notes.md) · [exercises](/notes/topics/t07_interface/exercises/t07_interface_exercises.md) · [challenge](notes/topics/t07_interface/challenges/ce02_the_directory_distillery.md)
+- [ ] **t08 — Generics I** · [notes](/notes/topics/t08_generics_1/t08_generics_1_notes.md) · [exercises](/notes/topics/t08_generics_1/exercises/t08_generics_1_exercises.md) · [challenge 1](notes/topics/t08_generics_1/challenges/ce03_frequency_forge.md) · [challenge 2](notes/topics/t08_generics_1/challenges/ce04_cargo_manifest.md)
+- [ ] **t09 — Generics II** · [notes](/notes/topics/t09_generics_2/t09_generics_2_notes.md) · [exercises](/notes/topics/t09_generics_2/exercises/t09_generics_2_exercises.md)
+- [ ] **t10 — Design Patterns I** · [notes](/notes/topics/t10_design_patterns_1/t10_design_patterns_1_notes.md) · [exercises](/notes/topics/t10_design_patterns_1/exercises/t10_design_patterns_exercises.md)
+- [ ] **t11 — Design Patterns II** · [notes](/notes/topics/t11_design_patterns_2/t11_design_patterns_2_notes.md) · [exercises](/notes/topics/t11_design_patterns_2/exercises/t11_design_patterns_2_exercises.md)
+- [ ] **t12 — DB Connectivity** · [notes](/notes/topics/t12_dao/t12_db_connectivity_dao_notes.md) · [exercises](/notes/topics/t12_dao/exercises/t12_db_connectivity_exercises.md)
+- [ ] **t13 — Functional Interfaces** · [notes](/notes/topics/t13_functional_interfaces/t13_functional_interfaces_notes.md) · [exercises](/notes/topics/t13_functional_interfaces/exercises/t13_functional_interfaces_exercises.md) · [challenge 1](notes/topics/t13_functional_interfaces/challenges/ce05_alien_vs_predicate.md) · [challenge 2](notes/topics/t13_functional_interfaces/challenges/ce06_accumulator_ops.md)
+- [ ] **t14 — Concurrency** · [notes](/notes/topics/t14_concurrency_notes/t14_concurrency_notes.md) · [exercises](/notes/topics/t14_concurrency_notes/exercises/t14_concurrency_exercises.md)
+- [ ] **t15 — Networking** · [notes](/notes/topics/t15_networking_notes/t15_networking_notes.md) · [exercises](/notes/topics/t15_networking_notes/exercises/t15_networking_exercises.md)
+- [ ] **t16 — JSON** · [notes](/notes/topics/t16_json_notes/t16_json_notes.md) · [exercises](/notes/topics/t16_json_notes/exercises/t16_binary_io_exercises.md)
+
 ---
 
 ## Cheatsheets
