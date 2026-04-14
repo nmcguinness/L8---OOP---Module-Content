@@ -36,30 +36,6 @@ This space holds your weekly topics, exercises, shared resources, and assessment
 
 ---
 
-## Study Progress Checklist
-
-Work through each topic in order — **notes first, exercises next, challenges last**.
-Copy this list into a GitHub issue or your own notes and tick items off as you go.
-
-- [ ] **t01 — Arrays** · [notes](notes/topics/t01_arrays/t01_arrays_notes.md) · [exercises](notes/topics/t01_arrays/exercises/t01_arrays_exercises.md) · [challenge](notes/topics/t01_arrays/challenges/ce01_array_of_suspects.md)
-- [ ] **t02 — Ordering** · [notes](/notes/topics/t02_ordering/t02_ordering_notes.md) · [exercises](/notes/topics/t02_ordering/exercises/t02_ordering_exercises.md)
-- [ ] **t03 — Collections I** · [notes](/notes/topics/t03_collections_1/t03_collections_1_notes.md) · [exercises](/notes/topics/t03_collections_1/exercises/t03_collections_1_exercises.md)
-- [ ] **t04 — Collections II** · [notes](/notes/topics/t04_collections_2/t04_collections_2_notes.md) · [exercises](/notes/topics/t04_collections_2/exercises/t04_collections_2_exercises.md)
-- [ ] **t05 — Equality & Hashing** · [notes](/notes/topics/t05_equality_hashing/t05_equality_hashing_notes.md) · [exercises](/notes/topics/t05_equality_hashing/exercises/t05_equality_hashing_exercises.md)
-- [ ] **t06 — Inheritance** · [notes](/notes/topics/t06_inheritance/t06_inheritance_notes.md) · [exercises](/notes/topics/t06_inheritance/exercises/t06_inheritance_exercises.md)
-- [ ] **t07 — Interfaces** · [notes](/notes/topics/t07_interface/t07_interface_notes.md) · [exercises](/notes/topics/t07_interface/exercises/t07_interface_exercises.md) · [challenge](notes/topics/t07_interface/challenges/ce02_the_directory_distillery.md)
-- [ ] **t08 — Generics I** · [notes](/notes/topics/t08_generics_1/t08_generics_1_notes.md) · [exercises](/notes/topics/t08_generics_1/exercises/t08_generics_1_exercises.md) · [challenge 1](notes/topics/t08_generics_1/challenges/ce03_frequency_forge.md) · [challenge 2](notes/topics/t08_generics_1/challenges/ce04_cargo_manifest.md)
-- [ ] **t09 — Generics II** · [notes](/notes/topics/t09_generics_2/t09_generics_2_notes.md) · [exercises](/notes/topics/t09_generics_2/exercises/t09_generics_2_exercises.md)
-- [ ] **t10 — Design Patterns I** · [notes](/notes/topics/t10_design_patterns_1/t10_design_patterns_1_notes.md) · [exercises](/notes/topics/t10_design_patterns_1/exercises/t10_design_patterns_exercises.md)
-- [ ] **t11 — Design Patterns II** · [notes](/notes/topics/t11_design_patterns_2/t11_design_patterns_2_notes.md) · [exercises](/notes/topics/t11_design_patterns_2/exercises/t11_design_patterns_2_exercises.md)
-- [ ] **t12 — DB Connectivity** · [notes](/notes/topics/t12_dao/t12_db_connectivity_dao_notes.md) · [exercises](/notes/topics/t12_dao/exercises/t12_db_connectivity_exercises.md)
-- [ ] **t13 — Functional Interfaces** · [notes](/notes/topics/t13_functional_interfaces/t13_functional_interfaces_notes.md) · [exercises](/notes/topics/t13_functional_interfaces/exercises/t13_functional_interfaces_exercises.md) · [challenge 1](notes/topics/t13_functional_interfaces/challenges/ce05_alien_vs_predicate.md) · [challenge 2](notes/topics/t13_functional_interfaces/challenges/ce06_accumulator_ops.md)
-- [ ] **t14 — Concurrency** · [notes](/notes/topics/t14_concurrency_notes/t14_concurrency_notes.md) · [exercises](/notes/topics/t14_concurrency_notes/exercises/t14_concurrency_exercises.md)
-- [ ] **t15 — Networking** · [notes](/notes/topics/t15_networking_notes/t15_networking_notes.md) · [exercises](/notes/topics/t15_networking_notes/exercises/t15_networking_exercises.md)
-- [ ] **t16 — JSON** · [notes](/notes/topics/t16_json_notes/t16_json_notes.md) · [exercises](/notes/topics/t16_json_notes/exercises/t16_binary_io_exercises.md)
-
----
-
 ## Cheatsheets
 
 | Topic | Description |
