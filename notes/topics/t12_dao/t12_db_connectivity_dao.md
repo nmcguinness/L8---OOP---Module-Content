@@ -1,10 +1,11 @@
 ---
 title: "DB Connectivity I — JDBC + DAO (Data Access Object)"
-subtitle: "Local dev using phpMyAdmin"
+subtitle: "COMP C8Z03 — Year 2 OOP"
 created: 2026-02-04
-version: 1.2
+version: 1.3
 generated_at: "2026-02-04T00:00:00+00:00"
-tags: ["java", "mysql", "phpmyadmin", "jdbc", "dao", "n-tier"]
+authors: ["OOP Teaching Team"]
+tags: ["java", "mysql", "phpmyadmin", "jdbc", "dao", "n-tier", "year2", "comp-c8z03"]
 related_notes:
   - "t10_design_patterns_1_notes.md"
   - "t11_design_patterns_2_notes.md"
@@ -703,4 +704,21 @@ public class Main {
   https://dev.mysql.com/doc/connector-j/en/
 
 ---
+
+## Lesson Context
+
+```yaml
+previous_lesson:
+  topic_code: t11_design_patterns_2
+  domain_emphasis: Balanced
+
+this_lesson:
+  topic_code: t12_db_connectivity
+  primary_domain_emphasis: Balanced
+  difficulty_tier: Intermediate
+
+next_lesson:
+  topic_code: t14_concurrency
+  note: "The DAO and service layer built here are assumed to be in place when the multi-client server is introduced"
+```
 
