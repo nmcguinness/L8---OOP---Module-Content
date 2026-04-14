@@ -1,16 +1,24 @@
 ---
 title: "Equality & Hashing in Java — Foundations"
 subtitle: "COMP C8Z03 — Year 2 OOP"
+topic_code: t05_equality_hashing
 description: "A practical introduction to identity vs value equality, the equals/hashCode contract, and how hashing works — without using collection types yet."
 created: 2025-10-06
+last_updated: 2026-04-14
 version: 1.0
-authors: ["Teaching Team"]
-tags: [java, equality, hashing, equals, hashcode]
+status: published
+authors: ["OOP Teaching Team"]
+tags: [java, equality, hashing, equals, hashcode, year2, comp-c8z03]
+difficulty_tier: Foundation
+previous_topic: t04_collections_2
+prerequisites:
+  - Classes, objects, and Strings
+  - Basic method overriding
 ---
 
 # Equality & Hashing in Java
 
-> **Prequisities:**
+> **Prerequisites:**
 > - Classes/objects; Strings; basic method overriding.
 
 ---
@@ -267,20 +275,6 @@ public class Demo {
 
 ---
 
-## Lesson Context 
-
-```yaml
-previous_lesson:
-  topic_code: t04_collections_2_notes
-  domain_emphasis: Balanced
-
-this_lesson:
-  primary_domain_emphasis: Balanced
-  difficulty_tier: Foundation
-```
-
----
-
 ## Appendix A: Modulo arithmetic (a quick primer)
 
 **Idea:** Modulo (“mod”) gives the **remainder** after division.
@@ -326,3 +320,17 @@ We write `a mod m` (in Java: `a % m`) and read it as “the remainder when `a` i
 * Modulo is **wrap-around** arithmetic: counting on a clock is “mod 12”.
 * We use it to wrap any integer hash into a **fixed index range** for array-backed tables.
 
+---
+
+## Lesson Context
+
+```yaml
+previous_lesson:
+  topic_code: t04_collections_2
+  domain_emphasis: Balanced
+
+this_lesson:
+  topic_code: t05_equality_hashing
+  primary_domain_emphasis: Balanced
+  difficulty_tier: Foundation
+```

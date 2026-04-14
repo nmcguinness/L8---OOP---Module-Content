@@ -1,11 +1,16 @@
 ---
 title: "Interfaces"
 subtitle: "COMP C8Z03 — Year 2 OOP"
+topic_code: t07_interface
 description: "A clear, structured introduction to Java interfaces, why they matter, how they support polymorphism, and how they’re used in Games and Software."
 created: 2025-11-24
+last_updated: 2026-04-14
 version: 1.1
+status: published
 authors: ["OOP Teaching Team"]
 tags: [java, interfaces, polymorphism, year2, comp-c8z03]
+difficulty_tier: Intermediate
+previous_topic: t06_inheritance
 prerequisites:
   - Inheritance basics (superclasses, method overriding)
   - Collections I–II (ArrayList, LinkedList, Iterators)
@@ -286,12 +291,15 @@ In real applications, interface constants are commonly used for **log levels, fo
 
 ---
 
+## Lesson Context
+
 ```yaml
 previous_lesson:
-  topic_code:  t07_interfaces
+  topic_code: t06_inheritance
   domain_emphasis: Balanced
 
 this_lesson:
+  topic_code: t07_interface
   primary_domain_emphasis: Balanced
   difficulty_tier: Intermediate
 ```

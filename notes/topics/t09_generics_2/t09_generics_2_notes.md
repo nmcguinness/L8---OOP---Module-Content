@@ -1,11 +1,16 @@
 ---
 title: "Generics II — Wildcards, Variance & PECS"
 subtitle: "COMP C8Z03 — Year 2 OOP"
+topic_code: t09_generics_2
 description: "Invariance, wildcards (? extends / ? super), the PECS rule, and how to design flexible, type-safe generic APIs."
 created: 2026-01-22
+last_updated: 2026-04-14
 version: 1.0
+status: published
 authors: ["OOP Teaching Team"]
 tags: [java, generics, wildcards, pecs, variance, collections, year2, comp-c8z03]
+difficulty_tier: Intermediate
+previous_topic: t08_generics_1
 prerequisites:
   - Generics I (type parameters, generic methods, bounded type params)
   - Collections (List, Map, iteration)
@@ -377,13 +382,11 @@ This pattern appears constantly in real code (queues, pipelines, logging, batchi
 
 ```yaml
 previous_lesson:
-  topic_code: t08_generics
+  topic_code: t08_generics_1
   domain_emphasis: Balanced
-  week_in_topic: 1_of_2
 
 this_lesson:
-  topic_code: t09_generics
+  topic_code: t09_generics_2
   primary_domain_emphasis: Balanced
   difficulty_tier: Intermediate
-  week_in_topic: 2_of_2
 ```

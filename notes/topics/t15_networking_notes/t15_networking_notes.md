@@ -1,11 +1,16 @@
 ---
 title: "Networking I — TCP Sockets and the Client-Server Protocol"
 subtitle: "COMP C8Z03 — Year 2 OOP"
+topic_code: t15_networking
 description: "How to build a multi-client TCP server in Java: ServerSocket, client handlers, a JSON-over-sockets protocol, and a generic ServerResponse<T> wrapper."
 created: 2026-02-20
+last_updated: 2026-04-14
 version: 1.0
+status: published
 authors: ["OOP Teaching Team"]
 tags: [java, networking, sockets, tcp, client-server, json, protocol, executorservice, year2, comp-c8z03]
+difficulty_tier: Intermediate
+previous_topic: t14_concurrency
 prerequisites:
   - Interfaces and generics
   - DB Connectivity / DAO
@@ -807,3 +812,16 @@ Clients must always check the `status` field before using `data`.
   https://www.baeldung.com/jackson-object-mapper-tutorial
 
 ---
+
+## Lesson Context
+
+```yaml
+previous_lesson:
+  topic_code: t14_concurrency
+  domain_emphasis: Balanced
+
+this_lesson:
+  topic_code: t15_networking
+  primary_domain_emphasis: Balanced
+  difficulty_tier: Intermediate
+```

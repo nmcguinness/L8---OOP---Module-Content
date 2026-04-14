@@ -1,11 +1,16 @@
 ---
 title: "Inheritance"
 subtitle: "COMP C8Z03 — Year 2 OOP"
+topic_code: t06_inheritance
 description: "A focused introduction to inheritance, method overriding, constructor chaining, abstract classes, and polymorphism in Java."
 created: 2025-11-20
+last_updated: 2026-04-14
 version: 1.0
+status: published
 authors: ["OOP Teaching Team"]
 tags: [java, inheritance, overriding, polymorphism, year2, comp-c8z03]
+difficulty_tier: Intermediate
+previous_topic: t05_equality_hashing
 prerequisites:
   - Classes, fields, constructors, methods
   - Encapsulation (private fields + getters/setters)

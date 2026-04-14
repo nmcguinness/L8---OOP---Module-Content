@@ -1,16 +1,24 @@
 ---
 title: "Arrays (1D & 2D)"
 subtitle: "COMP C8Z03 — Year 2 OOP"
+topic_code: t01_arrays
 description: "Introduction to Java arrays: creating and indexing 1D/2D arrays, iterating with loops, common patterns (min/max, count, search), bounds checks, and typical pitfalls."
 created: 2025-10-01
+last_updated: 2026-04-14
 version: 1.0
-authors: ["Teaching Team"]
-tags: [java, arrays, 1d, 2d, loops, indexing, debugging]
+status: published
+authors: ["OOP Teaching Team"]
+tags: [java, arrays, 1d, 2d, loops, indexing, debugging, year2, comp-c8z03]
+difficulty_tier: Foundation
+previous_topic: none
+prerequisites:
+  - Variables, if statements, and loops
+  - Simple methods
 ---
 
 
 # Arrays (1D & 2D)
-> **Prequisities:** 
+> **Prerequisites:** 
 > - variables, `if`, loops, simple methods  
 
 ---
@@ -324,7 +332,7 @@ static void print2D(int[][] g) {
 - What naming choice did you change to make your code clearer? Why is the new name better for a future reader?
 - If you had to test your `min`, `indexOf`, or `find2D` methods, what **3 test cases** would you start with and why?
 
-## Lesson Context 
+## Lesson Context
 
 ```yaml
 previous_lesson:
@@ -332,6 +340,7 @@ previous_lesson:
   domain_emphasis: Balanced
 
 this_lesson:
+  topic_code: t01_arrays
   primary_domain_emphasis: Balanced
   difficulty_tier: Foundation
 ```

@@ -1,16 +1,24 @@
 ---
 title: "Functional Interfaces: Consumer, Function, Predicate, Supplier"
 subtitle: "COMP C8Z03 — Year 2 OOP"
+topic_code: t13_functional_interfaces
 description: "Core functional interfaces in java.util.function; how to read their types, use them with lambdas and method references, and apply them with collections APIs. Includes balanced Games/Software examples and common composition patterns."
 created: 2026-02-04
+last_updated: 2026-04-14
 version: 1.0
+status: published
 authors: ["OOP Teaching Team"]
-tags: ["java", "functional-interfaces", "java.util.function", "lambda", "method-reference", "year2", "comp-c8z03"]
-prerequisites: ["Methods", "Generics basics", "Collections I: ArrayList essentials"]
+tags: [java, functional-interfaces, java.util.function, lambda, method-reference, year2, comp-c8z03]
+difficulty_tier: Intermediate
+previous_topic: t12_db_connectivity
+prerequisites:
+  - Methods
+  - Generics basics
+  - Collections I: ArrayList essentials
 ---
 
 # Functional Interfaces: Consumer, Function, Predicate, Supplier
-> **Prequisities:**
+> **Prerequisites:**
 > - Methods: parameters, return values, overloading  
 > - Generics basics: `T`, `K`, `V`  
 > - Collections I: `List<T>`, loops, simple helpers  
@@ -367,20 +375,6 @@ System.out.println(clampTo0_100.applyAsInt(120)); // 100
 
 ---
 
-## Lesson Context 
-
-```yaml
-previous_lesson:
-  topic_code: t12_generics_2_notes
-  domain_emphasis: Balanced
-
-this_lesson:
-  primary_domain_emphasis: Balanced
-  difficulty_tier: Foundation
-```
-
----
-
 ## Appendix A: Mapping from common C# delegate names
 | C# name | Java equivalent | Meaning |
 | :-- | :-- | :-- |
@@ -390,3 +384,18 @@ this_lesson:
 | `Func<T, R>` | `Function<T, R>` | one input, returns a value |
 | `Func<T, U, R>` | `BiFunction<T, U, R>` | two inputs, returns a value |
 | `Func<R>` | `Supplier<R>` | no input, returns a value |
+
+---
+
+## Lesson Context
+
+```yaml
+previous_lesson:
+  topic_code: t12_db_connectivity
+  domain_emphasis: Balanced
+
+this_lesson:
+  topic_code: t13_functional_interfaces
+  primary_domain_emphasis: Balanced
+  difficulty_tier: Intermediate
+```

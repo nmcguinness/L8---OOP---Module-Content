@@ -1,16 +1,24 @@
 ---
 title: "Collections II: LinkedList & iteration patterns"
 subtitle: "COMP C8Z03 — Year 2 OOP"
+topic_code: t04_collections_2
 description: "Year-2 exploration of LinkedList as a List and as a Deque; safe iteration/removal with ListIterator; queue/stack patterns; performance trade-offs; balanced Games/Software examples."
 created: 2025-10-07
+last_updated: 2026-04-14
 version: 1.0
-authors: ["Teaching Team"]
-tags: ["java", "collections", "linkedlist", "deque", "iterator", "year2", "comp-c8z03"]
-prerequisites: ["Arrays (1D & 2D)", "Equality & Hashing — Foundations", "Collections I: ArrayList essentials"]
+status: published
+authors: ["OOP Teaching Team"]
+tags: [java, collections, linkedlist, deque, iterator, year2, comp-c8z03]
+difficulty_tier: Intermediate
+previous_topic: t03_collections_1
+prerequisites:
+  - Arrays (1D & 2D)
+  - Equality & Hashing — Foundations
+  - Collections I: ArrayList essentials
 ---
 
 # Collections II: LinkedList & iteration patterns
-> **Prequisities:**
+> **Prerequisites:**
 > - Arrays (1D & 2D): indexing & traversal  
 > - equals/hashCode basics (reading only)  
 > - Collections I: ArrayList (APIs, iteration, iterator-removal)  
@@ -248,18 +256,6 @@ Job next = !hi.isEmpty()? hi.poll() : !mid.isEmpty()? mid.poll() : lo.poll();
 - For an **undo/redo** feature, why might two `Deque`s be simpler than a single list with an index?
 - If a method needs **random access** sometimes and **mid-scan mutation** other times, how would you design its API to stay flexible?
 
-## Lesson Context
-```yaml
-previous_lesson:
-  topic_code: t03_collections_1
-  domain_emphasis: Balanced
-
-this_lesson:
-  primary_domain_emphasis: Balanced
-  difficulty_tier: Foundation
-```
----
-
 ## Appendix A — Mini reference (APIs you’ll use most)
 **ListIterator**  
 - `hasNext()/next()` / `hasPrevious()/previous()`  
@@ -275,3 +271,18 @@ this_lesson:
 - **Mutating while scanning?** → `LinkedList` + `ListIterator`.  
 - **Uniqueness / membership tests?** → (Next lesson) **Sets**.  
 - **Key→value lookups?** → (Next lesson) **Maps**.
+
+---
+
+## Lesson Context
+
+```yaml
+previous_lesson:
+  topic_code: t03_collections_1
+  domain_emphasis: Balanced
+
+this_lesson:
+  topic_code: t04_collections_2
+  primary_domain_emphasis: Balanced
+  difficulty_tier: Intermediate
+```

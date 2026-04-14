@@ -1,11 +1,16 @@
 ---
 title: "Concurrency I — Threads and the ExecutorService"
 subtitle: "COMP C8Z03 — Year 2 OOP"
+topic_code: t14_concurrency
 description: "What threads are, how the JVM schedules them, and how to manage pools of them cleanly using ExecutorService — the foundation for a multi-client server."
 created: 2026-02-20
+last_updated: 2026-04-14
 version: 1.0
+status: published
 authors: ["OOP Teaching Team"]
 tags: [java, concurrency, threads, executorservice, runnable, callable, synchronization, year2, comp-c8z03]
+difficulty_tier: Intermediate
+previous_topic: t13_functional_interfaces
 prerequisites:
   - Interfaces and lambda expressions
   - Collections (ArrayList, basic maps)
@@ -480,3 +485,16 @@ Rather than creating an object (thread) for each task, a pool creates and reuses
   https://docs.oracle.com/en/java/docs/api/java.base/java/util/concurrent/ExecutorService.html
 
 ---
+
+## Lesson Context
+
+```yaml
+previous_lesson:
+  topic_code: t13_functional_interfaces
+  domain_emphasis: Balanced
+
+this_lesson:
+  topic_code: t14_concurrency
+  primary_domain_emphasis: Balanced
+  difficulty_tier: Intermediate
+```

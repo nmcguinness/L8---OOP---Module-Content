@@ -1,11 +1,16 @@
 ---
 title: "Generics I — Type Parameters & Type Safety (Week 1 of 2)"
 subtitle: "COMP C8Z03 — Year 2 OOP"
+topic_code: t08_generics_1
 description: "Why generics exist, how to write generic classes and methods, and how generics make Java APIs safer and easier to reuse."
 created: 2026-01-22
+last_updated: 2026-04-14
 version: 1.0
+status: published
 authors: ["OOP Teaching Team"]
 tags: [java, generics, type-safety, collections, year2, comp-c8z03]
+difficulty_tier: Intermediate
+previous_topic: t07_interface
 prerequisites:
   - Arrays & ArrayList basics
   - Collections & iteration patterns
@@ -454,10 +459,11 @@ The caller gets strong typing for the success value (`T`) while still having a p
 
 ```yaml
 previous_lesson:
-  topic_code:  t07_interfaces
+  topic_code: t07_interface
   domain_emphasis: Balanced
 
 this_lesson:
+  topic_code: t08_generics_1
   primary_domain_emphasis: Balanced
   difficulty_tier: Intermediate
 ```

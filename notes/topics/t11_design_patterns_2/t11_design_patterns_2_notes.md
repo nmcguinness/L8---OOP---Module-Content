@@ -1,11 +1,16 @@
 ---
 title: "Design Patterns II — Structure, Coordination & Extension"
 subtitle: "COMP C8Z03 — Year 2 OOP"
+topic_code: t11_design_patterns_2
 description: "How creation and coordination become design problems at scale, and how Factory, Observer, and Adapter help systems evolve without collapsing into coupling and conditionals."
 created: 2026-02-04
+last_updated: 2026-04-14
 version: 1.0
+status: published
 authors: ["OOP Teaching Team"]
 tags: [java, design-patterns, factory, observer, adapter, coordination, architecture, oop, year2, comp-c8z03]
+difficulty_tier: Intermediate
+previous_topic: t10_design_patterns_1
 prerequisites:
   - Design Patterns I (Strategy and Command)
   - Interfaces and composition
@@ -395,7 +400,7 @@ If yes, a pattern may be missing — or misused.
 
 ---
 
-## Lesson Context (YAML footer)
+## Lesson Context
 
 ```yaml
 previous_lesson:

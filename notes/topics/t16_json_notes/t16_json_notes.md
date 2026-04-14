@@ -1,16 +1,16 @@
 ---
 title: "JSON in Java — From Format Basics to Socket Communication"
 subtitle: "COMP C8Z03 — Year 2 OOP"
+topic_code: t16_json
 description: "A ground-up introduction to JSON: the format itself, string-based serialisation and deserialisation with Jackson, generic wrapper types, protocol design, Base64 binary encoding, round-trip testing, and sending JSON over a socket connection."
 created: 2026-02-26
+last_updated: 2026-04-14
 version: 1.1
+status: published
 authors: ["OOP Teaching Team"]
-tags: ["java", "json", "jackson", "serialisation", "protocol", "sockets", "base64", "generics", "year2", "comp-c8z03"]
-related_notes:
-  - "t08_generics_1_notes.md"
-  - "t09_generics_2_notes.md"
-  - "t12_db_connectivity_dao.md"
-  - "t14_networking_notes.md"
+tags: [java, json, jackson, serialisation, protocol, sockets, base64, generics, year2, comp-c8z03]
+difficulty_tier: Intermediate
+previous_topic: t15_networking
 ---
 
 # JSON in Java — From Format Basics to Socket Communication
@@ -1503,19 +1503,15 @@ Working through ce13 is a useful way to practise the Jackson API in a structured
 
 ---
 
-## Lesson context (YAML footer)
+## Lesson Context
 
 ```yaml
 previous_lesson:
-  topic_code: t12_db_connectivity
+  topic_code: t15_networking
   domain_emphasis: Balanced
 
 this_lesson:
-  topic_code: t12b_json
+  topic_code: t16_json
   primary_domain_emphasis: Balanced
   difficulty_tier: Intermediate
-
-next_lesson:
-  topic_code: t14_networking
-  note: "JSON protocol and socket fundamentals from this topic are assumed from this point onward"
 ```

@@ -1,16 +1,24 @@
 ---
 title: "Collections I: ArrayList"
 subtitle: "COMP C8Z03 — Year 2 OOP"
+topic_code: t03_collections_1
 description: "Year‑2 introduction to Java ArrayList with iteration patterns, common APIs, pitfalls, and balanced Games/Software examples."
 created: 2025-10-07
+last_updated: 2026-04-14
 version: 1.0
-authors: ["Teaching Team"]
-tags: ["java", "collections", "arraylist", "iteration", "year2", "comp-c8z03"]
-prerequisites: ["Arrays (1D & 2D)", "equals/hashCode basics", "Ordering basics (reading only)"]
+status: published
+authors: ["OOP Teaching Team"]
+tags: [java, collections, arraylist, iteration, year2, comp-c8z03]
+difficulty_tier: Foundation
+previous_topic: t02_ordering
+prerequisites:
+  - Arrays (1D & 2D)
+  - equals/hashCode basics
+  - Ordering basics (reading only)
 ---
 
 # Collections I: ArrayList 
-> **Prequisities:**
+> **Prerequisites:**
 > - Arrays (1D & 2D): indexing, iteration, basic algorithms (search, simple transforms)
 > - equals/hashCode basics: what identity means for objects
 > - Ordering basics (reading only): idea of natural order vs custom order (using Comparing and Lambda functions)
@@ -215,13 +223,15 @@ class Backlog {
 
 ---
 
-## Lesson Context 
+## Lesson Context
+
 ```yaml
 previous_lesson:
-  topic_code: t02_ordering_notes
+  topic_code: t02_ordering
   domain_emphasis: Balanced
 
 this_lesson:
+  topic_code: t03_collections_1
   primary_domain_emphasis: Balanced
   difficulty_tier: Foundation
 ```

@@ -1,14 +1,20 @@
 ---
 title: "DB Connectivity I — JDBC + DAO (Data Access Object)"
 subtitle: "COMP C8Z03 — Year 2 OOP"
+topic_code: t12_db_connectivity
+description: "A practical guide to connecting Java applications to a MySQL database using JDBC, implementing the DAO pattern for N-tier architecture, and writing safe SQL with PreparedStatements."
 created: 2026-02-04
+last_updated: 2026-04-14
 version: 1.3
-generated_at: "2026-02-04T00:00:00+00:00"
+status: published
 authors: ["OOP Teaching Team"]
-tags: ["java", "mysql", "phpmyadmin", "jdbc", "dao", "n-tier", "year2", "comp-c8z03"]
-related_notes:
-  - "t10_design_patterns_1_notes.md"
-  - "t11_design_patterns_2_notes.md"
+tags: [java, mysql, phpmyadmin, jdbc, dao, n-tier, year2, comp-c8z03]
+difficulty_tier: Intermediate
+previous_topic: t11_design_patterns_2
+prerequisites:
+  - Classes, interfaces, and polymorphism
+  - Collections (ArrayList and loops)
+  - Design Patterns I & II (Strategy, Command, Factory)
 ---
 
 # DB Connectivity I — JDBC + DAO (Data Access Object)
@@ -716,9 +722,5 @@ this_lesson:
   topic_code: t12_db_connectivity
   primary_domain_emphasis: Balanced
   difficulty_tier: Intermediate
-
-next_lesson:
-  topic_code: t14_concurrency
-  note: "The DAO and service layer built here are assumed to be in place when the multi-client server is introduced"
 ```
 

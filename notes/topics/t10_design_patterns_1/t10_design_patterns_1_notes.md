@@ -1,11 +1,16 @@
 ---
 title: "Design Patterns I — Behaviour & Decoupling"
 subtitle: "COMP C8Z03 — Year 2 OOP"
+topic_code: t10_design_patterns_1
 description: "Why conditional-heavy designs become brittle, and how Strategy and Command help you encapsulate behaviour and work to reduce coupling."
 created: 2026-02-04
+last_updated: 2026-04-14
 version: 1.0
+status: published
 authors: ["OOP Teaching Team"]
 tags: [java, design-patterns, strategy, command, decoupling, oop, year2, comp-c8z03]
+difficulty_tier: Intermediate
+previous_topic: t09_generics_2
 prerequisites:
   - Classes (fields, constructors, methods)
   - Collections (ArrayList / LinkedList + loops)
@@ -299,7 +304,7 @@ The following resources provide clear explanations, diagrams, and refactoring-or
 
 ---
 
-## Lesson Context (YAML footer)
+## Lesson Context
 
 ```yaml
 previous_lesson:
