@@ -892,6 +892,7 @@ import java.nio.file.Path;
 //helper to tell you what directory to put your data file in
 System.out.println("Put your data file in: " + System.getProperty("user.dir"));
 
+// Dont forget to actually make a file or download something in PNG format!
 byte[] fileBytes = Files.readAllBytes(Path.of("profile.png"));
 
 // Converts: raw byte array to a Base64-encoded ASCII string
@@ -903,14 +904,11 @@ String encoded = Base64.getEncoder().encodeToString(fileBytes);
 ### Decoding a Base64 string back to bytes
 
 ```java
-// 'encoded' is the Base64 string received from the JSON field
-String encoded = payload.getFileData();
-
 // Converts: Base64 string back to the original byte array
-byte[] fileBytes = Base64.getDecoder().decode(encoded);
+byte[] receivedFileBytes = Base64.getDecoder().decode(encoded);
 
 // Write the reconstructed file to disk
-Files.write(Path.of("retrieved_profile.png"), fileBytes);
+Files.write(Path.of("retrieved_profile.png"), receivedFileBytes);
 ```
 
 ### Embedding binary data in a JSON upload payload
