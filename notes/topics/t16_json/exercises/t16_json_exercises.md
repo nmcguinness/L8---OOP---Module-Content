@@ -45,7 +45,43 @@ public class Exercise {
 - [ ] Completed the Binary I/O notes
 - [ ] Completed the DB Connectivity / DAO exercises (t12)
 - [ ] You understand `PreparedStatement` and `ResultSet`
-- [ ] You have a working MySQL database from the DAO exercises
+- [ ] MySQL is running locally and you can connect with MySQL Workbench or the CLI
+
+---
+
+## Database setup
+
+Run the following SQL **once** in MySQL Workbench (or the MySQL CLI) before attempting any exercise.
+
+```sql
+-- =========================================================
+-- Game Asset Store — one-time database setup
+-- =========================================================
+
+-- 1. Drop and recreate the schema
+DROP DATABASE IF EXISTS game_assets_db;
+CREATE DATABASE game_assets_db;
+USE game_assets_db;
+
+-- 2. Create the game_assets table
+--    asset_data stores the raw binary payload as a MEDIUMBLOB (up to 16 MB)
+CREATE TABLE game_assets (
+    asset_id    INT          AUTO_INCREMENT PRIMARY KEY,
+    asset_name  VARCHAR(255) NOT NULL,
+    asset_type  VARCHAR(100) NOT NULL,
+    file_size   INT          NOT NULL,
+    asset_data  MEDIUMBLOB   NOT NULL
+);
+
+-- 3. Seed four rows with placeholder binary data
+--    REPEAT fills the column with repeated ASCII characters so each row has a real,
+--    non-empty payload. The actual bytes are replaced when you run the exercises.
+INSERT INTO game_assets (asset_name, asset_type, file_size, asset_data) VALUES
+    ('hero_idle.png',    'image/png',                1024, REPEAT('A', 1024)),
+    ('background.wav',   'audio/wav',                 512, REPEAT('B',  512)),
+    ('level_01.map',     'application/octet-stream', 2048, REPEAT('C', 2048)),
+    ('enemy_sprite.png', 'image/png',                 768, REPEAT('D',  768));
+```
 
 ---
 
@@ -186,54 +222,36 @@ class BinaryFileUtil {
 
 ---
 
-## Exercise 02 — Extend the schema with a BLOB table
+## Exercise 02 — Connect to the game_assets database and query metadata
 
-**Objective:** Add a `game_assets` table to your MySQL database with a `MEDIUMBLOB` column for binary data and metadata columns for name, type, and size. Verify the schema with a smoke test.
+**Objective:** Connect to the `game_assets_db` database (created in the **Database setup** section above) using JDBC and list the seeded assets. The query must read metadata only — `asset_data` must not appear in the `SELECT`.
 
 **Context (software + games):**
 
-- **Software dev:** Schema design separates metadata (cheap to query) from binary payload (expensive to load). Getting this right at the schema level prevents costly migrations later.
-- **Games dev:** Asset management systems (Unity AssetBundles, Unreal pak files) always separate asset metadata from binary content in their databases.
+- **Software dev:** Schema design separates metadata (cheap to query) from binary payload (expensive to load). A metadata-only SELECT avoids pulling megabytes of binary data when you only need filenames and sizes.
+- **Games dev:** Asset management systems (Unity AssetBundles, Unreal pak files) always separate asset metadata from binary content — listing assets never loads the binary payload.
 
 ### What you are building
 
-- A `game_assets` table in MySQL
-- A smoke test that inserts a tiny asset and reads the metadata back
+- A JDBC connection to `game_assets_db`
+- A metadata-only query that lists every row and a count query — neither touches `asset_data`
 
 ### Tasks
 
-1. In phpMyAdmin, run this SQL against your existing database:
-
-   ```sql
-   CREATE TABLE game_assets (
-       asset_id      INT            NOT NULL AUTO_INCREMENT,
-       asset_name    VARCHAR(255)   NOT NULL,
-       asset_type    VARCHAR(50)    NOT NULL,
-       file_size     INT            NOT NULL,
-       asset_data    MEDIUMBLOB     NOT NULL,
-       uploaded_at   TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
-       PRIMARY KEY (asset_id)
-   );
-   ```
-
-2. Insert one row manually in phpMyAdmin using SQL (use a small hex literal for the BLOB):
-
-   ```sql
-   INSERT INTO game_assets (asset_name, asset_type, file_size, asset_data)
-   VALUES ('hero_sprite.png', 'image/png', 4, 0x89504E47);
-   ```
-
-3. In `Exercise.run()`:
-   - Connect with JDBC.
-   - Run `SELECT asset_id, asset_name, asset_type, file_size FROM game_assets` (no `asset_data`).
+1. In `Exercise.run()`:
+   - Connect with JDBC using the credentials from the **Database setup** section.
+   - Run `SELECT asset_id, asset_name, asset_type, file_size FROM game_assets ORDER BY asset_id` (no `asset_data`).
    - Print each row: `"[id] name (type, N bytes)"`.
-   - Run `SELECT COUNT(*) FROM game_assets` and print it.
+   - Run `SELECT COUNT(*) FROM game_assets` and print the total.
 
 ### Sample output
 
 ```text
-[1] hero_sprite.png (image/png, 4 bytes)
-Total assets: 1
+[1] hero_idle.png (image/png, 1024 bytes)
+[2] background.wav (audio/wav, 512 bytes)
+[3] level_01.map (application/octet-stream, 2048 bytes)
+[4] enemy_sprite.png (image/png, 768 bytes)
+Total assets: 4
 ```
 
 ### Constraints
@@ -243,26 +261,27 @@ Total assets: 1
 
 ### Done when…
 
-- The row inserted via phpMyAdmin appears in the Java output.
-- No BLOB data is loaded by the metadata query.
+- All four seeded rows appear in the output.
+- No BLOB data is loaded by either query.
 
 <details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px; padding:0.9rem 1rem; margin:1rem 0;">
   <summary style="cursor:pointer; font-weight:800; list-style:none; margin:0;">✅ Solution</summary>
   <div style="margin-top:0.8rem;">
 
 ```java
-package t16_binary_io.exercises.e02;
+package t16_json.exercises.ex02;
 
 import java.sql.*;
 
 public class Exercise {
 
-    public static void run() throws Exception {
-        String url  = "jdbc:mysql://localhost:3306/car_rental?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
-        String user = "car_rental_user";
-        String pass = "your_password";
+    private static final String URL     = "jdbc:mysql://localhost:3306/game_assets_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+    private static final String DB_USER = "game_assets_user";
+    private static final String DB_PASS = "your_password";
 
-        try (Connection c = DriverManager.getConnection(url, user, pass)) {
+    public static void run() throws Exception {
+
+        try (Connection c = DriverManager.getConnection(URL, DB_USER, DB_PASS)) {
 
             // Metadata-only query — asset_data deliberately excluded
             String sql = "SELECT asset_id, asset_name, asset_type, file_size FROM game_assets ORDER BY asset_id";
@@ -380,8 +399,8 @@ import java.util.*;
 public class Exercise {
 
     public static void run() throws Exception {
-        String url  = "jdbc:mysql://localhost:3306/car_rental?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
-        String user = "car_rental_user";
+        String url  = "jdbc:mysql://localhost:3306/game_assets_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+        String user = "game_assets_user";
         String pass = "your_password";
 
         GameAssetDao dao = new JdbcGameAssetDao(url, user, pass);
@@ -624,8 +643,8 @@ import java.util.*;
 public class Exercise {
 
     public static void run() throws Exception {
-        String url  = "jdbc:mysql://localhost:3306/car_rental?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
-        String user = "car_rental_user";
+        String url  = "jdbc:mysql://localhost:3306/game_assets_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+        String user = "game_assets_user";
         String pass = "your_password";
 
         JdbcGameAssetDao dao = new JdbcGameAssetDao(url, user, pass);
@@ -880,8 +899,8 @@ public class Exercise {
 
     public static void run() throws Exception {
         JdbcGameAssetDao dao = new JdbcGameAssetDao(
-            "jdbc:mysql://localhost:3306/car_rental?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true",
-            "car_rental_user", "your_password");
+            "jdbc:mysql://localhost:3306/game_assets_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true",
+            "game_assets_user", "your_password");
 
         Thread st = new Thread(() -> {
             try { new AssetServer(9_200, dao).start(); }
@@ -1067,8 +1086,8 @@ import java.util.*;
 public class UploadServer {
 
     // === Constants ===
-    private static final String URL     = "jdbc:mysql://localhost:3306/car_rental?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
-    private static final String DB_USER = "car_rental_user";
+    private static final String URL     = "jdbc:mysql://localhost:3306/game_assets_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+    private static final String DB_USER = "game_assets_user";
     private static final String DB_PASS = "your_password";
     private static final int    PORT    = 9_206;
 
@@ -1174,8 +1193,8 @@ import java.util.*;
 public class UploadClient {
 
     private static final ObjectMapper MAPPER  = new ObjectMapper();
-    private static final String       URL     = "jdbc:mysql://localhost:3306/car_rental?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
-    private static final String       DB_USER = "car_rental_user";
+    private static final String       URL     = "jdbc:mysql://localhost:3306/game_assets_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+    private static final String       DB_USER = "game_assets_user";
     private static final String       DB_PASS = "your_password";
     private static final int          PORT    = 9_206;
 
@@ -1320,8 +1339,8 @@ import java.util.*;
 public class RetrieveServer {
 
     // === Constants ===
-    private static final String URL     = "jdbc:mysql://localhost:3306/car_rental?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
-    private static final String DB_USER = "car_rental_user";
+    private static final String URL     = "jdbc:mysql://localhost:3306/game_assets_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+    private static final String DB_USER = "game_assets_user";
     private static final String DB_PASS = "your_password";
     private static final int    PORT    = 9_207;
 
@@ -1429,8 +1448,8 @@ import java.util.*;
 public class RetrieveClient {
 
     private static final ObjectMapper MAPPER  = new ObjectMapper();
-    private static final String       URL     = "jdbc:mysql://localhost:3306/car_rental?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
-    private static final String       DB_USER = "car_rental_user";
+    private static final String       URL     = "jdbc:mysql://localhost:3306/game_assets_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+    private static final String       DB_USER = "game_assets_user";
     private static final String       DB_PASS = "your_password";
     private static final int          PORT    = 9_207;
 
@@ -1579,7 +1598,7 @@ Cleaned up id=15
   <summary style="cursor:pointer; font-weight:800; list-style:none; margin:0;">✅ Solution</summary>
   <div style="margin-top:0.8rem;">
 
-**`Exercise.java`** — client (seed the DB directly via JDBC, connect to the server, print metadata, assert no binary payload)
+**`MetadataServer.java`** — server (start this first; handles `GET_METADATA` requests; `asset_data` is deliberately absent from the SELECT)
 
 ```java
 package t16_binary_io.exercises.e08;
@@ -1591,102 +1610,13 @@ import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.util.*;
 
-public class Exercise {
+public class MetadataServer {
 
-    private static final ObjectMapper MAPPER  = new ObjectMapper();
-    private static final String       URL     = "jdbc:mysql://localhost:3306/car_rental?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
-    private static final String       DB_USER = "car_rental_user";
-    private static final String       DB_PASS = "your_password";
-    private static final int          PORT    = 9_208;
-
-    // Runs: the metadata exercise — seeds the DB, starts the server, queries metadata over a socket
-    public static void run() throws Exception {
-        // Insert a test asset directly via JDBC
-        byte[] data = new byte[2_048];
-        Arrays.fill(data, (byte) 42);
-        int testId = insertAsset("hero_sprite.png", "image/png", data.length, data);
-        System.out.println("Pre-inserted asset — id: " + testId);
-
-        // Start the metadata server on a daemon thread
-        Thread serverThread = new Thread(() -> {
-            try { new MetadataServer(PORT, URL, DB_USER, DB_PASS).start(); }
-            catch (Exception e) { System.err.println("Server error: " + e.getMessage()); }
-        });
-        serverThread.setDaemon(true);
-        serverThread.start();
-        Thread.sleep(200);
-
-        // Client: request metadata only — no binary payload
-        try (Socket         socket = new Socket("localhost", PORT);
-             BufferedReader in     = new BufferedReader(new InputStreamReader(socket.getInputStream(),  StandardCharsets.UTF_8));
-             PrintWriter    out    = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true)) {
-
-            Map<String, Object> request = new LinkedHashMap<>();
-            request.put("type",    "GET_METADATA");
-            request.put("payload", Map.of("id", testId));
-
-            out.println(MAPPER.writeValueAsString(request));
-
-            String   responseJson = in.readLine();
-            Map<?,?> response     = MAPPER.readValue(responseJson, Map.class);
-            Map<?,?> metadata     = (Map<?,?>) response.get("data");
-
-            System.out.println("File name:    " + metadata.get("fileName"));
-            System.out.println("Content type: " + metadata.get("contentType"));
-            System.out.println("File size:    " + metadata.get("fileSize") + " bytes");
-            System.out.println("fileData absent from response: " + !metadata.containsKey("fileData"));
-        }
-
-        // Clean up
-        deleteById(testId);
-        System.out.println("Cleaned up id=" + testId);
-    }
-
-    // Inserts: a binary asset directly via JDBC; returns the auto-generated id
-    private static int insertAsset(String name, String type, int size, byte[] assetData) throws Exception {
-        String sql = "INSERT INTO game_assets (asset_name, asset_type, file_size, asset_data) VALUES (?, ?, ?, ?)";
-        try (Connection        c  = DriverManager.getConnection(URL, DB_USER, DB_PASS);
-             PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
-            ps.setString(1, name);
-            ps.setString(2, type);
-            ps.setInt(3,    size);
-            ps.setBytes(4,  assetData);
-            ps.executeUpdate();
-
-            try (ResultSet keys = ps.getGeneratedKeys()) {
-                if (!keys.next())
-                    throw new IllegalStateException("no generated key returned");
-                return keys.getInt(1);
-            }
-        }
-    }
-
-    // Deletes: a game_assets row by id
-    private static void deleteById(int id) throws Exception {
-        String sql = "DELETE FROM game_assets WHERE asset_id = ?";
-        try (Connection        c  = DriverManager.getConnection(URL, DB_USER, DB_PASS);
-             PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setInt(1, id);
-            ps.executeUpdate();
-        }
-    }
-}
-```
-
-**`MetadataServer.java`** — server (SELECT metadata columns only; `asset_data` is deliberately absent from the query)
-
-```java
-package t16_binary_io.exercises.e08;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.*;
-import java.net.*;
-import java.nio.charset.StandardCharsets;
-import java.sql.*;
-import java.util.*;
-
-class MetadataServer {
+    // === Constants ===
+    private static final String URL     = "jdbc:mysql://localhost:3306/game_assets_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+    private static final String DB_USER = "game_assets_user";
+    private static final String DB_PASS = "your_password";
+    private static final int    PORT    = 9_208;
 
     // === Fields ===
     private int    _port;
@@ -1696,9 +1626,16 @@ class MetadataServer {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
+    // === Entry point ===
+    // Starts: the metadata server; run this class before running MetadataClient
+    public static void main(String[] args) throws Exception {
+        System.out.println("MetadataServer listening on port " + PORT + " ...");
+        new MetadataServer(PORT, URL, DB_USER, DB_PASS).start();
+    }
+
     // === Constructors ===
     // Creates: a metadata-only server bound to the given port and database
-    MetadataServer(int port, String url, String user, String pass) {
+    public MetadataServer(int port, String url, String user, String pass) {
         _port = port;
         _url  = url;
         _user = user;
@@ -1707,7 +1644,7 @@ class MetadataServer {
 
     // === Public API ===
     // Starts: the server loop; accepts connections until interrupted
-    void start() throws Exception {
+    public void start() throws Exception {
         try (ServerSocket ss = new ServerSocket(_port)) {
             while (!Thread.currentThread().isInterrupted())
                 handleMetadata(ss.accept());
@@ -1759,6 +1696,92 @@ class MetadataServer {
 
         } catch (Exception e) {
             System.err.println("Metadata handler error: " + e.getMessage());
+        }
+    }
+}
+```
+
+**`MetadataClient.java`** — client (start this second; seeds the DB via JDBC, connects to `MetadataServer`, prints metadata, asserts no binary payload)
+
+```java
+package t16_binary_io.exercises.e08;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.*;
+import java.net.*;
+import java.nio.charset.StandardCharsets;
+import java.sql.*;
+import java.util.*;
+
+public class MetadataClient {
+
+    private static final ObjectMapper MAPPER  = new ObjectMapper();
+    private static final String       URL     = "jdbc:mysql://localhost:3306/game_assets_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+    private static final String       DB_USER = "game_assets_user";
+    private static final String       DB_PASS = "your_password";
+    private static final int          PORT    = 9_208;
+
+    // Entry point: seed the DB, request metadata from MetadataServer, assert no fileData in response
+    public static void main(String[] args) throws Exception {
+        // Insert a test asset directly via JDBC
+        byte[] assetData = new byte[2_048];
+        Arrays.fill(assetData, (byte) 42);
+        int testId = insertAsset("hero_sprite.png", "image/png", assetData.length, assetData);
+        System.out.println("Pre-inserted asset — id: " + testId);
+
+        // Request metadata only — no binary payload
+        try (Socket         socket = new Socket("localhost", PORT);
+             BufferedReader in     = new BufferedReader(new InputStreamReader(socket.getInputStream(),  StandardCharsets.UTF_8));
+             PrintWriter    out    = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true)) {
+
+            Map<String, Object> request = new LinkedHashMap<>();
+            request.put("type",    "GET_METADATA");
+            request.put("payload", Map.of("id", testId));
+
+            out.println(MAPPER.writeValueAsString(request));
+
+            String   responseJson = in.readLine();
+            Map<?,?> response     = MAPPER.readValue(responseJson, Map.class);
+            Map<?,?> metadata     = (Map<?,?>) response.get("data");
+
+            System.out.println("File name:    " + metadata.get("fileName"));
+            System.out.println("Content type: " + metadata.get("contentType"));
+            System.out.println("File size:    " + metadata.get("fileSize") + " bytes");
+            System.out.println("fileData absent from response: " + !metadata.containsKey("fileData"));
+        }
+
+        // Clean up
+        deleteById(testId);
+        System.out.println("Cleaned up id=" + testId);
+    }
+
+    // Inserts: a binary asset directly via JDBC; returns the auto-generated id
+    private static int insertAsset(String name, String type, int size, byte[] data) throws Exception {
+        String sql = "INSERT INTO game_assets (asset_name, asset_type, file_size, asset_data) VALUES (?, ?, ?, ?)";
+        try (Connection        c  = DriverManager.getConnection(URL, DB_USER, DB_PASS);
+             PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            ps.setString(1, name);
+            ps.setString(2, type);
+            ps.setInt(3,    size);
+            ps.setBytes(4,  data);
+            ps.executeUpdate();
+
+            try (ResultSet keys = ps.getGeneratedKeys()) {
+                if (!keys.next())
+                    throw new IllegalStateException("no generated key returned");
+                return keys.getInt(1);
+            }
+        }
+    }
+
+    // Deletes: a game_assets row by id
+    private static void deleteById(int id) throws Exception {
+        String sql = "DELETE FROM game_assets WHERE asset_id = ?";
+        try (Connection        c  = DriverManager.getConnection(URL, DB_USER, DB_PASS);
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
         }
     }
 }
