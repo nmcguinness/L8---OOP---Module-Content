@@ -989,6 +989,737 @@ public class Exercise {
 
 ---
 
+## Exercise 06 — Send a binary file from client to server (upload)
+
+**Objective:** Write a minimal upload server that receives a Base64-encoded file over a socket, decodes it, and stores the bytes in the database using `PreparedStatement.setBytes()`. The client reads a file from disk, encodes it, and sends it as a JSON request.
+
+**Context (software + games):**
+
+- **Software dev:** Every file-upload feature — document storage, profile image upload, backup — follows this pattern: client encodes → sends → server decodes → persists.
+- **Games dev:** Uploading a player avatar, a custom map, or a replay file to a game backend uses exactly these steps.
+
+### What you are building
+
+- An `UploadServer` class that accepts a single `UPLOAD_FILE` JSON request, decodes the Base64 payload, and stores the bytes with `setBytes()`
+- Client code in `Exercise.run()` that reads a synthetic file, encodes it, and sends the upload request
+- Verified by printing the returned auto-generated ID
+
+### Required request/response shapes
+
+```
+UPLOAD_FILE
+  request:  { "type": "UPLOAD_FILE",
+               "payload": { "fileName":    "upload_test.bin",
+                             "contentType": "application/octet-stream",
+                             "fileSize":    512,
+                             "fileData":    "<base64 string>" } }
+  response: { "status": "OK", "id": <generated asset_id> }
+```
+
+### Tasks
+
+1. In `Exercise.run()`:
+   - Create a 512-byte synthetic `byte[]` (e.g. values `0–199` repeating).
+   - Write it to `"data/upload_test.bin"` using `Files.write`.
+   - Start `UploadServer` on port `9_206` as a daemon thread; sleep 200 ms.
+   - Connect a client socket; build the request map; Base64-encode the bytes; send with `out.println(MAPPER.writeValueAsString(request))`.
+   - Read the response; parse the returned ID; print it.
+   - Clean up: delete the stored row via a direct JDBC `DELETE`.
+
+2. Implement `UploadServer`:
+   - Loop on `ServerSocket.accept()` until interrupted.
+   - In `handleUpload(Socket)`: read one JSON line, extract `fileData`, decode with `Base64.getDecoder().decode(...)`, insert into `game_assets` with `ps.setBytes(4, bytes)`, return `{ "status": "OK", "id": <id> }`.
+
+### Sample output
+
+```text
+Upload OK — stored id: 12
+Cleaned up id=12
+```
+
+### Constraints
+
+- Base64-encode the `byte[]` before placing it in the JSON string — never embed raw bytes.
+- Use `ps.setBytes(4, bytes)` in the server — not `ps.setString(...)`.
+- Use `StandardCharsets.UTF_8` on all socket stream wrappers.
+- Use `PreparedStatement` throughout — no SQL string concatenation.
+
+### Done when…
+
+- A positive integer ID is printed on every run.
+- The row is no longer in the database after `deleteById`.
+- Changing one byte in `original` before sending produces a different stored result (verify by running Exercise 07 on the same ID).
+
+<details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px; padding:0.9rem 1rem; margin:1rem 0;">
+  <summary style="cursor:pointer; font-weight:800; list-style:none; margin:0;">✅ Solution</summary>
+  <div style="margin-top:0.8rem;">
+
+```java
+package t16_binary_io.exercises.e06;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.*;
+import java.net.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.sql.*;
+import java.util.*;
+
+public class Exercise {
+
+    private static final ObjectMapper MAPPER  = new ObjectMapper();
+    private static final String       URL     = "jdbc:mysql://localhost:3306/car_rental?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+    private static final String       DB_USER = "car_rental_user";
+    private static final String       DB_PASS = "your_password";
+    private static final int          PORT    = 9_206;
+
+    // Runs: the upload exercise — creates a test file, starts the server, uploads over a socket
+    public static void run() throws Exception {
+        // Create a synthetic 512-byte test file
+        byte[] original = new byte[512];
+        for (int i = 0; i < original.length; i++) original[i] = (byte)(i % 200);
+
+        Files.createDirectories(Path.of("data"));
+        Files.write(Path.of("data/upload_test.bin"), original);
+
+        // Start the upload server on a daemon thread
+        Thread serverThread = new Thread(() -> {
+            try { new UploadServer(PORT, URL, DB_USER, DB_PASS).start(); }
+            catch (Exception e) { System.err.println("Server error: " + e.getMessage()); }
+        });
+        serverThread.setDaemon(true);
+        serverThread.start();
+        Thread.sleep(200);
+
+        // Client: Base64-encode the file and send an UPLOAD_FILE request
+        int storedId;
+        try (Socket         socket = new Socket("localhost", PORT);
+             BufferedReader in     = new BufferedReader(new InputStreamReader(socket.getInputStream(),  StandardCharsets.UTF_8));
+             PrintWriter    out    = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true)) {
+
+            String encoded = Base64.getEncoder().encodeToString(original);
+
+            Map<String, Object> payload = new LinkedHashMap<>();
+            payload.put("fileName",    "upload_test.bin");
+            payload.put("contentType", "application/octet-stream");
+            payload.put("fileSize",    original.length);
+            payload.put("fileData",    encoded);
+
+            Map<String, Object> request = new LinkedHashMap<>();
+            request.put("type",    "UPLOAD_FILE");
+            request.put("payload", payload);
+
+            out.println(MAPPER.writeValueAsString(request));
+
+            String   responseJson = in.readLine();
+            Map<?,?> response     = MAPPER.readValue(responseJson, Map.class);
+            storedId = ((Number) response.get("id")).intValue();
+            System.out.println("Upload OK — stored id: " + storedId);
+        }
+
+        // Clean up the test row
+        deleteById(storedId);
+        System.out.println("Cleaned up id=" + storedId);
+    }
+
+    // Deletes: a game_assets row by id
+    private static void deleteById(int id) throws Exception {
+        String sql = "DELETE FROM game_assets WHERE asset_id = ?";
+        try (Connection        c  = DriverManager.getConnection(URL, DB_USER, DB_PASS);
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        }
+    }
+}
+
+class UploadServer {
+
+    // === Fields ===
+    private int    _port;
+    private String _url;
+    private String _user;
+    private String _pass;
+
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+
+    // === Constructors ===
+    // Creates: an upload-only server bound to the given port and database
+    UploadServer(int port, String url, String user, String pass) {
+        _port = port;
+        _url  = url;
+        _user = user;
+        _pass = pass;
+    }
+
+    // === Public API ===
+    // Starts: the server loop; accepts connections until interrupted
+    void start() throws Exception {
+        try (ServerSocket ss = new ServerSocket(_port)) {
+            while (!Thread.currentThread().isInterrupted())
+                handleUpload(ss.accept());
+        }
+    }
+
+    // === Helpers ===
+    // Handles: one UPLOAD_FILE request — decodes Base64 payload and stores in game_assets
+    private void handleUpload(Socket client) {
+        try (client;
+             BufferedReader in  = new BufferedReader(new InputStreamReader(client.getInputStream(),  StandardCharsets.UTF_8));
+             PrintWriter    out = new PrintWriter(new OutputStreamWriter(client.getOutputStream(), StandardCharsets.UTF_8), true)) {
+
+            String line = in.readLine();
+            if (line == null) return;
+
+            Map<?,?> req     = MAPPER.readValue(line, Map.class);
+            Map<?,?> payload = (Map<?,?>) req.get("payload");
+
+            String b64  = (String)  payload.get("fileData");
+            String name = (String)  payload.get("fileName");
+            String type = (String)  payload.get("contentType");
+            int    size = ((Number) payload.get("fileSize")).intValue();
+            byte[] data = Base64.getDecoder().decode(b64);
+
+            int id = insertAsset(name, type, size, data);
+
+            Map<String, Object> response = new LinkedHashMap<>();
+            response.put("status", "OK");
+            response.put("id",     id);
+            out.println(MAPPER.writeValueAsString(response));
+
+        } catch (Exception e) {
+            System.err.println("Upload handler error: " + e.getMessage());
+        }
+    }
+
+    // Inserts: a binary asset into game_assets; returns the auto-generated asset_id
+    private int insertAsset(String name, String type, int size, byte[] data) throws Exception {
+        String sql = "INSERT INTO game_assets (asset_name, asset_type, file_size, asset_data) VALUES (?, ?, ?, ?)";
+        try (Connection        c  = DriverManager.getConnection(_url, _user, _pass);
+             PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            ps.setString(1, name);
+            ps.setString(2, type);
+            ps.setInt(3,    size);
+            ps.setBytes(4,  data);
+            ps.executeUpdate();
+
+            try (ResultSet keys = ps.getGeneratedKeys()) {
+                if (!keys.next())
+                    throw new IllegalStateException("no generated key returned");
+                return keys.getInt(1);
+            }
+        }
+    }
+}
+```
+
+  </div>
+</details>
+
+---
+
+## Exercise 07 — Retrieve a stored file from a server (download)
+
+**Objective:** Write a retrieve server that fetches a `MEDIUMBLOB` from the database using `ResultSet.getBytes()`, Base64-encodes it, and sends it back to the client as a JSON response. The client decodes the Base64 string and reconstructs the file on disk, then verifies byte-for-byte equality with `Arrays.equals()`.
+
+**Context (software + games):**
+
+- **Software dev:** Any system that serves stored files — a CDN origin, a document API, a media server — follows this retrieval pattern on the server side.
+- **Games dev:** A game client downloading a purchased skin, a saved level, or a leaderboard replay receives exactly this kind of binary payload in a JSON envelope.
+
+### What you are building
+
+- A `RetrieveServer` class that accepts a `RETRIEVE_FILE` request, calls `rs.getBytes("asset_data")`, and returns the bytes Base64-encoded in a JSON response
+- A known test asset pre-inserted via JDBC so the test has a real ID to request
+- Client code that decodes the response, writes the file to disk, and prints an integrity check
+
+### Required request/response shapes
+
+```
+RETRIEVE_FILE
+  request:  { "type": "RETRIEVE_FILE", "payload": { "id": <asset_id> } }
+  response: { "status": "OK",
+               "data": { "id":          <asset_id>,
+                          "fileName":    "retrieve_test.bin",
+                          "contentType": "application/octet-stream",
+                          "fileSize":    512,
+                          "fileData":    "<base64 string>" } }
+```
+
+### Tasks
+
+1. In `Exercise.run()`:
+   - Create a known 512-byte `byte[]` (e.g. values `0–199` repeating).
+   - Insert it directly into `game_assets` via JDBC (`setBytes()`); capture the returned ID.
+   - Start `RetrieveServer` on port `9_207` as a daemon thread; sleep 200 ms.
+   - Connect a client socket; send `{ "type": "RETRIEVE_FILE", "payload": { "id": <testId> } }`.
+   - Read the response; extract `fileData`; Base64-decode to `byte[]`; write to `"data/retrieved_test.bin"`.
+   - Print the filename, byte count, and `Arrays.equals(original, downloaded)`.
+   - Clean up: delete the test row.
+
+2. Implement `RetrieveServer`:
+   - Loop on `ServerSocket.accept()` until interrupted.
+   - In `handleRetrieve(Socket)`: read one JSON line, extract `id`, run `SELECT ... asset_data ... WHERE asset_id = ?`, call `rs.getBytes("asset_data")`, Base64-encode the result, return the full data map.
+   - If no row is found for the given ID, return `{ "status": "ERROR", "message": "not found" }`.
+
+### Sample output
+
+```text
+Pre-inserted test asset — id: 8
+Retrieved: retrieve_test.bin (512 bytes)
+Integrity check: true
+Cleaned up id=8
+```
+
+### Constraints
+
+- Use `rs.getBytes("asset_data")` — not `rs.getString(...)`.
+- Use `Base64.getEncoder().encodeToString(bytes)` in the server; `Base64.getDecoder().decode(...)` in the client.
+- Use `Arrays.equals(original, downloaded)` — not `==`.
+- Use `StandardCharsets.UTF_8` on all socket stream wrappers.
+
+### Done when…
+
+- `"Integrity check: true"` prints on every run.
+- `data/retrieved_test.bin` exists on disk and matches the original byte-for-byte.
+- Running the server with a non-existent ID (e.g. id=`999_999`) returns an error response rather than throwing an exception.
+
+<details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px; padding:0.9rem 1rem; margin:1rem 0;">
+  <summary style="cursor:pointer; font-weight:800; list-style:none; margin:0;">✅ Solution</summary>
+  <div style="margin-top:0.8rem;">
+
+```java
+package t16_binary_io.exercises.e07;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.*;
+import java.net.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.sql.*;
+import java.util.*;
+
+public class Exercise {
+
+    private static final ObjectMapper MAPPER  = new ObjectMapper();
+    private static final String       URL     = "jdbc:mysql://localhost:3306/car_rental?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+    private static final String       DB_USER = "car_rental_user";
+    private static final String       DB_PASS = "your_password";
+    private static final int          PORT    = 9_207;
+
+    // Runs: the retrieve exercise — seeds the DB, starts the server, downloads over a socket
+    public static void run() throws Exception {
+        // Create a known test asset and insert it directly via JDBC
+        byte[] original = new byte[512];
+        for (int i = 0; i < original.length; i++) original[i] = (byte)(i % 200);
+        int testId = insertAsset("retrieve_test.bin", "application/octet-stream", original.length, original);
+        System.out.println("Pre-inserted test asset — id: " + testId);
+
+        // Start the retrieve server on a daemon thread
+        Thread serverThread = new Thread(() -> {
+            try { new RetrieveServer(PORT, URL, DB_USER, DB_PASS).start(); }
+            catch (Exception e) { System.err.println("Server error: " + e.getMessage()); }
+        });
+        serverThread.setDaemon(true);
+        serverThread.start();
+        Thread.sleep(200);
+
+        // Client: send a RETRIEVE_FILE request and reconstruct the file on disk
+        try (Socket         socket = new Socket("localhost", PORT);
+             BufferedReader in     = new BufferedReader(new InputStreamReader(socket.getInputStream(),  StandardCharsets.UTF_8));
+             PrintWriter    out    = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true)) {
+
+            Map<String, Object> request = new LinkedHashMap<>();
+            request.put("type",    "RETRIEVE_FILE");
+            request.put("payload", Map.of("id", testId));
+
+            out.println(MAPPER.writeValueAsString(request));
+
+            String   responseJson = in.readLine();
+            Map<?,?> response     = MAPPER.readValue(responseJson, Map.class);
+            Map<?,?> data         = (Map<?,?>) response.get("data");
+
+            byte[] downloaded = Base64.getDecoder().decode((String) data.get("fileData"));
+
+            Files.createDirectories(Path.of("data"));
+            Files.write(Path.of("data/retrieved_test.bin"), downloaded);
+
+            System.out.println("Retrieved: " + data.get("fileName") + " (" + downloaded.length + " bytes)");
+            System.out.println("Integrity check: " + Arrays.equals(original, downloaded));
+        }
+
+        // Clean up
+        deleteById(testId);
+        System.out.println("Cleaned up id=" + testId);
+    }
+
+    // Inserts: a binary asset directly via JDBC; returns the auto-generated id
+    private static int insertAsset(String name, String type, int size, byte[] data) throws Exception {
+        String sql = "INSERT INTO game_assets (asset_name, asset_type, file_size, asset_data) VALUES (?, ?, ?, ?)";
+        try (Connection        c  = DriverManager.getConnection(URL, DB_USER, DB_PASS);
+             PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            ps.setString(1, name);
+            ps.setString(2, type);
+            ps.setInt(3,    size);
+            ps.setBytes(4,  data);
+            ps.executeUpdate();
+
+            try (ResultSet keys = ps.getGeneratedKeys()) {
+                if (!keys.next())
+                    throw new IllegalStateException("no generated key returned");
+                return keys.getInt(1);
+            }
+        }
+    }
+
+    // Deletes: a game_assets row by id
+    private static void deleteById(int id) throws Exception {
+        String sql = "DELETE FROM game_assets WHERE asset_id = ?";
+        try (Connection        c  = DriverManager.getConnection(URL, DB_USER, DB_PASS);
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        }
+    }
+}
+
+class RetrieveServer {
+
+    // === Fields ===
+    private int    _port;
+    private String _url;
+    private String _user;
+    private String _pass;
+
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+
+    // === Constructors ===
+    // Creates: a retrieve-only server bound to the given port and database
+    RetrieveServer(int port, String url, String user, String pass) {
+        _port = port;
+        _url  = url;
+        _user = user;
+        _pass = pass;
+    }
+
+    // === Public API ===
+    // Starts: the server loop; accepts connections until interrupted
+    void start() throws Exception {
+        try (ServerSocket ss = new ServerSocket(_port)) {
+            while (!Thread.currentThread().isInterrupted())
+                handleRetrieve(ss.accept());
+        }
+    }
+
+    // === Helpers ===
+    // Handles: one RETRIEVE_FILE request — fetches the BLOB and Base64-encodes it for the client
+    private void handleRetrieve(Socket client) {
+        try (client;
+             BufferedReader in  = new BufferedReader(new InputStreamReader(client.getInputStream(),  StandardCharsets.UTF_8));
+             PrintWriter    out = new PrintWriter(new OutputStreamWriter(client.getOutputStream(), StandardCharsets.UTF_8), true)) {
+
+            String line = in.readLine();
+            if (line == null) return;
+
+            Map<?,?> req     = MAPPER.readValue(line, Map.class);
+            Map<?,?> payload = (Map<?,?>) req.get("payload");
+            int      id      = ((Number) payload.get("id")).intValue();
+
+            String sql = "SELECT asset_name, asset_type, file_size, asset_data "
+                       + "FROM game_assets WHERE asset_id = ?";
+
+            try (Connection        c  = DriverManager.getConnection(_url, _user, _pass);
+                 PreparedStatement ps = c.prepareStatement(sql)) {
+
+                ps.setInt(1, id);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (!rs.next()) {
+                        out.println(MAPPER.writeValueAsString(
+                            Map.of("status", "ERROR", "message", "not found id=" + id)));
+                        return;
+                    }
+
+                    String name  = rs.getString("asset_name");
+                    String type  = rs.getString("asset_type");
+                    int    size  = rs.getInt("file_size");
+                    byte[] bytes = rs.getBytes("asset_data");   // load the BLOB
+
+                    Map<String, Object> data = new LinkedHashMap<>();
+                    data.put("id",          id);
+                    data.put("fileName",    name);
+                    data.put("contentType", type);
+                    data.put("fileSize",    size);
+                    data.put("fileData",    Base64.getEncoder().encodeToString(bytes));
+
+                    Map<String, Object> response = new LinkedHashMap<>();
+                    response.put("status", "OK");
+                    response.put("data",   data);
+                    out.println(MAPPER.writeValueAsString(response));
+                }
+            }
+
+        } catch (Exception e) {
+            System.err.println("Retrieve handler error: " + e.getMessage());
+        }
+    }
+}
+```
+
+  </div>
+</details>
+
+---
+
+## Exercise 08 — Request file metadata without loading the BLOB
+
+**Objective:** Write a metadata server whose SQL deliberately omits the `asset_data` column. The server returns only the filename, content type, and file size. The client prints the metadata and confirms that no binary data was transferred.
+
+**Context (software + games):**
+
+- **Software dev:** A file manager showing a directory listing, a search results page, or a pagination endpoint must return metadata cheaply — fetching 500 BLOBs to render a list of filenames would be unusably slow.
+- **Games dev:** An in-game asset browser showing a list of downloadable skins or maps loads thumbnails and names first; the binary payload is fetched only when the player clicks download.
+
+### What you are building
+
+- A `MetadataServer` class that handles `GET_METADATA` requests using a SELECT that **omits `asset_data`**
+- A test asset pre-inserted via JDBC
+- Client code that requests metadata and confirms the response contains no `fileData` field
+
+### Required request/response shapes
+
+```
+GET_METADATA
+  request:  { "type": "GET_METADATA", "payload": { "id": <asset_id> } }
+  response: { "status": "OK",
+               "data": { "id":          <asset_id>,
+                          "fileName":    "hero_sprite.png",
+                          "contentType": "image/png",
+                          "fileSize":    2048 } }
+```
+
+Note: the response **does not contain a `fileData` field** — the BLOB is never fetched.
+
+### Tasks
+
+1. In `Exercise.run()`:
+   - Create a 2 048-byte `byte[]` (e.g. `Arrays.fill(data, (byte) 42)`).
+   - Insert it directly into `game_assets` via JDBC; capture the returned ID.
+   - Start `MetadataServer` on port `9_208` as a daemon thread; sleep 200 ms.
+   - Connect a client socket; send `{ "type": "GET_METADATA", "payload": { "id": <testId> } }`.
+   - Read the response; parse the `data` map; print `fileName`, `contentType`, `fileSize`.
+   - Assert the response map does **not** contain a key `"fileData"`.
+   - Clean up: delete the test row.
+
+2. Implement `MetadataServer`:
+   - Loop on `ServerSocket.accept()` until interrupted.
+   - In `handleMetadata(Socket)`: write the SQL as `SELECT asset_name, asset_type, file_size FROM game_assets WHERE asset_id = ?` — `asset_data` must not appear anywhere in the query string.
+   - Return the metadata map on success; `{ "status": "ERROR", "message": "not found" }` if the row does not exist.
+
+### Sample output
+
+```text
+Pre-inserted asset — id: 15
+File name:    hero_sprite.png
+Content type: image/png
+File size:    2048 bytes
+fileData absent from response: true
+Cleaned up id=15
+```
+
+### Constraints
+
+- `asset_data` must not appear in the server's SELECT statement — verify this by reading the SQL string in your solution.
+- Use `PreparedStatement` — no SQL string concatenation.
+- Use `StandardCharsets.UTF_8` on all socket stream wrappers.
+
+### Done when…
+
+- The four metadata fields print correctly on every run.
+- `"fileData absent from response: true"` prints — the response map must not contain that key.
+- Requesting a non-existent ID returns an error response, not an exception.
+
+<details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px; padding:0.9rem 1rem; margin:1rem 0;">
+  <summary style="cursor:pointer; font-weight:800; list-style:none; margin:0;">✅ Solution</summary>
+  <div style="margin-top:0.8rem;">
+
+```java
+package t16_binary_io.exercises.e08;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.*;
+import java.net.*;
+import java.nio.charset.StandardCharsets;
+import java.sql.*;
+import java.util.*;
+
+public class Exercise {
+
+    private static final ObjectMapper MAPPER  = new ObjectMapper();
+    private static final String       URL     = "jdbc:mysql://localhost:3306/car_rental?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+    private static final String       DB_USER = "car_rental_user";
+    private static final String       DB_PASS = "your_password";
+    private static final int          PORT    = 9_208;
+
+    // Runs: the metadata exercise — seeds the DB, starts the server, queries metadata over a socket
+    public static void run() throws Exception {
+        // Insert a test asset directly via JDBC
+        byte[] data = new byte[2_048];
+        Arrays.fill(data, (byte) 42);
+        int testId = insertAsset("hero_sprite.png", "image/png", data.length, data);
+        System.out.println("Pre-inserted asset — id: " + testId);
+
+        // Start the metadata server on a daemon thread
+        Thread serverThread = new Thread(() -> {
+            try { new MetadataServer(PORT, URL, DB_USER, DB_PASS).start(); }
+            catch (Exception e) { System.err.println("Server error: " + e.getMessage()); }
+        });
+        serverThread.setDaemon(true);
+        serverThread.start();
+        Thread.sleep(200);
+
+        // Client: request metadata only — no binary payload
+        try (Socket         socket = new Socket("localhost", PORT);
+             BufferedReader in     = new BufferedReader(new InputStreamReader(socket.getInputStream(),  StandardCharsets.UTF_8));
+             PrintWriter    out    = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true)) {
+
+            Map<String, Object> request = new LinkedHashMap<>();
+            request.put("type",    "GET_METADATA");
+            request.put("payload", Map.of("id", testId));
+
+            out.println(MAPPER.writeValueAsString(request));
+
+            String   responseJson = in.readLine();
+            Map<?,?> response     = MAPPER.readValue(responseJson, Map.class);
+            Map<?,?> metadata     = (Map<?,?>) response.get("data");
+
+            System.out.println("File name:    " + metadata.get("fileName"));
+            System.out.println("Content type: " + metadata.get("contentType"));
+            System.out.println("File size:    " + metadata.get("fileSize") + " bytes");
+            System.out.println("fileData absent from response: " + !metadata.containsKey("fileData"));
+        }
+
+        // Clean up
+        deleteById(testId);
+        System.out.println("Cleaned up id=" + testId);
+    }
+
+    // Inserts: a binary asset directly via JDBC; returns the auto-generated id
+    private static int insertAsset(String name, String type, int size, byte[] assetData) throws Exception {
+        String sql = "INSERT INTO game_assets (asset_name, asset_type, file_size, asset_data) VALUES (?, ?, ?, ?)";
+        try (Connection        c  = DriverManager.getConnection(URL, DB_USER, DB_PASS);
+             PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            ps.setString(1, name);
+            ps.setString(2, type);
+            ps.setInt(3,    size);
+            ps.setBytes(4,  assetData);
+            ps.executeUpdate();
+
+            try (ResultSet keys = ps.getGeneratedKeys()) {
+                if (!keys.next())
+                    throw new IllegalStateException("no generated key returned");
+                return keys.getInt(1);
+            }
+        }
+    }
+
+    // Deletes: a game_assets row by id
+    private static void deleteById(int id) throws Exception {
+        String sql = "DELETE FROM game_assets WHERE asset_id = ?";
+        try (Connection        c  = DriverManager.getConnection(URL, DB_USER, DB_PASS);
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        }
+    }
+}
+
+class MetadataServer {
+
+    // === Fields ===
+    private int    _port;
+    private String _url;
+    private String _user;
+    private String _pass;
+
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+
+    // === Constructors ===
+    // Creates: a metadata-only server bound to the given port and database
+    MetadataServer(int port, String url, String user, String pass) {
+        _port = port;
+        _url  = url;
+        _user = user;
+        _pass = pass;
+    }
+
+    // === Public API ===
+    // Starts: the server loop; accepts connections until interrupted
+    void start() throws Exception {
+        try (ServerSocket ss = new ServerSocket(_port)) {
+            while (!Thread.currentThread().isInterrupted())
+                handleMetadata(ss.accept());
+        }
+    }
+
+    // === Helpers ===
+    // Handles: one GET_METADATA request — SELECTs metadata columns only; asset_data is never fetched
+    private void handleMetadata(Socket client) {
+        try (client;
+             BufferedReader in  = new BufferedReader(new InputStreamReader(client.getInputStream(),  StandardCharsets.UTF_8));
+             PrintWriter    out = new PrintWriter(new OutputStreamWriter(client.getOutputStream(), StandardCharsets.UTF_8), true)) {
+
+            String line = in.readLine();
+            if (line == null) return;
+
+            Map<?,?> req     = MAPPER.readValue(line, Map.class);
+            Map<?,?> payload = (Map<?,?>) req.get("payload");
+            int      id      = ((Number) payload.get("id")).intValue();
+
+            // asset_data deliberately excluded from this SELECT
+            String sql = "SELECT asset_name, asset_type, file_size "
+                       + "FROM game_assets WHERE asset_id = ?";
+
+            try (Connection        c  = DriverManager.getConnection(_url, _user, _pass);
+                 PreparedStatement ps = c.prepareStatement(sql)) {
+
+                ps.setInt(1, id);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (!rs.next()) {
+                        out.println(MAPPER.writeValueAsString(
+                            Map.of("status", "ERROR", "message", "not found id=" + id)));
+                        return;
+                    }
+
+                    Map<String, Object> metadata = new LinkedHashMap<>();
+                    metadata.put("id",          id);
+                    metadata.put("fileName",    rs.getString("asset_name"));
+                    metadata.put("contentType", rs.getString("asset_type"));
+                    metadata.put("fileSize",    rs.getInt("file_size"));
+
+                    Map<String, Object> response = new LinkedHashMap<>();
+                    response.put("status", "OK");
+                    response.put("data",   metadata);
+                    out.println(MAPPER.writeValueAsString(response));
+                }
+            }
+
+        } catch (Exception e) {
+            System.err.println("Metadata handler error: " + e.getMessage());
+        }
+    }
+}
+```
+
+  </div>
+</details>
+
+---
+
 ## Lesson Context
 ```yaml
 linked_lesson:

@@ -1839,16 +1839,12 @@ Working through ce13 is a useful way to practise the Jackson API in a structured
   https://www.baeldung.com/jackson-object-mapper-tutorial
   Practical walkthrough of `writeValueAsString`, `readValue`, configuration, and common options.
 
-- **Baeldung — Jackson and Type References**
-  https://www.baeldung.com/jackson-typeref
-  Focused explanation of why `TypeReference` exists, how it works, and when to use it.
-
 - **Baeldung — Java Base64 Encoding and Decoding**
   https://www.baeldung.com/java-base64-encode-and-decode
   Covers `Base64.getEncoder()` / `getDecoder()` with practical examples including file content.
 
 - **Baeldung — Storing and Reading BLOBs with JDBC**
-  https://www.baeldung.com/java-jdbc-blobs
+  https://www.baeldung.com/java-sql-store-load-file-blob
   Practical walkthrough of `setBytes()`, `setBinaryStream()`, `getBytes()`, and `getBinaryStream()` with MySQL examples.
 
 - **JSON specification — RFC 8259**
