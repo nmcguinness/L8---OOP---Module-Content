@@ -1054,6 +1054,8 @@ Cleaned up id=12
   <summary style="cursor:pointer; font-weight:800; list-style:none; margin:0;">✅ Solution</summary>
   <div style="margin-top:0.8rem;">
 
+**`Exercise.java`** — client (create the test file, start the server, upload, verify the returned ID)
+
 ```java
 package t16_binary_io.exercises.e06;
 
@@ -1132,6 +1134,19 @@ public class Exercise {
         }
     }
 }
+```
+
+**`UploadServer.java`** — server (accept the upload request, Base64-decode, store with `setBytes()`)
+
+```java
+package t16_binary_io.exercises.e06;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.*;
+import java.net.*;
+import java.nio.charset.StandardCharsets;
+import java.sql.*;
+import java.util.*;
 
 class UploadServer {
 
@@ -1289,6 +1304,8 @@ Cleaned up id=8
   <summary style="cursor:pointer; font-weight:800; list-style:none; margin:0;">✅ Solution</summary>
   <div style="margin-top:0.8rem;">
 
+**`Exercise.java`** — client (seed the DB directly via JDBC, connect to the server, decode the response, verify integrity)
+
 ```java
 package t16_binary_io.exercises.e07;
 
@@ -1384,6 +1401,19 @@ public class Exercise {
         }
     }
 }
+```
+
+**`RetrieveServer.java`** — server (fetch the BLOB with `getBytes()`, Base64-encode, return in JSON response)
+
+```java
+package t16_binary_io.exercises.e07;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.*;
+import java.net.*;
+import java.nio.charset.StandardCharsets;
+import java.sql.*;
+import java.util.*;
 
 class RetrieveServer {
 
@@ -1545,6 +1575,8 @@ Cleaned up id=15
   <summary style="cursor:pointer; font-weight:800; list-style:none; margin:0;">✅ Solution</summary>
   <div style="margin-top:0.8rem;">
 
+**`Exercise.java`** — client (seed the DB directly via JDBC, connect to the server, print metadata, assert no binary payload)
+
 ```java
 package t16_binary_io.exercises.e08;
 
@@ -1636,6 +1668,19 @@ public class Exercise {
         }
     }
 }
+```
+
+**`MetadataServer.java`** — server (SELECT metadata columns only; `asset_data` is deliberately absent from the query)
+
+```java
+package t16_binary_io.exercises.e08;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.*;
+import java.net.*;
+import java.nio.charset.StandardCharsets;
+import java.sql.*;
+import java.util.*;
 
 class MetadataServer {
 

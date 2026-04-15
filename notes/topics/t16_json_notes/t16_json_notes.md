@@ -1312,49 +1312,49 @@ The critical rule is: **name every column you want, and leave `player_image` out
 
 The following diagram shows how the four stages of a binary upload connect:
 
-```
-Client side                          Server side                     Database
-----------                           -----------                     --------
-Files.readAllBytes(path)
-  → byte[]
-Base64.encode(bytes)
-  → String b64
-Build FileUploadPayload
-  (fileName, contentType,
-   fileSize, fileData=b64)
-MAPPER.writeValueAsString(request)
-  → JSON line
-out.println(json)          ──────→  in.readLine()
-                                    MAPPER.readValue(...)
-                                    Base64.decode(payload.getFileData())
-                                      → byte[]
-                                    ps.setBytes(6, bytes)  ──────→  MEDIUMBLOB stored
-                                    return generated id
-in.readLine()              ←──────  out.println(responseJson)
-MAPPER.readValue(...)
-print stored id
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant S as Server
+    participant DB as Database
+
+    C->>C: Files.readAllBytes(path) → byte[]
+    C->>C: Base64.encode(bytes) → String b64
+    C->>C: Build FileUploadPayload (fileName, contentType, fileSize, fileData=b64)
+    C->>C: MAPPER.writeValueAsString(request) → JSON line
+    C->>S: out.println(json)
+    S->>S: MAPPER.readValue(...) → extract payload
+    S->>S: Base64.decode(payload.getFileData()) → byte[]
+    S->>DB: ps.setBytes(6, bytes)
+    DB-->>S: generated id
+    S->>S: build ServerResponse with stored id
+    S-->>C: out.println(responseJson)
+    C->>C: MAPPER.readValue(...) → print stored id
 ```
 
 And the retrieval direction:
 
-```
-Client side                          Server side                     Database
-----------                           -----------                     --------
-Send RETRIEVE_FILE { id: 7 }
-out.println(json)          ──────→  in.readLine()
-                                    ps.setInt(1, 7)
-                                    rs.getBytes("player_image")  ←── MEDIUMBLOB loaded
-                                      → byte[]
-                                    Base64.encode(bytes)
-                                      → String b64
-                                    Build response payload
-in.readLine()              ←──────  out.println(responseJson)
-MAPPER.readValue(...)
-Base64.decode(b64) → byte[]
-Files.write(savePath, bytes)
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant S as Server
+    participant DB as Database
+
+    C->>C: Build RETRIEVE_FILE request { id: 7 }
+    C->>C: MAPPER.writeValueAsString(request) → JSON line
+    C->>S: out.println(json)
+    S->>S: MAPPER.readValue(...) → extract id
+    S->>DB: ps.setInt(1, 7) / executeQuery()
+    DB-->>S: rs.getBytes("player_image") → byte[]
+    S->>S: Base64.encode(bytes) → String b64
+    S->>S: build ServerResponse with fileData
+    S-->>C: out.println(responseJson)
+    C->>C: MAPPER.readValue(...) → extract fileData
+    C->>C: Base64.decode(b64) → byte[]
+    C->>C: Files.write(savePath, bytes)
 ```
 
-Each arrow is one method call. The complexity is in knowing which API to call at each step — the structure itself is straightforward.
+Each arrow is one `println` or `readLine` call. The complexity is in knowing which API to call at each step — the structure itself is straightforward.
 
 ---
 
