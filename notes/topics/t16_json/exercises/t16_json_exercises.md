@@ -808,207 +808,7 @@ class GameAsset {
 
 ---
 
-## Exercise 05 — Base64 encoding and socket protocol integration
-
-**Objective:** Encode a binary asset as Base64 to embed it in a JSON string, then send it over a socket using the leaderboard server pattern from t15. The receiver decodes the Base64, stores the bytes in the database, and retrieves them to prove byte-for-byte integrity.
-
-**Context (software + games):**
-
-- **Software dev:** REST APIs, S3 pre-signed uploads, and email attachments all use Base64 to carry binary data through text-based protocols.
-- **Games dev:** Game clients uploading screenshots, replays, or user-generated content to a backend use Base64 encoding over an HTTP or TCP channel.
-
-### What you are building
-
-- `ASSET_UPLOAD` and `ASSET_DOWNLOAD` request handlers in a small server
-- Base64 encode on the client side; Base64 decode on the server side
-- End-to-end integrity check: bytes in == bytes out
-
-### Required request/response shapes
-
-```
-ASSET_UPLOAD
-  request:  { "requestType": "ASSET_UPLOAD",
-               "payload": { "assetName": "hero.bin",
-                            "assetType": "image/png",
-                            "assetData": "<base64 string>" } }
-  response: ServerResponse<AssetMetadata> — metadata of the stored asset
-
-ASSET_DOWNLOAD
-  request:  { "requestType": "ASSET_DOWNLOAD", "payload": { "id": 3 } }
-  response: ServerResponse<Map> — { assetId, assetName, assetType, assetData (base64) }
-
-ASSET_METADATA
-  request:  { "requestType": "ASSET_METADATA", "payload": { "id": 3 } }
-  response: ServerResponse<AssetMetadata> — no binary data
-```
-
-### Tasks
-
-1. Reuse `GameAsset`, `AssetMetadata`, `JdbcGameAssetDao`, and `ServerResponse<T>` from earlier exercises.
-2. Implement an `AssetServer` (modelled on `LeaderboardServer` from t15) with a `ClientHandler` that dispatches:
-   - `ASSET_UPLOAD`: decode Base64 from payload → create `GameAsset` → `dao.insert()` → return metadata
-   - `ASSET_DOWNLOAD`: `dao.findById(id)` → Base64-encode `assetData` → return in a map
-   - `ASSET_METADATA`: `dao.findMetadataById(id)` → return metadata
-3. Implement an `AssetClient` with methods:
-   - `upload(out, in, filePath)` — reads file, encodes to Base64, sends `ASSET_UPLOAD`
-   - `download(out, in, id, savePath)` — sends `ASSET_DOWNLOAD`, decodes Base64, writes to disk
-4. In `Exercise.run()`:
-   - Start `AssetServer` (port 9200) on a daemon thread.
-   - Client: create a synthetic 1,024-byte test file and upload it. Print the returned metadata.
-   - Client: download by the returned ID and save to `"data/downloaded_asset.bin"`.
-   - Read both files and print: `"Integrity check: true/false"`.
-   - Clean up the database row.
-
-### Sample output
-
-```text
-Uploaded: AssetMetadata{id=7, name=test_asset.bin, type=application/octet-stream, size=1024}
-Downloaded to: data/downloaded_asset.bin (1024 bytes)
-Integrity check: true
-Cleaned up id=7
-```
-
-### Constraints
-
-- Use `Base64.getEncoder().encodeToString(bytes)` before sending.
-- Use `Base64.getDecoder().decode(string)` when receiving.
-- Use `Arrays.equals(original, downloaded)` for the integrity check.
-- The server must never load the BLOB when handling `ASSET_METADATA`.
-
-### Done when…
-
-- `"Integrity check: true"` prints every time.
-- `ASSET_METADATA` returns correctly without loading the BLOB (check the SQL).
-- A deliberately corrupted Base64 string (e.g. inject a bad character) causes a structured `ServerResponse.error(...)` rather than an exception propagating to the client.
-
-<details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px; padding:0.9rem 1rem; margin:1rem 0;">
-  <summary style="cursor:pointer; font-weight:800; list-style:none; margin:0;">✅ Solution (key sections)</summary>
-  <div style="margin-top:0.8rem;">
-
-```java
-package t16_binary_io.exercises.e05;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.*;
-import java.net.*;
-import java.nio.file.*;
-import java.util.*;
-import java.util.concurrent.*;
-
-public class Exercise {
-
-    public static void run() throws Exception {
-        JdbcGameAssetDao dao = new JdbcGameAssetDao(
-            "jdbc:mysql://localhost:3306/game_assets_db",
-            "root", "");
-
-        Thread st = new Thread(() -> {
-            try { new AssetServer(9_200, dao).start(); }
-            catch (Exception e) { e.printStackTrace(); }
-        });
-        st.setDaemon(true);
-        st.start();
-        Thread.sleep(300);
-
-        // Create a 1024-byte synthetic file
-        byte[] original = new byte[1_024];
-        for (int i = 0; i < original.length; i++) original[i] = (byte)(i % 127);
-        BinaryFileUtil.writeFile("data/test_upload.bin", original);
-
-        ObjectMapper mapper = new ObjectMapper();
-        int uploadedId;
-
-        // Upload
-        try (Socket s = new Socket("localhost", 9_200);
-             BufferedReader in  = new BufferedReader(new InputStreamReader(s.getInputStream()));
-             PrintWriter    out = new PrintWriter(s.getOutputStream(), true)) {
-
-            String encoded = Base64.getEncoder().encodeToString(original);
-            Map<String, Object> req = new HashMap<>();
-            req.put("requestType", "ASSET_UPLOAD");
-            req.put("payload", Map.of("assetName", "test_asset.bin",
-                                      "assetType", "application/octet-stream",
-                                      "assetData", encoded));
-            out.println(mapper.writeValueAsString(req));
-
-            String reply = in.readLine();
-            System.out.println("Uploaded: " + reply);
-
-            // Extract the ID from the response
-            Map<?,?> resp = mapper.readValue(reply, Map.class);
-            Map<?,?> data = (Map<?,?>) resp.get("data");
-            uploadedId = Integer.parseInt(data.get("assetId").toString());
-        }
-
-        // Download
-        try (Socket s = new Socket("localhost", 9_200);
-             BufferedReader in  = new BufferedReader(new InputStreamReader(s.getInputStream()));
-             PrintWriter    out = new PrintWriter(s.getOutputStream(), true)) {
-
-            Map<String, Object> req = new HashMap<>();
-            req.put("requestType", "ASSET_DOWNLOAD");
-            req.put("payload", Map.of("id", uploadedId));
-            out.println(mapper.writeValueAsString(req));
-
-            String reply = in.readLine();
-            Map<?,?> resp = mapper.readValue(reply, Map.class);
-            Map<?,?> data = (Map<?,?>) resp.get("data");
-
-            byte[] downloaded = Base64.getDecoder().decode(data.get("assetData").toString());
-            BinaryFileUtil.writeFile("data/downloaded_asset.bin", downloaded);
-
-            System.out.println("Downloaded to: data/downloaded_asset.bin (" + downloaded.length + " bytes)");
-            System.out.println("Integrity check: " + Arrays.equals(original, downloaded));
-        }
-
-        // Clean up
-        dao.deleteById(uploadedId);
-        System.out.println("Cleaned up id=" + uploadedId);
-    }
-}
-
-// AssetServer follows the same structure as LeaderboardServer from t15.
-// ClientHandler.dispatch() additions:
-
-// ASSET_UPLOAD handler:
-// String encoded  = req.getString("assetData");
-// if (encoded == null || encoded.isBlank()) return ServerResponse.error("assetData is required");
-// try {
-//     byte[] data = Base64.getDecoder().decode(encoded);
-//     String name = req.getString("assetName");
-//     String type = req.getString("assetType");
-//     GameAsset asset = new GameAsset(0, name, type != null ? type : "application/octet-stream", data.length, data);
-//     int id = _dao.insert(asset);
-//     Optional<AssetMetadata> meta = _dao.findMetadataById(id);
-//     return meta.isPresent() ? ServerResponse.ok("asset uploaded", meta.get()) : ServerResponse.error("stored but not found");
-// } catch (IllegalArgumentException e) {
-//     return ServerResponse.error("invalid base64: " + e.getMessage());
-// }
-
-// ASSET_DOWNLOAD handler:
-// int id = req.getInt("id");
-// Optional<GameAsset> file = _dao.findById(id);
-// if (file.isEmpty()) return ServerResponse.error("no asset with id=" + id);
-// Map<String,Object> resp = new HashMap<>();
-// resp.put("assetId",   file.get().getAssetId());
-// resp.put("assetName", file.get().getAssetName());
-// resp.put("assetType", file.get().getAssetType());
-// resp.put("assetData", Base64.getEncoder().encodeToString(file.get().getAssetData()));
-// return ServerResponse.ok("asset retrieved", resp);
-
-// ASSET_METADATA handler:
-// int id = req.getInt("id");
-// Optional<AssetMetadata> meta = _dao.findMetadataById(id);
-// if (meta.isEmpty()) return ServerResponse.error("no asset with id=" + id);
-// return ServerResponse.ok("metadata retrieved", meta.get());
-```
-
-  </div>
-</details>
-
----
-
-## Exercise 06 — Send a binary file from client to server (upload)
+## Exercise 05 — Send a binary file from client to server (upload)
 
 **Objective:** Write a minimal upload server that receives a Base64-encoded file over a socket, decodes it, and stores the bytes in the database using `PreparedStatement.setBytes()`. The client reads a file from disk, encodes it, and sends it as a JSON request.
 
@@ -1074,7 +874,7 @@ Cleaned up id=12
 **`UploadServer.java`** — server (start this first; accepts `UPLOAD_FILE` requests, Base64-decodes, stores with `setBytes()`)
 
 ```java
-package t16_binary_io.exercises.e06;
+package t16_binary_io.exercises.e05;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.*;
@@ -1180,7 +980,7 @@ public class UploadServer {
 **`UploadClient.java`** — client (start this second; creates the test file, connects to `UploadServer`, uploads, verifies the returned ID)
 
 ```java
-package t16_binary_io.exercises.e06;
+package t16_binary_io.exercises.e05;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.*;
@@ -1255,7 +1055,7 @@ public class UploadClient {
 
 ---
 
-## Exercise 07 — Retrieve a stored file from a server (download)
+## Exercise 06 — Retrieve a stored file from a server (download)
 
 **Objective:** Write a retrieve server that fetches a `MEDIUMBLOB` from the database using `ResultSet.getBytes()`, Base64-encodes it, and sends it back to the client as a JSON response. The client decodes the Base64 string and reconstructs the file on disk, then verifies byte-for-byte equality with `Arrays.equals()`.
 
@@ -1327,7 +1127,7 @@ Cleaned up id=8
 **`RetrieveServer.java`** — server (start this first; accepts `RETRIEVE_FILE` requests, fetches the BLOB with `getBytes()`, Base64-encodes, returns in JSON)
 
 ```java
-package t16_binary_io.exercises.e07;
+package t16_binary_io.exercises.e06;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.*;
@@ -1435,7 +1235,7 @@ public class RetrieveServer {
 **`RetrieveClient.java`** — client (start this second; seeds the DB via JDBC, connects to `RetrieveServer`, decodes the response, verifies integrity)
 
 ```java
-package t16_binary_io.exercises.e07;
+package t16_binary_io.exercises.e06;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.*;
@@ -1527,7 +1327,7 @@ public class RetrieveClient {
 
 ---
 
-## Exercise 08 — Request file metadata without loading the BLOB
+## Exercise 07 — Request file metadata without loading the BLOB
 
 **Objective:** Write a metadata server whose SQL deliberately omits the `asset_data` column. The server returns only the filename, content type, and file size. The client prints the metadata and confirms that no binary data was transferred.
 
@@ -1601,7 +1401,7 @@ Cleaned up id=15
 **`MetadataServer.java`** — server (start this first; handles `GET_METADATA` requests; `asset_data` is deliberately absent from the SELECT)
 
 ```java
-package t16_binary_io.exercises.e08;
+package t16_binary_io.exercises.e07;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.*;
@@ -1704,7 +1504,7 @@ public class MetadataServer {
 **`MetadataClient.java`** — client (start this second; seeds the DB via JDBC, connects to `MetadataServer`, prints metadata, asserts no binary payload)
 
 ```java
-package t16_binary_io.exercises.e08;
+package t16_binary_io.exercises.e07;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.*;
