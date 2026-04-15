@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class Exercise {
 
-    public static void run() throws Exception {
+    public static void main(String[] args) throws Exception {
         // Create a synthetic test file
         byte[] synthetic = new byte[256];
         for (int i = 0; i < synthetic.length; i++)

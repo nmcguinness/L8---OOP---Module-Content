@@ -4,11 +4,11 @@ import java.sql.*;
 
 public class Exercise {
 
-    private static final String URL     = "jdbc:mysql://localhost:3306/game_assets_db?";
+    private static final String URL     = "jdbc:mysql://localhost:3306/game_assets_db";
     private static final String DB_USER = "root";
     private static final String DB_PASS = "";
 
-    public static void run() throws Exception {
+    public static void main(String[] args) throws Exception {
 
         try (Connection c = DriverManager.getConnection(URL, DB_USER, DB_PASS)) {
 

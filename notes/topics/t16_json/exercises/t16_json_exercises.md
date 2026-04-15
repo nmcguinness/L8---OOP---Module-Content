@@ -22,21 +22,7 @@ These exercises reinforce **Binary I/O — Streams, BLOBs, and File Storage** by
 
 ## How to run
 
-Each exercise uses:
-
-- **Folder:** `/exercises/topics/t16_binary_io/exercises/eXX/`
-- **Filename:** `Exercise.java`
-- **Package:** `t16_binary_io.exercises.eXX`
-
-```java
-package t16_binary_io.exercises.e01;
-
-public class Exercise {
-    public static void run() throws Exception {
-        // your code here
-    }
-}
-```
+Since each class listed in the Solution section has a `main(String[] args)` method you can just run each class directly.
 
 ## Before you start
 
@@ -160,7 +146,7 @@ import java.util.Arrays;
 
 public class Exercise {
 
-    public static void run() throws Exception {
+    public static void main(String[] args) throws Exception {
         // Create a synthetic test file
         byte[] synthetic = new byte[256];
         for (int i = 0; i < synthetic.length; i++)
@@ -279,7 +265,7 @@ public class Exercise {
     private static final String DB_USER = "root";
     private static final String DB_PASS = "";
 
-    public static void run() throws Exception {
+    public static void main(String[] args) throws Exception {
 
         try (Connection c = DriverManager.getConnection(URL, DB_USER, DB_PASS)) {
 
@@ -398,7 +384,7 @@ import java.util.*;
 
 public class Exercise {
 
-    public static void run() throws Exception {
+    public static void main(String[] args) throws Exception {
         String url  = "jdbc:mysql://localhost:3306/game_assets_db";
         String user = "root";
         String pass = "";
@@ -751,9 +737,6 @@ import java.util.*;
 public class UploadClient {
 
     private static final ObjectMapper MAPPER  = new ObjectMapper();
-    private static final String       URL     = "jdbc:mysql://localhost:3306/game_assets_db";
-    private static final String       DB_USER = "root";
-    private static final String       DB_PASS = "";
     private static final int          PORT    = 9_206;
 
     // Entry point: create the test file, upload to UploadServer, verify the returned ID
@@ -789,20 +772,6 @@ public class UploadClient {
             Map<?,?> response     = MAPPER.readValue(responseJson, Map.class);
             storedId = ((Number) response.get("id")).intValue();
             System.out.println("Upload OK — stored id: " + storedId);
-        }
-
-        // Clean up the test row
-        deleteById(storedId);
-        System.out.println("Cleaned up id=" + storedId);
-    }
-
-    // Deletes: a game_assets row by id
-    private static void deleteById(int id) throws Exception {
-        String sql = "DELETE FROM game_assets WHERE asset_id = ?";
-        try (Connection        c  = DriverManager.getConnection(URL, DB_USER, DB_PASS);
-             PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setInt(1, id);
-            ps.executeUpdate();
         }
     }
 }
@@ -1006,18 +975,12 @@ import java.util.*;
 public class RetrieveClient {
 
     private static final ObjectMapper MAPPER  = new ObjectMapper();
-    private static final String       URL     = "jdbc:mysql://localhost:3306/game_assets_db";
-    private static final String       DB_USER = "root";
-    private static final String       DB_PASS = "";
     private static final int          PORT    = 9_207;
 
     // Entry point: seed the DB, download from RetrieveServer, verify byte-for-byte integrity
     public static void main(String[] args) throws Exception {
-        // Create a known test asset and insert it directly via JDBC
-        byte[] original = new byte[512];
-        for (int i = 0; i < original.length; i++) original[i] = (byte)(i % 200);
-        int testId = insertAsset("retrieve_test.bin", "application/octet-stream", original.length, original);
-        System.out.println("Pre-inserted test asset — id: " + testId);
+        // Retrieve row with ID=1
+        int testId = 1;
 
         // Send a RETRIEVE_FILE request and reconstruct the file on disk
         try (Socket         socket = new Socket("localhost", PORT);
@@ -1041,40 +1004,6 @@ public class RetrieveClient {
 
             System.out.println("Retrieved: " + data.get("fileName") + " (" + downloaded.length + " bytes)");
             System.out.println("Integrity check: " + Arrays.equals(original, downloaded));
-        }
-
-        // Clean up
-        deleteById(testId);
-        System.out.println("Cleaned up id=" + testId);
-    }
-
-    // Inserts: a binary asset directly via JDBC; returns the auto-generated id
-    private static int insertAsset(String name, String type, int size, byte[] data) throws Exception {
-        String sql = "INSERT INTO game_assets (asset_name, asset_type, file_size, asset_data) VALUES (?, ?, ?, ?)";
-        try (Connection        c  = DriverManager.getConnection(URL, DB_USER, DB_PASS);
-             PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
-            ps.setString(1, name);
-            ps.setString(2, type);
-            ps.setInt(3,    size);
-            ps.setBytes(4,  data);
-            ps.executeUpdate();
-
-            try (ResultSet keys = ps.getGeneratedKeys()) {
-                if (!keys.next())
-                    throw new IllegalStateException("no generated key returned");
-                return keys.getInt(1);
-            }
-        }
-    }
-
-    // Deletes: a game_assets row by id
-    private static void deleteById(int id) throws Exception {
-        String sql = "DELETE FROM game_assets WHERE asset_id = ?";
-        try (Connection        c  = DriverManager.getConnection(URL, DB_USER, DB_PASS);
-             PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setInt(1, id);
-            ps.executeUpdate();
         }
     }
 }
@@ -1274,18 +1203,12 @@ import java.util.*;
 public class MetadataClient {
 
     private static final ObjectMapper MAPPER  = new ObjectMapper();
-    private static final String       URL     = "jdbc:mysql://localhost:3306/game_assets_db";
-    private static final String       DB_USER = "root";
-    private static final String       DB_PASS = "";
     private static final int          PORT    = 9_208;
 
     // Entry point: seed the DB, request metadata from MetadataServer, assert no fileData in response
     public static void main(String[] args) throws Exception {
-        // Insert a test asset directly via JDBC
-        byte[] assetData = new byte[2_048];
-        Arrays.fill(assetData, (byte) 42);
-        int testId = insertAsset("hero_sprite.png", "image/png", assetData.length, assetData);
-        System.out.println("Pre-inserted asset — id: " + testId);
+       // Retrieve row with ID=1
+        int testId = 1;
 
         // Request metadata only — no binary payload
         try (Socket         socket = new Socket("localhost", PORT);
@@ -1311,36 +1234,6 @@ public class MetadataClient {
         // Clean up
         deleteById(testId);
         System.out.println("Cleaned up id=" + testId);
-    }
-
-    // Inserts: a binary asset directly via JDBC; returns the auto-generated id
-    private static int insertAsset(String name, String type, int size, byte[] data) throws Exception {
-        String sql = "INSERT INTO game_assets (asset_name, asset_type, file_size, asset_data) VALUES (?, ?, ?, ?)";
-        try (Connection        c  = DriverManager.getConnection(URL, DB_USER, DB_PASS);
-             PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
-            ps.setString(1, name);
-            ps.setString(2, type);
-            ps.setInt(3,    size);
-            ps.setBytes(4,  data);
-            ps.executeUpdate();
-
-            try (ResultSet keys = ps.getGeneratedKeys()) {
-                if (!keys.next())
-                    throw new IllegalStateException("no generated key returned");
-                return keys.getInt(1);
-            }
-        }
-    }
-
-    // Deletes: a game_assets row by id
-    private static void deleteById(int id) throws Exception {
-        String sql = "DELETE FROM game_assets WHERE asset_id = ?";
-        try (Connection        c  = DriverManager.getConnection(URL, DB_USER, DB_PASS);
-             PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setInt(1, id);
-            ps.executeUpdate();
-        }
     }
 }
 ```
