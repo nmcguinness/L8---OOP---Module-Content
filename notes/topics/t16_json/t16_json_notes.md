@@ -880,35 +880,50 @@ Base64 represents every group of three bytes as four printable ASCII characters 
 
 The trade-off is size: Base64 encoding increases data size by approximately 33%. A 100 KB image becomes approximately 133 KB as a Base64 string inside a JSON field.
 
-### Encoding bytes to a Base64 string
+### Encoding/decoding bytes to/from a Base64 string
 
 Java's `java.util.Base64` has been in the standard library since Java 8. No additional dependency is needed.
 
 ```java
+import java.io.IOException;
 import java.util.Base64;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-//helper to tell you what directory to put your data file in
-System.out.println("Put your data file in: " + System.getProperty("user.dir"));
+public class Main {
 
-// Dont forget to actually make a file or download something in PNG format!
-byte[] fileBytes = Files.readAllBytes(Path.of("profile.png"));
+    public static void main(String[] args)
+    {
+        //helper to tell you what directory to put your data file in
+        System.out.println("Put your data file in: " + System.getProperty("user.dir"));
 
-// Converts: raw byte array to a Base64-encoded ASCII string
-String encoded = Base64.getEncoder().encodeToString(fileBytes);
+        try {
 
-// 'encoded' is now safe to place in a JSON string field
-```
+            //ENCODE
 
-### Decoding a Base64 string back to bytes
+            // Ensure you create/source the file so that you have something to open!
+            byte[] fileBytes = Files.readAllBytes(Path.of("profile.png"));
 
-```java
-// Converts: Base64 string back to the original byte array
-byte[] receivedFileBytes = Base64.getDecoder().decode(encoded);
+            // Converts: raw byte array to a Base64-encoded ASCII string
+            String encoded = Base64.getEncoder().encodeToString(fileBytes);
 
-// Write the reconstructed file to disk
-Files.write(Path.of("retrieved_profile.png"), receivedFileBytes);
+            // Show the data
+            System.out.println(encoded);
+
+            //DECODE
+
+            // Converts: Base64 string back to the original byte array
+            byte[] receivedFileBytes = Base64.getDecoder().decode(encoded);
+
+            // Write the reconstructed file to disk
+            Files.write(Path.of("retrieved_profile.png"), receivedFileBytes);
+        }
+        catch(IOException e)
+        {
+            System.out.println("A bad thing happened with the file!");
+        }
+    }
+}
 ```
 
 ### Embedding binary data in a JSON upload payload
