@@ -275,9 +275,9 @@ import java.sql.*;
 
 public class Exercise {
 
-    private static final String URL     = "jdbc:mysql://localhost:3306/game_assets_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
-    private static final String DB_USER = "game_assets_user";
-    private static final String DB_PASS = "your_password";
+    private static final String URL     = "jdbc:mysql://localhost:3306/game_assets_db";
+    private static final String DB_USER = "root";
+    private static final String DB_PASS = "";
 
     public static void run() throws Exception {
 
@@ -399,9 +399,9 @@ import java.util.*;
 public class Exercise {
 
     public static void run() throws Exception {
-        String url  = "jdbc:mysql://localhost:3306/game_assets_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
-        String user = "game_assets_user";
-        String pass = "your_password";
+        String url  = "jdbc:mysql://localhost:3306/game_assets_db";
+        String user = "root";
+        String pass = "";
 
         GameAssetDao dao = new JdbcGameAssetDao(url, user, pass);
 
@@ -643,9 +643,9 @@ import java.util.*;
 public class Exercise {
 
     public static void run() throws Exception {
-        String url  = "jdbc:mysql://localhost:3306/game_assets_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
-        String user = "game_assets_user";
-        String pass = "your_password";
+        String url  = "jdbc:mysql://localhost:3306/game_assets_db";
+        String user = "root";
+        String pass = "";
 
         JdbcGameAssetDao dao = new JdbcGameAssetDao(url, user, pass);
 
@@ -899,8 +899,8 @@ public class Exercise {
 
     public static void run() throws Exception {
         JdbcGameAssetDao dao = new JdbcGameAssetDao(
-            "jdbc:mysql://localhost:3306/game_assets_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true",
-            "game_assets_user", "your_password");
+            "jdbc:mysql://localhost:3306/game_assets_db",
+            "root", "");
 
         Thread st = new Thread(() -> {
             try { new AssetServer(9_200, dao).start(); }
@@ -1086,9 +1086,9 @@ import java.util.*;
 public class UploadServer {
 
     // === Constants ===
-    private static final String URL     = "jdbc:mysql://localhost:3306/game_assets_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
-    private static final String DB_USER = "game_assets_user";
-    private static final String DB_PASS = "your_password";
+    private static final String URL     = "jdbc:mysql://localhost:3306/game_assets_db";
+    private static final String DB_USER = "root";
+    private static final String DB_PASS = "";
     private static final int    PORT    = 9_206;
 
     // === Fields ===
@@ -1193,9 +1193,9 @@ import java.util.*;
 public class UploadClient {
 
     private static final ObjectMapper MAPPER  = new ObjectMapper();
-    private static final String       URL     = "jdbc:mysql://localhost:3306/game_assets_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
-    private static final String       DB_USER = "game_assets_user";
-    private static final String       DB_PASS = "your_password";
+    private static final String       URL     = "jdbc:mysql://localhost:3306/game_assets_db";
+    private static final String       DB_USER = "root";
+    private static final String       DB_PASS = "";
     private static final int          PORT    = 9_206;
 
     // Entry point: create the test file, upload to UploadServer, verify the returned ID
@@ -1339,9 +1339,9 @@ import java.util.*;
 public class RetrieveServer {
 
     // === Constants ===
-    private static final String URL     = "jdbc:mysql://localhost:3306/game_assets_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
-    private static final String DB_USER = "game_assets_user";
-    private static final String DB_PASS = "your_password";
+    private static final String URL     = "jdbc:mysql://localhost:3306/game_assets_db";
+    private static final String DB_USER = "root";
+    private static final String DB_PASS = "";
     private static final int    PORT    = 9_207;
 
     // === Fields ===
@@ -1448,9 +1448,9 @@ import java.util.*;
 public class RetrieveClient {
 
     private static final ObjectMapper MAPPER  = new ObjectMapper();
-    private static final String       URL     = "jdbc:mysql://localhost:3306/game_assets_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
-    private static final String       DB_USER = "game_assets_user";
-    private static final String       DB_PASS = "your_password";
+    private static final String       URL     = "jdbc:mysql://localhost:3306/game_assets_db";
+    private static final String       DB_USER = "root";
+    private static final String       DB_PASS = "";
     private static final int          PORT    = 9_207;
 
     // Entry point: seed the DB, download from RetrieveServer, verify byte-for-byte integrity
@@ -1613,9 +1613,9 @@ import java.util.*;
 public class MetadataServer {
 
     // === Constants ===
-    private static final String URL     = "jdbc:mysql://localhost:3306/game_assets_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
-    private static final String DB_USER = "game_assets_user";
-    private static final String DB_PASS = "your_password";
+    private static final String URL     = "jdbc:mysql://localhost:3306/game_assets_db";
+    private static final String DB_USER = "root";
+    private static final String DB_PASS = "";
     private static final int    PORT    = 9_208;
 
     // === Fields ===
@@ -1716,9 +1716,9 @@ import java.util.*;
 public class MetadataClient {
 
     private static final ObjectMapper MAPPER  = new ObjectMapper();
-    private static final String       URL     = "jdbc:mysql://localhost:3306/game_assets_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
-    private static final String       DB_USER = "game_assets_user";
-    private static final String       DB_PASS = "your_password";
+    private static final String       URL     = "jdbc:mysql://localhost:3306/game_assets_db";
+    private static final String       DB_USER = "root";
+    private static final String       DB_PASS = "";
     private static final int          PORT    = 9_208;
 
     // Entry point: seed the DB, request metadata from MetadataServer, assert no fileData in response
