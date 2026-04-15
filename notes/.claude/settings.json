@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep '^$CATEGORY' c:/Work/2025-26/OOP/Repos/L8---OOP---Module-Content/notes/assessments/oop_self_assessment_mcq.gift)"
+    ]
+  }
+}

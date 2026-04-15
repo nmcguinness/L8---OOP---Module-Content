@@ -2,13 +2,13 @@
 title: "JSON in Java — From Format Basics to Socket Communication"
 subtitle: "COMP C8Z03 — Year 2 OOP"
 topic_code: t16_json
-description: "A ground-up introduction to JSON: the format itself, string-based serialisation and deserialisation with Jackson, generic wrapper types, protocol design, Base64 binary encoding, round-trip testing, and sending JSON over a socket connection."
+description: "A ground-up introduction to JSON: the format itself, string-based serialisation and deserialisation with Jackson, generic wrapper types, protocol design, Base64 binary encoding, BLOB storage and retrieval with JDBC, round-trip testing, and sending JSON over a socket connection."
 created: 2026-02-26
-last_updated: 2026-04-14
-version: 1.1
+last_updated: 2026-04-15
+version: 1.2
 status: published
 authors: ["OOP Teaching Team"]
-tags: [java, json, jackson, serialisation, protocol, sockets, base64, generics, year2, comp-c8z03]
+tags: [java, json, jackson, serialisation, protocol, sockets, base64, blob, jdbc, generics, year2, comp-c8z03]
 difficulty_tier: Intermediate
 previous_topic: t15_networking
 ---
@@ -35,6 +35,10 @@ previous_topic: t15_networking
 | Apply | Serialise and deserialise a **generic wrapper type** (`Response<T>`) using `TypeReference`. |
 | Apply | Design a simple **JSON request/response protocol** with a `type` field and `payload` envelope. |
 | Apply | Base64-encode a `byte[]` for safe inclusion in a JSON string, and decode it back to the original bytes. |
+| Apply | Extend a MySQL table with a `MEDIUMBLOB` column and associated metadata columns; update `mysqlSetup.sql` accordingly. |
+| Apply | Insert binary data into a `MEDIUMBLOB` column using `PreparedStatement.setBytes()`. |
+| Apply | Retrieve binary data from a `MEDIUMBLOB` column using `ResultSet.getBytes()`. |
+| Apply | Write a metadata-only SELECT query that deliberately omits the BLOB column. |
 | Apply | Send a JSON string over a socket and read it back using `PrintWriter` and `BufferedReader`. |
 | Apply | Write JUnit 5 round-trip tests that assert a serialise→deserialise cycle produces an equal object. |
 | Debug | Fix common Jackson errors: missing no-arg constructor, field name mismatch, raw type warnings. |
@@ -1019,7 +1023,7 @@ FileUploadPayload payload  = buildUploadPayload(Path.of("profile.png"), 7);
 JsonNode          node     = MAPPER.valueToTree(payload);
 Request           request  = new Request("UPLOAD_FILE", node);
 String            json     = MAPPER.writeValueAsString(request);
-out.println(json);     // 'out' is the socket's PrintWriter — see Section 8
+out.println(json);     // 'out' is the socket's PrintWriter — see Section 9
 ```
 
 ### Server decode sequence
@@ -1035,7 +1039,344 @@ byte[]            fileBytes = Base64.getDecoder().decode(payload.getFileData());
 
 ---
 
-## Section 8 — Sending JSON over a socket
+## Section 8 — Storing and retrieving binary data with JDBC (BLOB)
+
+Section 7 showed how to encode a `byte[]` as a Base64 string for safe inclusion in a JSON message. This section covers the other half of the pipeline: persisting those bytes in a MySQL database using a `BLOB` column, and reading them back out.
+
+The steps are independent. A `byte[]` arriving at the server from a JSON upload request is stored with `PreparedStatement.setBytes()`. A `byte[]` retrieved from the database is Base64-encoded and returned in a `ServerResponse<T>`. Neither side cares how the other works — the contract is just `byte[]` in and `byte[]` out.
+
+---
+
+### BLOB column types in MySQL
+
+MySQL offers four BLOB types that differ only in the maximum number of bytes they can store:
+
+| Type | Maximum size | Typical use |
+| :- | :- | :- |
+| `TINYBLOB` | 255 bytes | Very small payloads (rarely used) |
+| `BLOB` | 65 535 bytes (~64 KB) | Small images, icons |
+| `MEDIUMBLOB` | 16 777 215 bytes (~16 MB) | Most game assets, audio clips, documents |
+| `LONGBLOB` | 4 294 967 295 bytes (~4 GB) | Large video files |
+
+For most GCA2 use cases a `MEDIUMBLOB` is the right choice. It covers any realistic file a student might upload during a demo without the overhead of `LONGBLOB`.
+
+---
+
+### Schema design — extending a table with a BLOB column
+
+Binary data should never live alone in a table. Metadata (the file name, content type, and size) must be stored alongside it in separate `VARCHAR`/`INT` columns so it can be queried cheaply without fetching the payload.
+
+The three metadata columns required by the brief are:
+
+| Column | SQL type | Purpose |
+| :- | :- | :- |
+| `file_name` | `VARCHAR(255) NOT NULL` | Original filename including extension |
+| `content_type` | `VARCHAR(100) NOT NULL` | MIME type (`image/png`, `audio/ogg`, `application/pdf`) |
+| `file_size` | `INT NOT NULL` | File size in bytes **before** Base64 encoding |
+
+Add these columns (and the BLOB column) to an existing entity table using `ALTER TABLE`:
+
+```sql
+ALTER TABLE player
+    ADD COLUMN file_name     VARCHAR(255)  NOT NULL DEFAULT '',
+    ADD COLUMN content_type  VARCHAR(100)  NOT NULL DEFAULT '',
+    ADD COLUMN file_size     INT           NOT NULL DEFAULT 0,
+    ADD COLUMN player_image  MEDIUMBLOB;
+```
+
+Alternatively, define them directly in the `CREATE TABLE` statement in `mysqlSetup.sql`:
+
+```sql
+CREATE TABLE player (
+    player_id     INT           NOT NULL AUTO_INCREMENT,
+    player_name   VARCHAR(255)  NOT NULL,
+    rating        DOUBLE        NOT NULL,
+    file_name     VARCHAR(255)  NOT NULL DEFAULT '',
+    content_type  VARCHAR(100)  NOT NULL DEFAULT '',
+    file_size     INT           NOT NULL DEFAULT 0,
+    player_image  MEDIUMBLOB,
+    PRIMARY KEY (player_id)
+);
+```
+
+`MEDIUMBLOB` columns are **nullable by default**. This is intentional — rows inserted before a file is uploaded should not be forced to provide binary data.
+
+> **Update `mysqlSetup.sql`:** After altering the schema, update `mysqlSetup.sql` so that running it from scratch recreates the schema with the BLOB column in place. The seed `INSERT` rows may omit the BLOB columns (the `DEFAULT ''` and `DEFAULT 0` values handle metadata; the nullable BLOB stays `NULL`).
+
+---
+
+### Extending the DTO to hold binary data
+
+Add the four columns as fields to your entity DTO. Jackson ignores `byte[]` fields by default when serialising (a raw `byte[]` in JSON would be Base64-encoded automatically by Jackson), but in your architecture the conversion is handled explicitly — the DTO carries a `byte[]` internally and the server/client code does the Base64 conversion before sending and after receiving. This keeps the DTO free of Jackson-specific concerns.
+
+```java
+public class Player {
+
+    // === Fields ===
+    private int    fPlayerId;
+    private String fPlayerName;
+    private double fRating;
+    private String fFileName;      // original filename, e.g. "avatar.png"
+    private String fContentType;   // MIME type, e.g. "image/png"
+    private int    fFileSize;      // bytes, pre-encoding
+    private byte[] fPlayerImage;   // raw bytes; null when no file has been uploaded
+
+    // === Constructors ===
+    // Creates: a Player with no binary data attached
+    public Player(int playerId, String playerName, double rating) {
+        fPlayerId    = playerId;
+        fPlayerName  = (playerName == null || playerName.isBlank())
+                           ? "Unknown" : playerName.trim();
+        fRating      = (rating < 0.0 || rating > 10.0) ? 0.0 : rating;
+        fFileName    = "";
+        fContentType = "";
+        fFileSize    = 0;
+        fPlayerImage = null;
+    }
+
+    // Creates: a Player with all fields including binary data
+    public Player(int playerId, String playerName, double rating,
+                  String fileName, String contentType,
+                  int fileSize, byte[] playerImage) {
+        this(playerId, playerName, rating);
+        fFileName    = (fileName    == null) ? "" : fileName.trim();
+        fContentType = (contentType == null) ? "" : contentType.trim();
+        fFileSize    = Math.max(0, fileSize);
+        fPlayerImage = playerImage;
+    }
+
+    // === Public API ===
+    // Gets: the player ID
+    public int    getPlayerId()     { return fPlayerId; }
+
+    // Gets: the player name
+    public String getPlayerName()   { return fPlayerName; }
+
+    // Gets: the player rating
+    public double getRating()       { return fRating; }
+
+    // Gets: the filename of the stored image
+    public String getFileName()     { return fFileName; }
+
+    // Sets: the filename
+    public void   setFileName(String f)         { fFileName    = (f == null) ? "" : f.trim(); }
+
+    // Gets: the MIME content type
+    public String getContentType()              { return fContentType; }
+
+    // Sets: the MIME content type
+    public void   setContentType(String ct)     { fContentType = (ct == null) ? "" : ct.trim(); }
+
+    // Gets: the file size in bytes (pre-encoding)
+    public int    getFileSize()                 { return fFileSize; }
+
+    // Sets: the file size in bytes
+    public void   setFileSize(int size)         { fFileSize = Math.max(0, size); }
+
+    // Gets: the raw image bytes; may be null if no file has been stored
+    public byte[] getPlayerImage()              { return fPlayerImage; }
+
+    // Sets: the raw image bytes
+    public void   setPlayerImage(byte[] data)   { fPlayerImage = data; }
+}
+```
+
+The key point is that `fPlayerImage` is `null` — not an empty array — when no file has been uploaded. Your DAO insert and retrieval code must handle `null` without crashing.
+
+---
+
+### Inserting a BLOB with `setBytes()`
+
+`PreparedStatement.setBytes(paramIndex, bytes)` fills a `?` placeholder with a `byte[]`. The JDBC driver handles the conversion to the database's internal BLOB representation.
+
+```java
+// Inserts: a player row including binary image data; returns the auto-generated player_id
+public int insertPlayerWithImage(Player player) throws Exception {
+    String sql = """
+            INSERT INTO player
+                (player_name, rating, file_name, content_type, file_size, player_image)
+            VALUES (?, ?, ?, ?, ?, ?)
+            """;
+
+    try (Connection c = DriverManager.getConnection(fUrl, fUser, fPass);
+         PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+        ps.setString(1, player.getPlayerName());
+        ps.setDouble(2, player.getRating());
+        ps.setString(3, player.getFileName());
+        ps.setString(4, player.getContentType());
+        ps.setInt(5,    player.getFileSize());
+        ps.setBytes(6,  player.getPlayerImage());   // null is valid — stored as NULL in the DB
+
+        ps.executeUpdate();
+
+        try (ResultSet keys = ps.getGeneratedKeys()) {
+            if (keys.next())
+                return keys.getInt(1);
+        }
+    }
+    throw new Exception("Insert failed — no generated key returned");
+}
+```
+
+`ps.setBytes(6, null)` is valid JDBC — the driver stores a SQL `NULL` in the BLOB column. This means you do not need to branch on whether the player has an image before calling `setBytes`.
+
+---
+
+### Retrieving a BLOB with `getBytes()`
+
+`ResultSet.getBytes("column_name")` returns a `byte[]`. It returns `null` if the column contains SQL `NULL`. Check for `null` before using the array.
+
+```java
+// Gets: a Player by ID, including any stored binary image data
+public Optional<Player> getPlayerById(int id) throws Exception {
+    String sql = """
+            SELECT player_id, player_name, rating,
+                   file_name, content_type, file_size, player_image
+            FROM player
+            WHERE player_id = ?
+            """;
+
+    try (Connection c = DriverManager.getConnection(fUrl, fUser, fPass);
+         PreparedStatement ps = c.prepareStatement(sql)) {
+
+        ps.setInt(1, id);
+
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                Player p = new Player(
+                    rs.getInt("player_id"),
+                    rs.getString("player_name"),
+                    rs.getDouble("rating"),
+                    rs.getString("file_name"),
+                    rs.getString("content_type"),
+                    rs.getInt("file_size"),
+                    rs.getBytes("player_image")    // returns null if the column is NULL
+                );
+                return Optional.of(p);
+            }
+        }
+    }
+    return Optional.empty();
+}
+```
+
+`rs.getBytes("player_image")` loads the entire BLOB into a `byte[]` in memory. For large files this can be significant. Only call this method when the caller actually needs the binary content — never in a list-all or metadata-only query.
+
+---
+
+### Metadata-only queries — never fetch the BLOB you don't need
+
+A listing screen, a file browser, or a search result needs the filename, content type, and size — not the binary payload. Fetching a 5 MB image just to display its name wastes memory, slows the query, and increases network traffic between the database and the server.
+
+Write a separate query that lists columns explicitly and **omits the BLOB column**:
+
+```java
+// Gets: metadata for all players that have a stored image, without loading the binary data
+public List<Player> getAllPlayerMetadata() throws Exception {
+    String sql = """
+            SELECT player_id, player_name, rating,
+                   file_name, content_type, file_size
+            FROM player
+            WHERE player_image IS NOT NULL
+            ORDER BY player_id
+            """;
+
+    List<Player> results = new ArrayList<>();
+
+    try (Connection c = DriverManager.getConnection(fUrl, fUser, fPass);
+         PreparedStatement ps = c.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+
+        while (rs.next()) {
+            results.add(new Player(
+                rs.getInt("player_id"),
+                rs.getString("player_name"),
+                rs.getDouble("rating"),
+                rs.getString("file_name"),
+                rs.getString("content_type"),
+                rs.getInt("file_size"),
+                null    // deliberately not fetched
+            ));
+        }
+    }
+    return results;
+}
+```
+
+The critical rule is: **name every column you want, and leave `player_image` out of the list**. Never use `SELECT *` — it would pull the BLOB even if your `ResultSet` code ignores it.
+
+---
+
+### Putting it all together — the full binary upload/download pipeline
+
+The following diagram shows how the four stages of a binary upload connect:
+
+```
+Client side                          Server side                     Database
+----------                           -----------                     --------
+Files.readAllBytes(path)
+  → byte[]
+Base64.encode(bytes)
+  → String b64
+Build FileUploadPayload
+  (fileName, contentType,
+   fileSize, fileData=b64)
+MAPPER.writeValueAsString(request)
+  → JSON line
+out.println(json)          ──────→  in.readLine()
+                                    MAPPER.readValue(...)
+                                    Base64.decode(payload.getFileData())
+                                      → byte[]
+                                    ps.setBytes(6, bytes)  ──────→  MEDIUMBLOB stored
+                                    return generated id
+in.readLine()              ←──────  out.println(responseJson)
+MAPPER.readValue(...)
+print stored id
+```
+
+And the retrieval direction:
+
+```
+Client side                          Server side                     Database
+----------                           -----------                     --------
+Send RETRIEVE_FILE { id: 7 }
+out.println(json)          ──────→  in.readLine()
+                                    ps.setInt(1, 7)
+                                    rs.getBytes("player_image")  ←── MEDIUMBLOB loaded
+                                      → byte[]
+                                    Base64.encode(bytes)
+                                      → String b64
+                                    Build response payload
+in.readLine()              ←──────  out.println(responseJson)
+MAPPER.readValue(...)
+Base64.decode(b64) → byte[]
+Files.write(savePath, bytes)
+```
+
+Each arrow is one method call. The complexity is in knowing which API to call at each step — the structure itself is straightforward.
+
+---
+
+### What `getBinaryStream()` and `setBinaryStream()` are for
+
+The brief permits both `setBytes()`/`getBytes()` and `setBinaryStream()`/`getBinaryStream()`. The stream-based variants exist for files too large to fit in a single `byte[]` in memory (hundreds of megabytes). They let JDBC transfer binary data incrementally without loading the whole payload at once.
+
+For GCA2, `setBytes()` and `getBytes()` are simpler and sufficient. Use the stream variants only if you choose to handle very large files and want to avoid loading the full payload into memory.
+
+```java
+// Alternative insert using a stream (not required for GCA2 but shown for completeness)
+InputStream stream = new ByteArrayInputStream(player.getPlayerImage());
+ps.setBinaryStream(6, stream, player.getPlayerImage().length);
+
+// Alternative retrieval using a stream
+InputStream stream = rs.getBinaryStream("player_image");
+byte[] bytes = stream.readAllBytes();
+```
+
+---
+
+## Section 9 — Sending JSON over a socket
 
 ### How a socket connection works
 
@@ -1282,7 +1623,7 @@ Every step in this diagram is a single `println` or `readLine`. The complexity i
 
 ---
 
-## Section 9 — Testing JSON round-trips
+## Section 10 — Testing JSON round-trips
 
 ### Why round-trip tests matter
 
@@ -1422,6 +1763,11 @@ Placing a `new Player(...)` call inside `@BeforeEach` (rather than as a `static 
 | Not annotating DTOs with `@JsonIgnoreProperties(ignoreUnknown = true)` | `UnrecognizedPropertyException` when the JSON contains a new field the class doesn't know about | Add `@JsonIgnoreProperties(ignoreUnknown = true)` to `Request`, `Response<T>`, and any DTO that may evolve |
 | Constructing `ObjectMapper` per request | Significant performance degradation; thread-safety issues possible | Declare `private static final ObjectMapper MAPPER = new ObjectMapper()` once |
 | Sending raw binary bytes in a JSON string | `JsonParseException` on the receiving end | Base64-encode before embedding; Base64-decode after extracting |
+| Using `SELECT *` in a metadata query | The BLOB is loaded even though the column is never read — unnecessary memory and I/O cost | List every column explicitly and omit the BLOB column |
+| Calling `rs.getString("player_image")` instead of `rs.getBytes(...)` | Corrupted or truncated binary data; `getBytes` is the only safe way to read a BLOB column | Always use `rs.getBytes("column")` for BLOB columns |
+| Not checking for `null` after `rs.getBytes(...)` | `NullPointerException` when a row has no stored image | Check `if (bytes != null)` before using the array |
+| Using `BLOB` instead of `MEDIUMBLOB` for typical files | `MysqlDataTruncation` for files over ~64 KB | Use `MEDIUMBLOB` (up to 16 MB) for any asset that could be a real image, audio clip, or document |
+| Forgetting `Statement.RETURN_GENERATED_KEYS` on the insert `PreparedStatement` | `getGeneratedKeys()` returns an empty `ResultSet` — the stored ID is lost | Always pass `Statement.RETURN_GENERATED_KEYS` as the second argument to `prepareStatement` |
 | `Files.probeContentType` returning `null` | `NullPointerException` when passing to constructor | Fall back to `"application/octet-stream"` if the return value is `null` |
 | Building JSON strings manually by concatenation | Fragile, escaping errors, injection risk | Always use `MAPPER.writeValueAsString(object)` |
 | Forgetting `autoFlush = true` on `PrintWriter` | Messages are buffered and never arrive at the other end | Construct as `new PrintWriter(outputStream, true)` |
@@ -1465,13 +1811,21 @@ Working through ce13 is a useful way to practise the Jackson API in a structured
 
 8. Why is Base64 encoding necessary when sending binary file data inside a JSON payload? Give a concrete example of what would go wrong without it.
 
-9. `ObjectMapper` is thread-safe once constructed. In the multithreaded server from Section 8, a single `MAPPER` instance is shared across all client handler threads. Why is this safe, and what benefit does it provide over creating a `new ObjectMapper()` inside each handler thread?
+9. `ObjectMapper` is thread-safe once constructed. In the multithreaded server from Section 9, a single `MAPPER` instance is shared across all client handler threads. Why is this safe, and what benefit does it provide over creating a `new ObjectMapper()` inside each handler thread?
 
 10. In a round-trip test, why is it insufficient to simply assert that `readValue` does not throw an exception? What additional assertion is necessary, and what does it verify that the exception check does not?
 
 11. The `handleGetById` helper uses `orElseGet(() -> Response.failure(...))` rather than `orElse(Response.failure(...))`. Both compile and both produce the same result in this case. What is the practical difference between the two, and in what situation would using `orElse(...)` instead of `orElseGet(...)` cause a concrete problem?
 
 12. A colleague adds a new `"lastSeen"` field to the `Player` JSON returned by the server. Older clients that do not yet have a `setLastSeen(...)` method on their `Player` class start throwing `UnrecognizedPropertyException`. What annotation would you add to `Player` to prevent this crash, and where exactly should it be placed?
+
+13. MySQL has four BLOB types: `TINYBLOB`, `BLOB`, `MEDIUMBLOB`, and `LONGBLOB`. Which would you choose for a column that stores player avatar images (typical size: 50 KB–2 MB)? Explain why the other three are unsuitable.
+
+14. A developer writes `SELECT * FROM player` in a metadata-only query handler, reasoning that "Java just won't use the `player_image` column." Explain two concrete problems this causes, even though the Java code never calls `rs.getBytes("player_image")`.
+
+15. `ps.setBytes(6, null)` is valid JDBC — it stores a SQL `NULL` in the BLOB column. When would you intentionally pass `null` to `setBytes`, and why is this preferable to storing an empty `byte[]`?
+
+16. Your server currently loads the full `Player` object (including the BLOB) in the `GET_ALL_PLAYERS` handler before serialising the list to JSON. A team member points out this is slow for a table with 500 players, each with a 500 KB image. Describe the architectural change required and name the specific SQL and JDBC API changes involved.
 
 ---
 
@@ -1493,13 +1847,17 @@ Working through ce13 is a useful way to practise the Jackson API in a structured
   https://www.baeldung.com/java-base64-encode-and-decode
   Covers `Base64.getEncoder()` / `getDecoder()` with practical examples including file content.
 
+- **Baeldung — Storing and Reading BLOBs with JDBC**
+  https://www.baeldung.com/java-jdbc-blobs
+  Practical walkthrough of `setBytes()`, `setBinaryStream()`, `getBytes()`, and `getBinaryStream()` with MySQL examples.
+
 - **JSON specification — RFC 8259**
   https://www.rfc-editor.org/rfc/rfc8259
-  The formal definition of the JSON format — short and readable. Section 8 explains why JSON must be UTF-8.
+  The formal definition of the JSON format — short and readable. Section 9 explains why JSON must be UTF-8.
 
 - **Baeldung — Java Sockets**
   https://www.baeldung.com/a-guide-to-java-sockets
-  Covers `ServerSocket`, `Socket`, and the streams used in Section 8, with practical examples.
+  Covers `ServerSocket`, `Socket`, and the streams used in Section 9, with practical examples.
 
 ---
 

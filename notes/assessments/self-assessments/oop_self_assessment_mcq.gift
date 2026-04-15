@@ -1,0 +1,847 @@
+// ============================================================
+// COMP C8Z03 — Year 2 OOP: Self-Assessment Quiz
+// ============================================================
+// File format : Moodle GIFT
+// Generated   : 2026-04-14
+// Topics      : t01 Arrays, t02 Ordering, t03 Collections I,
+//               t04 Collections II, t05 Equality & Hashing,
+//               t06 Inheritance, t07 Interfaces, t08 Generics I,
+//               t10 Design Patterns I, t11 Design Patterns II,
+//               t12 DAO/JDBC, t13 Functional Interfaces,
+//               t14 Concurrency, t15 Networking, t16 JSON
+// ------------------------------------------------------------
+// HOW TO IMPORT INTO MOODLE:
+//   1. Go to your Moodle course > Question bank > Import
+//   2. Choose file format "GIFT format"
+//   3. Upload this file
+//   4. Questions will be organised by the $CATEGORY tags below
+// ============================================================
+
+$CATEGORY: $module$/t01_arrays
+
+::t01_Q1:: A Java method receives an `int[]` parameter and loops with `for (int i \= 0; i <\= arr.length; i++)`. What happens when the loop runs?
+{
+  = An ArrayIndexOutOfBoundsException is thrown on the final iteration.
+    #Correct. When i equals arr.length the index is one past the last valid position (0 to length-1), causing the exception.
+  ~ The loop completes normally because the condition uses <=.
+    #Incorrect. The condition `i <= arr.length` allows i to reach arr.length, which is an invalid index.
+  ~ The last element is visited twice because of the <= boundary.
+    #Incorrect. The loop will attempt to access arr[arr.length], which does not exist, and throw an exception.
+  ~ A NullPointerException is thrown because the array has no element at that position.
+    #Incorrect. A missing element at an out-of-bounds index causes ArrayIndexOutOfBoundsException, not NullPointerException.
+}
+
+::t01_Q2:: You declare `int[][] jag \= new int[3][]`. After this single line,
+which statement is true?
+{
+  = The three inner row references are null and must each be separately allocated before use.
+    #Correct. `new int[3][]` allocates the outer array of three row references but leaves each inner row as null.
+  ~ A 3x3 rectangular array of zeros is created automatically.
+    #Incorrect. Only `new int[3][3]` would create a rectangular array; `new int[3][]` leaves rows unallocated.
+  ~ Accessing `jag[0][0]` returns 0 because Java initialises inner arrays to zero by default.
+    #Incorrect. Accessing `jag[0][0]` throws a NullPointerException because `jag[0]` is null.
+  ~ The code does not compile because jagged arrays are not supported in Java.
+    #Incorrect. Java fully supports jagged (non-rectangular) 2D arrays.
+}
+
+::t01_Q3:: A method needs to compute the average of an `int[]`. The following
+line appears inside the method\: `double avg \= sum / xs.length;` where `sum`
+is declared as `int`. For the input `\{3, 7\}` the result is `0.0` instead of `5.0`.
+What is the most likely cause?
+{
+  = Integer division is performed before the result is widened to double.
+    #Correct. Both `sum` and `xs.length` are ints, so division truncates before the double assignment.
+  ~ The array length returns 0 for a two-element array.
+    #Incorrect. `xs.length` returns 2 for a two-element array.
+  ~ The enhanced for-loop calculates the sum incorrectly for integer arrays.
+    #Incorrect. The issue is the division, not the loop. The sum itself would be correct.
+  ~ Java rounds the average down to the nearest integer automatically.
+    #Incorrect. Java performs integer division when both operands are int types, which truncates rather than rounds.
+}
+
+::t01_Q4:: You want to iterate over an `int[]` and double the value of every
+element. Which loop achieves this correctly?
+{
+  = An index-based for loop using `xs[i] = xs[i] * 2` inside the body.
+    #Correct. Only an index loop can write back to the original array; the loop variable gives the position needed to update.
+  ~ An enhanced for loop with `val = val * 2` inside the body.
+    #Incorrect. In an enhanced for loop, `val` is a copy of the element, so assigning to it does not modify the array.
+  ~ Either loop type works because the array is passed by reference.
+    #Incorrect. While the array reference is passed, the enhanced for loop variable is a primitive copy and cannot write back.
+  ~ A while loop is required because for loops cannot modify array elements.
+    #Incorrect. A standard index-based for loop can modify array elements; the loop type is not the constraint.
+}
+
+$CATEGORY: $module$/t02_ordering
+
+::t02_Q1:: A class `Score` implements `Comparable<Score>`. Its `compareTo`
+method returns `Integer.compare(other.value, this.value)` for the primary
+comparison. After calling `list.sort(null)` on an ArrayList of Scores,
+how are the elements ordered?
+{
+  = Scores are sorted in descending order by value (highest first).
+    #Correct. Returning `Integer.compare(other.value, this.value)` reverses the natural order, placing larger values first.
+  ~ Scores are sorted in ascending order by value (lowest first).
+    #Incorrect. To get ascending order you would use `Integer.compare(this.value, other.value)`.
+  ~ The sort order is undefined because `compareTo` returns the wrong sign.
+    #Incorrect. The return value is well-defined; it consistently places higher values earlier.
+  ~ A ClassCastException is thrown because `list.sort(null)` does not use Comparable.
+    #Incorrect. Passing `null` as the comparator to `list.sort` uses the elements' natural order via Comparable.
+}
+
+::t02_Q2:: You have a `List<Product>` and want to sort by price ascending,
+then by rating descending as a tie-breaker, using the Comparator factory API.
+Which expression correctly expresses this?
+{
+  = `Comparator.comparingDouble(Product\:\:price).thenComparing(Comparator.comparingDouble(Product\:\:rating).reversed())`
+    #Correct. `comparingDouble` on price gives ascending price order, and `.reversed()` on the rating comparator gives descending rating.
+  ~ `Comparator.comparingDouble(Product\:\:price).thenComparing(Product\:\:rating)`
+    #Incorrect. `thenComparing(Product\:\:rating)` sorts rating in ascending order, but descending is required.
+  ~ `Comparator.comparingDouble(Product\:\:price).reversed().thenComparing(Product\:\:rating)`
+    #Incorrect. Calling `.reversed()` on the price comparator gives descending price, not ascending.
+  ~ `Comparator.comparing(Product\:\:price, Product\:\:rating)`
+    #Incorrect. `Comparator.comparing` does not accept two key-extractor arguments in this form.
+}
+
+::t02_Q3:: Which statement best describes the difference between `Comparable`
+and `Comparator` in Java?
+{
+  = `Comparable` defines the class's own natural ordering inside the class; `Comparator` defines an external ordering strategy without modifying the class.
+    #Correct. `Comparable` is implemented by the class itself via `compareTo`, while `Comparator` is a separate object defining an alternative order.
+  ~ `Comparable` is used only with arrays; `Comparator` is used only with collections.
+    #Incorrect. Both can be used with arrays and collections; the distinction is about where the ordering logic lives.
+  ~ `Comparator` is always faster than `Comparable` because it avoids casting.
+    #Incorrect. Performance is not the distinction; both can be equally efficient.
+  ~ `Comparable` allows multiple sort orders for the same class; `Comparator` allows only one.
+    #Incorrect. It is the opposite: you can write many `Comparator` implementations for a class, but a class has only one `compareTo`.
+}
+
+::t02_Q4:: Java's `List.sort` is described as a *stable* sort. What does
+stability mean in this context?
+{
+  = Elements that compare as equal keep their original relative order after sorting.
+    #Correct. A stable sort preserves the prior ordering of elements that the comparator considers equal.
+  ~ The sort always produces the same result when called multiple times on the same list.
+    #Incorrect. This describes determinism, not stability; stability is specifically about equal elements preserving their order.
+  ~ The sort does not modify the original list and instead returns a new sorted copy.
+    #Incorrect. `List.sort` sorts in place; it does not return a new list.
+  ~ The sort runs in O(n log n) time regardless of input order.
+    #Incorrect. This describes time-complexity guarantees, which is a separate property from stability.
+}
+
+$CATEGORY: $module$/t03_collections_1
+
+::t03_Q1:: You call `names.remove("Maya")` on an `ArrayList<String>`. What
+does this method do?
+{
+  = It removes the first occurrence of the String "Maya" from the list by value equality.
+    #Correct. `remove(Object o)` scans from the start and removes the first element for which `equals` returns true.
+  ~ It removes the element at index 5 because "Maya" has 4 characters and indexing starts at 1.
+    #Incorrect. The String overload of `remove` removes by value, not by index.
+  ~ It removes all occurrences of "Maya" from the list.
+    #Incorrect. Only the first occurrence is removed; subsequent occurrences remain.
+  ~ It throws an IndexOutOfBoundsException if "Maya" is not found in the list.
+    #Incorrect. `remove(Object)` returns `false` if the element is not present; it does not throw.
+}
+
+::t03_Q2:: Code inside an enhanced for-each loop calls `list.remove(element)`
+directly on the `ArrayList` while iterating. What is the likely outcome?
+{
+  = A ConcurrentModificationException is thrown at runtime.
+    #Correct. Structurally modifying an ArrayList during enhanced for-each iteration invalidates the internal iterator and triggers this exception.
+  ~ The element is removed silently and iteration continues from the next element.
+    #Incorrect. This is the behaviour of `Iterator.remove()`, not direct list removal during for-each.
+  ~ A compile-time error prevents this code from being written.
+    #Incorrect. The code compiles without error; the exception only occurs at runtime.
+  ~ The loop skips the removed element and processes the rest without any exception.
+    #Incorrect. Java's fail-fast iterator detects the structural modification and throws ConcurrentModificationException.
+}
+
+::t03_Q3:: What is the time complexity of `ArrayList.get(i)` and
+`ArrayList.contains(x)` respectively?
+{
+  = O(1) for `get` and O(n) for `contains`.
+    #Correct. Random access by index is O(1) because ArrayList is backed by an array. `contains` must scan the whole list in the worst case.
+  ~ O(n) for `get` and O(1) for `contains`.
+    #Incorrect. Array-backed random access is O(1); linear scan for `contains` is O(n).
+  ~ O(1) for both because ArrayList is backed by a hash table.
+    #Incorrect. ArrayList is backed by a plain array, not a hash table. Only hash-based structures offer O(1) membership tests.
+  ~ O(log n) for both because ArrayList keeps its elements sorted.
+    #Incorrect. ArrayList does not maintain sorted order; elements are stored in insertion order.
+}
+
+::t03_Q4:: You want to safely remove from an ArrayList all elements that
+start with the letter "A" while iterating. Which approach is correct?
+{
+  = Obtain an `Iterator` from the list and call `it.remove()` after each matching `it.next()`.
+    #Correct. Using `Iterator.remove()` is the safe way to delete elements during iteration without causing ConcurrentModificationException.
+  ~ Use an enhanced for-each loop and call `list.remove(element)` for each match.
+    #Incorrect. This causes ConcurrentModificationException because the list is structurally modified during for-each iteration.
+  ~ Use an index loop counting down from `list.size()-1` to `0` and call `list.remove(i)` for each match.
+    #Incorrect. A reverse-index loop can work for some cases but the Iterator approach is cleaner and the standard Java idiom.
+  ~ Call `list.clear()` and re-add only the non-matching elements into a new list.
+    #Incorrect. This is unnecessarily destructive and replaces contents rather than selectively removing matches.
+}
+
+$CATEGORY: $module$/t04_collections_2
+
+::t04_Q1:: You have a `LinkedList<Integer>` and need to iterate forward,
+inserting a marker element after every even number encountered.
+Which iterator type allows safe insertion during the traversal?
+{
+  = `ListIterator`, which supports `it.add(element)` to insert after the last returned element.
+    #Correct. `ListIterator` is the only Java iterator that supports both `add` and bidirectional traversal during iteration.
+  ~ A standard `Iterator`, which already supports `add` via its `add` method.
+    #Incorrect. `Iterator` only has `remove`; it does not have an `add` method.
+  ~ An enhanced for-each loop with `list.add` called on the list directly.
+    #Incorrect. Calling `list.add` directly during for-each causes ConcurrentModificationException.
+  ~ An index-based for loop using `list.get(i)` to check each element.
+    #Incorrect. `LinkedList.get(i)` is O(n) per call, making this approach inefficient; also it does not handle concurrent structural modification cleanly.
+}
+
+::t04_Q2:: A `LinkedList` is used as a `Deque`. Code calls `tasks.offer("load")`
+followed by `tasks.offer("parse")` and then `tasks.poll()`. What does `poll()`
+return?
+{
+  = "load", because `offer` enqueues at the tail and `poll` dequeues from the head (FIFO).
+    #Correct. `offer` adds to the tail and `poll` removes from the head, implementing FIFO queue behaviour.
+  ~ "parse", because `offer` enqueues at the head and `poll` dequeues from the head (LIFO).
+    #Incorrect. `offer` adds to the tail, not the head. LIFO behaviour is obtained with `push`/`pop`.
+  ~ null, because `poll` always returns null on a non-empty deque.
+    #Incorrect. `poll` returns null only when the deque is empty; here it returns the first element.
+  ~ An exception, because `Deque` does not support `offer` and `poll`.
+    #Incorrect. `offer` and `poll` are the standard null-safe queue operations defined on `Deque`.
+}
+
+::t04_Q3:: Compared to `ArrayList`, what is the primary performance advantage
+of `LinkedList` when you already hold a `ListIterator` at the point of change?
+{
+  = Insertions and removals at the current iterator position are O(1) because no elements need to shift.
+    #Correct. LinkedList nodes are linked by references, so inserting or removing at a known node is O(1) pointer manipulation.
+  ~ Random access via `get(i)` is O(1) because each node stores its own index.
+    #Incorrect. `LinkedList.get(i)` is O(n); there is no index stored in nodes.
+  ~ Memory usage is lower because LinkedList does not allocate extra capacity like ArrayList.
+    #Incorrect. LinkedList uses more memory per element because each node stores two reference fields (next, previous) in addition to the value.
+  ~ Sorting a LinkedList is faster than sorting an ArrayList.
+    #Incorrect. Sorting a LinkedList is generally slower because it lacks the cache-friendly contiguous memory layout of an array.
+}
+
+::t04_Q4:: Why is it recommended to use `offer`, `poll`, and `peek` instead
+of `add`, `remove`, and `element` when using a `Deque` as a queue?
+{
+  = `offer`, `poll`, and `peek` return null (or false) on failure rather than throwing exceptions, making them safer for queue operations.
+    #Correct. The null-returning variants avoid exceptions when the queue is empty or full, which is more appropriate for conditional processing.
+  ~ `offer`, `poll`, and `peek` operate at the tail of the deque, whereas `add`, `remove`, and `element` operate at the head.
+    #Incorrect. Both sets of methods work with the head for removal/peek; the distinction is about exception behaviour, not position.
+  ~ `add`, `remove`, and `element` are deprecated and should not be used in modern Java.
+    #Incorrect. These methods are not deprecated; the difference is their error-handling behaviour.
+  ~ `offer` and `poll` are faster because they bypass synchronisation checks.
+    #Incorrect. Neither set of methods involves synchronisation; the distinction is about how they handle edge cases.
+}
+
+$CATEGORY: $module$/t05_equality_hashing
+
+::t05_Q1:: Two `String` objects are created with `new String("hello")` and
+compared using `\=\=`. The result is `false`. What does this demonstrate?
+{
+  = `\=\=` tests reference identity, not value equality; two distinct String objects can hold the same characters but occupy different memory locations.
+    #Correct. `\=\=` returns true only when both references point to the exact same object, regardless of content.
+  ~ The `String` class overrides `\=\=` to compare characters, so `false` means the strings differ.
+    #Incorrect. `\=\=` cannot be overridden in Java; it always tests reference identity for objects.
+  ~ Both objects hold the same value, so the result should be `true`; this indicates a Java bug.
+    #Incorrect. This is correct Java behaviour. `\=\=` on objects checks identity, not character content.
+  ~ Using `new String(...)` produces objects that are never equal because they bypass the string pool.
+    #Incorrect. While `new String(...)` bypasses the string pool, the objects are still equal by `equals()`; `\=\=` simply tests if they are the same object.
+}
+
+::t05_Q2:: A class overrides `equals` to compare by an `id` field but does
+not override `hashCode`. A developer stores two instances with the same `id`
+in a `HashSet`. What is the most likely problem?
+{
+  = Both objects may be stored in the set as if they were distinct, because they may produce different hash codes and land in different buckets.
+    #Correct. The equals/hashCode contract requires that equal objects share the same hash code. Without a matching `hashCode`, the set cannot find the duplicate.
+  ~ A compile-time error occurs because `hashCode` must always be overridden alongside `equals`.
+    #Incorrect. Java does not enforce this at compile time; the contract is a programming convention, not a language rule.
+  ~ The `HashSet` uses `equals` exclusively, so duplicates are still correctly detected.
+    #Incorrect. `HashSet` first uses `hashCode` to find the bucket, then uses `equals`; if hash codes differ, `equals` is never called for the comparison.
+  ~ The program throws a `NullPointerException` when the second object is added.
+    #Incorrect. The likely problem is a logical bug (duplicate entries), not a null pointer.
+}
+
+::t05_Q3:: You are implementing `hashCode` for a class with two fields: `int id`
+and `String email`. Which implementation correctly applies the standard
+31-multiplier pattern?
+{
+  = `int result = Objects.hash(id, email);`
+    #Correct. `Objects.hash(...)` is the idiomatic Java way to combine field hashes using the 31-multiplier pattern internally.
+  ~ `return id + email.hashCode();`
+    #Incorrect. A plain sum without a multiplier produces many collisions because adding fields commutatively means different field combinations can produce the same sum.
+  ~ `return id ^ email.hashCode();`
+    #Incorrect. XOR is symmetric and frequently produces 0 for equal fields, leading to poor hash distribution.
+  ~ `return System.identityHashCode(this);`
+    #Incorrect. This returns the default identity-based hash, which breaks the equals/hashCode contract when `equals` compares fields.
+}
+
+::t05_Q4:: What is the primary purpose of the bucket index calculation
+`index \= h mod tableSize` in a hash-based lookup structure?
+{
+  = It maps an arbitrarily large hash code integer to a valid position within the fixed-size internal array.
+    #Correct. The modulo operation constrains an unbounded hash integer to the range 0..tableSize-1.
+  ~ It ensures that no two objects can produce the same bucket index, preventing collisions.
+    #Incorrect. The modulo operation does not prevent collisions; multiple hash codes can map to the same bucket index.
+  ~ It converts the hash code to an alphabetical sort order for string keys.
+    #Incorrect. Modulo arithmetic has nothing to do with alphabetical ordering.
+  ~ It encrypts the hash code so that the original value cannot be recovered.
+    #Incorrect. Modulo is a lossy arithmetic operation, not encryption; it is used purely to select a bucket index.
+}
+
+$CATEGORY: $module$/t06_inheritance
+
+::t06_Q1:: A subclass constructor does not explicitly call `super(...)`. The
+parent class defines only a constructor that takes a String parameter and
+no no-argument constructor. What happens at compile time?
+{
+  = A compile error occurs because Java automatically inserts `super()` (no-arg), which does not exist in the parent.
+    #Correct. Without an explicit `super(...)` call, Java inserts `super()`. Since the parent has no no-arg constructor, this fails to compile.
+  ~ The code compiles and the parent's String constructor is called with an empty string automatically.
+    #Incorrect. Java inserts `super()` (no arguments), not `super("")`; and this fails if no no-arg constructor exists.
+  ~ The subclass object is created without initialising any parent fields.
+    #Incorrect. Java enforces constructor chaining; you cannot skip the parent constructor.
+  ~ The parent class is bypassed entirely when the subclass constructor runs.
+    #Incorrect. The parent constructor must always run; Java's constructor chaining rules ensure this.
+}
+
+::t06_Q2:: A method in a parent class is overridden in a subclass. An
+`ArrayList<Parent>` holds a mix of parent and subclass objects. When the
+loop calls `e.describe()` on each element, which version of `describe` is
+executed for a subclass instance?
+{
+  = The subclass version of `describe`, determined at runtime based on the actual object type.
+    #Correct. This is polymorphism: the JVM dispatches to the overriding method of the actual object, regardless of the reference type.
+  ~ The parent version of `describe`, because the reference type is `Parent`.
+    #Incorrect. The reference type controls which methods are visible at compile time, but the object type determines which implementation runs.
+  ~ Both versions run in sequence, with the subclass appending to the parent's output.
+    #Incorrect. Only one version runs unless the subclass explicitly calls `super.describe()`.
+  ~ A ClassCastException is thrown because the list is typed as `ArrayList<Parent>`.
+    #Incorrect. Storing subclass instances in a `List<Parent>` is valid polymorphism and does not cause a ClassCastException.
+}
+
+::t06_Q3:: What is the key reason to declare a class `abstract` rather than
+making it a concrete class with default method bodies?
+{
+  = An abstract class can declare methods without implementation, forcing every subclass to provide its own version and preventing incomplete objects from being instantiated.
+    #Correct. Abstract classes enforce a contract\: subclasses must implement abstract methods, and you cannot create an instance of the abstract class directly.
+  ~ Abstract classes run faster because the JVM optimises abstract method dispatch.
+    #Incorrect. Performance is not the reason to use abstract classes; the reason is design and contract enforcement.
+  ~ Abstract classes allow a subclass to extend multiple parents simultaneously.
+    #Incorrect. Java does not support multiple inheritance of classes, abstract or otherwise.
+  ~ Declaring a class abstract prevents any subclass from overriding its methods.
+    #Incorrect. It is the opposite: abstract classes invite overriding; `final` prevents it.
+}
+
+::t06_Q4:: What is the difference between method overriding and method overloading?
+{
+  = Overriding replaces a parent method with the same signature in a subclass; overloading provides multiple methods with the same name but different parameter lists in the same class.
+    #Correct. Overriding is about runtime polymorphism across the inheritance hierarchy; overloading is a compile-time convenience within one class.
+  ~ Overriding changes the return type of a method; overloading changes the parameter types.
+    #Incorrect. Overriding must match the return type (or use a covariant return); overloading uses different parameter lists, not just return types.
+  ~ Both terms describe the same concept but apply to different access modifiers.
+    #Incorrect. They describe fundamentally different mechanisms: one is inheritance-based dispatch, the other is compile-time method resolution.
+  ~ Overloading is only possible in abstract classes; overriding requires a concrete parent.
+    #Incorrect. Overloading can occur in any class; overriding requires a method defined in a parent class or interface.
+}
+
+$CATEGORY: $module$/t07_interface
+
+::t07_Q1:: A Java class declaration reads `class Barrel implements Interactable, Damageable`. What does this tell you about the design?
+{
+  = `Barrel` commits to providing implementations for all methods declared in both `Interactable` and `Damageable`.
+    #Correct. Implementing multiple interfaces means the class must supply concrete implementations for every abstract method from each interface.
+  ~ `Barrel` inherits state (fields) from both `Interactable` and `Damageable`.
+    #Incorrect. Interfaces cannot hold instance fields; `Barrel` inherits no state from them.
+  ~ `Barrel` can only be used where a `Barrel` reference is expected, not through the interface types.
+    #Incorrect. A `Barrel` instance can be assigned to variables of type `Interactable`, `Damageable`, or `Barrel`.
+  ~ This is invalid Java because a class can implement at most one interface.
+    #Incorrect. Java allows a class to implement any number of interfaces.
+}
+
+::t07_Q2:: An interface declares `int DEFAULT_INTERACTION_RANGE \= 2;`. What modifiers does this field implicitly have?
+{
+  = `public static final`.
+    #Correct. All fields declared in an interface are implicitly `public static final`; they are compile-time constants shared across all implementations.
+  ~ `protected static`.
+    #Incorrect. Interface fields cannot be protected; they are always public and always final.
+  ~ `private final`.
+    #Incorrect. Interface fields must be public so implementing classes can access them.
+  ~ No modifiers are applied; the field is treated as a regular instance variable.
+    #Incorrect. Interface fields cannot be instance variables; they are always `public static final` constants.
+}
+
+::t07_Q3:: When should you prefer an interface over an abstract class?
+{
+  = When you want to define a behavioural capability that unrelated classes can share without requiring a common inheritance hierarchy.
+    #Correct. Interfaces model "can-do" abilities and can be implemented by any class regardless of its place in the inheritance tree.
+  ~ When you need to share concrete helper methods and private fields across a set of closely related classes.
+    #Incorrect. Sharing implementation details and fields is the strength of an abstract class, not an interface.
+  ~ When you want to prevent any class from instantiating the type directly.
+    #Incorrect. Both abstract classes and interfaces cannot be instantiated directly; this is not the distinguishing criterion.
+  ~ When you need to define a constructor that all implementing classes must call.
+    #Incorrect. Interfaces cannot declare constructors; if you need a shared constructor chain, an abstract class is required.
+}
+
+::t07_Q4:: Code attempts to do `Interactable obj \= new Interactable();`.
+What is the result?
+{
+  = A compile error, because interfaces cannot be instantiated directly.
+    #Correct. You can only instantiate concrete classes that implement the interface, not the interface itself.
+  ~ A runtime exception, because there is no class body to call the constructor on.
+    #Incorrect. This is caught at compile time, not at runtime.
+  ~ The code creates an empty object that responds to `interact()` with no operation.
+    #Incorrect. Java does not create default empty implementations; the code will not compile.
+  ~ The code is valid only if `Interactable` contains at least one default method.
+    #Incorrect. Even with default methods, an interface cannot be directly instantiated.
+}
+
+$CATEGORY: $module$/t08_generics_1
+
+::t08_Q1:: A class stores its value as `private Object value`. A caller
+retrieves the value and casts it to `Integer` but the stored object is actually
+a `String`. What happens and when?
+{
+  = A ClassCastException is thrown at runtime when the cast is attempted.
+    #Correct. Without generics, the compiler cannot verify the cast, so the type mismatch is only detected when the JVM executes the cast.
+  ~ A compile error prevents this code from being written.
+    #Incorrect. Casting to a specific type is always permitted at compile time; the compiler cannot know what the Object actually holds.
+  ~ The String value is silently converted to an Integer.
+    #Incorrect. Java does not implicitly convert between unrelated types.
+  ~ The program returns null rather than throwing an exception.
+    #Incorrect. A failed cast throws ClassCastException; it does not return null.
+}
+
+::t08_Q2:: A generic class is declared as `class Slot<T extends Item>`.
+An instance is created as `Slot<Potion> potionSlot`. Which statement is true?
+{
+  = Attempting to call `potionSlot.put(new Sword(...))` causes a compile error, not a runtime error.
+    #Correct. The type parameter `T` is resolved to `Potion` at compile time, so passing a `Sword` is rejected by the compiler.
+  ~ The compiler permits `potionSlot.put(new Sword(...))` because `Sword` is also an `Item`.
+    #Incorrect. The slot is parameterised as `Slot<Potion>`, so only `Potion` instances are accepted.
+  ~ A runtime ClassCastException occurs when `put` is called with the wrong item type.
+    #Incorrect. Generics catch type mismatches at compile time, preventing the ClassCastException from occurring at runtime.
+  ~ The bound `T extends Item` means the slot can store any object, not just Items.
+    #Incorrect. The bound restricts T to Item subtypes; it does not widen the accepted types.
+}
+
+::t08_Q3:: A generic method signature reads `public static <T> T first(List<T> items)`.
+A caller invokes `first(List.of("A", "B"))`. What type does the method return,
+and is a cast required?
+{
+  = The method returns a `String` and no cast is required because the type parameter is inferred as `String`.
+    #Correct. The compiler infers `T` as `String` from the argument, so the return type is `String` and no cast is needed.
+  ~ The method returns an `Object` and a cast to `String` is required.
+    #Incorrect. Type inference allows the compiler to resolve `T` to `String`, eliminating the need for a cast.
+  ~ A compile error occurs because generic methods cannot infer a return type from a list.
+    #Incorrect. Java performs type inference automatically for generic method calls.
+  ~ The method throws a ClassCastException at runtime when the result is used as a String.
+    #Incorrect. With correct generics and type inference, no cast is involved and no ClassCastException can occur.
+}
+
+::t08_Q4:: Why is `new T()` not allowed inside a generic class body in Java?
+{
+  = Java generics use type erasure\: the type parameter T is replaced by `Object` at runtime, so the JVM has no information about which class to construct.
+    #Correct. Type erasure removes generic type information at runtime, making `new T()` impossible because the JVM does not know T's concrete type.
+  ~ Generic type parameters can only be used as method return types, not as constructor targets.
+    #Incorrect. Type parameters can be used in many positions; the restriction on `new T()` is specifically due to type erasure.
+  ~ It is a design decision to force developers to use abstract factories instead.
+    #Incorrect. While a Supplier/factory is a common workaround, the underlying reason is the technical constraint of type erasure.
+  ~ `new T()` is allowed when T extends a concrete class with a no-arg constructor.
+    #Incorrect. Even with a bound, `new T()` is not permitted; a `Supplier<T>` or reflective approach is required.
+}
+
+$CATEGORY: $module$/t10_design_patterns_1
+
+::t10_Q1:: The Strategy pattern is described as "define a family of algorithms, encapsulate each one, and make them interchangeable". In the notes example, what role does the `TaskRunner` class play?
+{
+  = Context — it holds a reference to the strategy interface and delegates execution to it without knowing the concrete implementation.
+    #Correct. The context (TaskRunner) uses the strategy interface to perform work, enabling the behaviour to be changed by injecting a different strategy.
+  ~ Strategy — it defines the algorithm that `ExecutionStrategy` implementations must follow.
+    #Incorrect. `TaskRunner` delegates to the strategy; it does not define the algorithm. The strategy interface defines the contract.
+  ~ Concrete Strategy — it provides one specific implementation of the execution algorithm.
+    #Incorrect. `FastExecution` and `SafeExecution` are the concrete strategies; `TaskRunner` is the context.
+  ~ Invoker — it enqueues commands and decides when to execute them.
+    #Incorrect. The Invoker role belongs to the Command pattern (e.g. `CommandQueue`), not the Strategy pattern.
+}
+
+::t10_Q2:: A codebase has a method containing a large `switch` statement with one case per payment type\: CARD, PAYPAL, CRYPTO. Adding a new payment type requires editing this method. Which design problem does this illustrate, and which pattern addresses it?
+{
+  = The code violates the open/closed principle because adding behaviour requires modifying existing code; the Strategy pattern addresses this by encapsulating each payment algorithm in its own class.
+    #Correct. Strategy replaces conditional-based variation with a family of interchangeable objects, allowing extension without modification.
+  ~ The code has too many classes and should be simplified by moving all logic into a single method; no pattern is needed.
+    #Incorrect. Consolidating all logic into one method increases coupling and makes future changes harder, not easier.
+  ~ The Command pattern solves this by wrapping each switch case in a command object that can be queued.
+    #Incorrect. Command addresses decoupling request invocation from execution; Strategy addresses varying the algorithm itself.
+  ~ This is a normal use of polymorphism and no design pattern is required.
+    #Incorrect. While polymorphism is involved, the recognised design solution for replacing conditionals over behaviour variants is the Strategy pattern.
+}
+
+::t10_Q3:: In the Command pattern, what is the main benefit of encapsulating a request as an object?
+{
+  = The request can be stored, queued, logged, or executed at a later time without the sender needing to know the details of the action.
+    #Correct. Turning a request into an object decouples the sender (invoker) from the receiver, enabling deferred or batched execution.
+  ~ The request runs faster because it avoids the overhead of method call dispatch.
+    #Incorrect. Performance is not the motivation for the Command pattern.
+  ~ The request automatically retries on failure without any additional code.
+    #Incorrect. Retry logic is not built into the Command pattern; it must be added explicitly if needed.
+  ~ It prevents any other code from modifying the request after it has been created.
+    #Incorrect. Immutability of command objects is a design choice, not an inherent property of the pattern.
+}
+
+::t10_Q4:: A `CommandQueue` has a `Queue<Command>` field and calls
+`command.execute()` in a loop. Which Statement accurately describes the
+relationship between the queue and the concrete command implementations?
+{
+  = The queue is decoupled from the concrete commands; it only depends on the `Command` interface, so new command types can be added without modifying the queue.
+    #Correct. Programming to the interface means the queue needs no knowledge of what each command does, satisfying the open/closed principle.
+  ~ The queue must be rewritten whenever a new concrete command class is added.
+    #Incorrect. Because the queue uses the `Command` interface, new implementations can be added without touching the queue code.
+  ~ The queue and commands must be in the same package to allow `execute()` to be called.
+    #Incorrect. Access control, not package membership, determines visibility; `execute()` is public on the interface.
+  ~ Concrete commands must extend the `CommandQueue` class to be eligible for processing.
+    #Incorrect. Commands implement the `Command` interface; they have no inheritance relationship with the queue.
+}
+
+$CATEGORY: $module$/t11_design_patterns_2
+
+::t11_Q1:: The Factory pattern's intent is to "encapsulate object creation so
+clients depend on what they want, not how it is built." What is the primary
+problem it solves?
+{
+  = It removes object creation logic from client code, centralising it so that changes to how objects are built do not ripple through every caller.
+    #Correct. When clients call `factory.createFor(task)` instead of `new ExecuteTaskCommand(task, new ValidatedExecution())`, only the factory needs updating if the construction changes.
+  ~ It makes all objects immutable so they cannot be changed after creation.
+    #Incorrect. The Factory pattern is about controlling creation, not enforcing immutability.
+  ~ It ensures only one instance of each class is ever created throughout the application.
+    #Incorrect. That is the Singleton pattern; Factory creates new instances as requested.
+  ~ It prevents subclasses from overriding the creation logic defined in the parent.
+    #Incorrect. Factory Method pattern actually encourages subclasses to override creation; the goal is decoupling clients from construction details.
+}
+
+::t11_Q2:: In the Observer pattern, an `ObservableTaskQueue` notifies a list
+of `TaskListener` objects after each command executes. What key design property
+does this provide?
+{
+  = The queue does not need to know what listeners do; listeners can be added or removed without modifying the queue.
+    #Correct. Observer decouples the subject (queue) from its observers (listeners), allowing the set of reactions to change independently.
+  ~ All listeners are guaranteed to execute before the next command is dequeued.
+    #Incorrect. The order and timing of notifications depends on implementation; the pattern does not guarantee sequential completion.
+  ~ The queue and listeners share the same thread, preventing concurrency issues.
+    #Incorrect. Thread safety is a separate concern; Observer does not inherently guarantee single-threaded execution.
+  ~ Listeners are notified only if they hold a direct reference to the task that changed.
+    #Incorrect. The subject notifies all registered listeners; they do not need to hold direct references to specific tasks.
+}
+
+::t11_Q3:: An `ExternalJobAdapter` implements the `Command` interface and
+wraps an `ExternalJob` whose only method is `runJob()`. What structural role
+does this class play and why is it used?
+{
+  = It is an Adapter that bridges the incompatible `ExternalJob` interface to the `Command` interface expected by the system.
+    #Correct. The adapter translates `execute()` calls into `runJob()` calls, allowing the external job to work within the existing command infrastructure.
+  ~ It is a Facade that simplifies a complex subsystem into a single unified interface.
+    #Incorrect. A Facade simplifies multiple complex components; an Adapter bridges one incompatible interface to another.
+  ~ It is a Decorator that adds new behaviour around the original `ExternalJob` method.
+    #Incorrect. A Decorator adds responsibilities to an object; an Adapter converts its interface without adding new behaviour.
+  ~ It is a Proxy that controls access to the `ExternalJob` for security purposes.
+    #Incorrect. A Proxy controls or logs access to an object; an Adapter is used purely for interface compatibility.
+}
+
+::t11_Q4:: When comparing the Observer and Command patterns, which statement
+best distinguishes their primary concerns?
+{
+  = Command encapsulates a unit of work as an object so it can be queued or deferred; Observer propagates a state-change notification to multiple dependents automatically.
+    #Correct. Command is about representing work; Observer is about broadcasting events to listeners without tight coupling.
+  ~ Command is used for UI events and Observer is used for database transactions.
+    #Incorrect. Neither pattern is domain-specific; both appear in UI, databases, games, and many other contexts.
+  ~ Observer requires the subject to know all observer types at compile time; Command does not.
+    #Incorrect. Observer depends on an interface (e.g. `TaskListener`), so the subject does not need to know concrete observer types.
+  ~ Both patterns achieve exactly the same decoupling and are interchangeable.
+    #Incorrect. They solve different problems\: one manages work execution, the other manages event propagation.
+}
+
+$CATEGORY: $module$/t12_dao
+
+::t12_Q1:: In an N-tier architecture using the DAO pattern, which layer should
+contain SQL statements and JDBC code?
+{
+  = The data access layer (DAO) only — SQL must not appear in the service layer or the presentation layer.
+    #Correct. The DAO pattern isolates all persistence logic in one place, keeping the service and presentation layers free of SQL.
+  ~ The service layer, so that business rules and data retrieval logic are co-located.
+    #Incorrect. Mixing SQL with business rules defeats the purpose of the DAO pattern and makes the system harder to test and maintain.
+  ~ The presentation (UI) layer, because it decides which data to display.
+    #Incorrect. The UI should never contain SQL; it should call service methods and display the results.
+  ~ Any layer, because JDBC is a utility library with no architectural constraints.
+    #Incorrect. While technically possible, scattering JDBC code throughout layers is a known design smell that the DAO pattern was created to prevent.
+}
+
+::t12_Q2:: Why should a JDBC DAO always use `PreparedStatement` with `?`
+placeholders rather than building SQL strings by concatenation?
+{
+  = String concatenation of user input into SQL creates a SQL injection vulnerability; `PreparedStatement` sends parameters separately, preventing malicious input from altering the query structure.
+    #Correct. SQL injection is one of the most serious security vulnerabilities; `PreparedStatement` is the standard defence.
+  ~ `PreparedStatement` is faster than string concatenation in all cases.
+    #Incorrect. While prepared statements can be faster due to pre-compilation, the primary reason to use them is security, not performance.
+  ~ String concatenation causes a `NullPointerException` when any parameter is null.
+    #Incorrect. String concatenation handles nulls without throwing; the critical issue is security, not null handling.
+  ~ Java's compiler rejects SQL string concatenation at compile time.
+    #Incorrect. The compiler cannot distinguish SQL strings from other strings; SQL injection is a runtime security issue.
+}
+
+::t12_Q3:: A `TaskDao` interface is defined with methods like `findById`,
+`insert`, and `deleteById`. The service layer depends on `TaskDao`, not on
+`JdbcTaskDao`. What design benefit does this provide?
+{
+  = The persistence implementation can be swapped (e.g. from JDBC to an in-memory DAO for testing) without changing the service layer.
+    #Correct. Programming to the interface decouples the service from any specific database technology, enabling easy testing and future migration.
+  ~ It prevents the DAO from being instantiated more than once, acting like a singleton.
+    #Incorrect. The interface type has no effect on instantiation; the factory or constructor controls object lifecycle.
+  ~ The interface guarantees that all DAO methods will execute within a database transaction.
+    #Incorrect. Transactions must be explicitly managed; the interface defines the method contract, not transactional behaviour.
+  ~ It allows the service layer to call private DAO methods directly.
+    #Incorrect. An interface only exposes public methods; private implementation details remain hidden in the implementing class.
+}
+
+::t12_Q4:: A DAO method returns `Optional<Task>` rather than `Task` or `null`.
+What does calling `dao.findById(999).orElseThrow(...)` express?
+{
+  = The caller expects the task to exist and treats its absence as an exceptional condition worth an exception.
+    #Correct. `orElseThrow` is the idiom for "this must be present; if not, throw a meaningful exception rather than a NullPointerException later".
+  ~ The method returns the default Task object when no row is found.
+    #Incorrect. `orElseThrow` throws an exception on empty; `orElse(defaultValue)` would provide a default.
+  ~ The DAO always finds a result when `orElseThrow` is called, so the Optional is always present.
+    #Incorrect. `orElseThrow` throws if the Optional is empty; it does not guarantee the Optional is present.
+  ~ Using `Optional` means null is never returned, so `orElseThrow` is unnecessary.
+    #Incorrect. An empty `Optional` is the representation of "no value"; `orElseThrow` is needed to explicitly handle that case.
+}
+
+$CATEGORY: $module$/t13_functional_interfaces
+
+::t13_Q1:: You need to pass a behaviour to a method that will test each
+element of a list and return `true` or `false` for each one. Which functional
+interface from `java.util.function` is the correct choice?
+{
+  = `Predicate<T>`, whose single abstract method is `boolean test(T t)`.
+    #Correct. `Predicate<T>` is designed for boolean-valued tests on a single input, exactly matching this requirement.
+  ~ `Consumer<T>`, because it processes each element and returns a result.
+    #Incorrect. `Consumer<T>` returns void; it performs a side effect rather than returning a boolean.
+  ~ `Supplier<T>`, because it produces the boolean result for each element.
+    #Incorrect. `Supplier<T>` takes no input; it produces a value without receiving one.
+  ~ `Function<T, Boolean>`, which is equivalent and preferable because it avoids boxing.
+    #Incorrect. `Function<T, Boolean>` boxes the result into `Boolean`; `Predicate<T>` is preferred for boolean tests as it avoids boxing and makes intent clearer.
+}
+
+::t13_Q2:: A list of integers is filtered with `scores.removeIf(s -> s < 10)`.
+What is the role of the lambda here, and what interface does it satisfy?
+{
+  = The lambda is a `Predicate<Integer>` that returns true for scores below 10; `removeIf` removes every element for which the predicate returns true.
+    #Correct. `removeIf` accepts a `Predicate<? super E>` and removes elements where the predicate holds.
+  ~ The lambda is a `Consumer<Integer>` that processes each score and removes it from the list.
+    #Incorrect. `Consumer` returns void; it cannot signal which elements to remove. `removeIf` uses a predicate.
+  ~ The lambda is a `Function<Integer, Integer>` that transforms scores before filtering.
+    #Incorrect. `removeIf` does not transform values; it removes elements based on a boolean test.
+  ~ The lambda is a `Supplier<Boolean>` that provides the removal decision without taking input.
+    #Incorrect. `Supplier` takes no input; the predicate must receive each score to evaluate it.
+}
+
+::t13_Q3:: Two `Predicate<String>` objects, `longEnough` and `hasDigit`, are
+combined with `longEnough.and(hasDigit)`. What does the composed predicate
+return for a string that satisfies `longEnough` but not `hasDigit`?
+{
+  = `false`, because `and` requires both predicates to return true.
+    #Correct. `Predicate.and` is a logical AND\: the composed predicate returns true only when both constituent predicates return true.
+  ~ `true`, because the string passes the first predicate.
+    #Incorrect. `and` requires both predicates to pass; failing either one means the composed predicate returns false.
+  ~ A NullPointerException, because the second predicate is only evaluated when the first returns false.
+    #Incorrect. `and` uses short-circuit evaluation\: if the first predicate returns false, the second is not evaluated. No exception occurs.
+  ~ An IllegalStateException, because predicates cannot be combined with `and` at runtime.
+    #Incorrect. `Predicate.and` is a standard default method available on all `Predicate` instances.
+}
+
+::t13_Q4:: A method reference `Integer\:\:parseInt` is assigned to a variable.
+Which functional interface type is compatible with this assignment?
+{
+  = `Function<String, Integer>`, because `parseInt` takes one `String` input and returns an `Integer`.
+    #Correct. The method reference matches the `apply(T t)` signature of `Function<String, Integer>`.
+  ~ `Consumer<String>`, because `parseInt` consumes a String and produces no output.
+    #Incorrect. `parseInt` returns an `Integer`; `Consumer` is for operations that return void.
+  ~ `Supplier<Integer>`, because `parseInt` supplies an integer value.
+    #Incorrect. `Supplier` takes no input; `parseInt` requires a String argument.
+  ~ `BiFunction<String, Integer, Integer>`, because parsing involves two integers.
+    #Incorrect. `Integer.parseInt(String)` takes exactly one argument; `BiFunction` requires two.
+}
+
+$CATEGORY: $module$/t14_concurrency
+
+::t14_Q1:: A developer writes `thread.run()` instead of `thread.start()`.
+What is the consequence?
+{
+  = The `run()` method executes on the current (calling) thread — no new thread is created.
+    #Correct. `run()` is just a regular method call; only `start()` asks the JVM to schedule a new thread and eventually call `run()` on it.
+  ~ A new thread is created but it terminates immediately without executing `run`.
+    #Incorrect. `run()` called directly executes synchronously on the current thread; no new thread is involved at all.
+  ~ A compile error occurs because `run()` is not a public method on `Thread`.
+    #Incorrect. `run()` is public; the code compiles and runs without error — it just does not create a new thread.
+  ~ The thread enters a BLOCKED state waiting for the JVM scheduler to call `run()`.
+    #Incorrect. Calling `run()` directly bypasses the scheduler entirely and executes immediately on the caller's thread.
+}
+
+::t14_Q2:: A `Counter` class has `private int _count` and a non-synchronised
+`increment()` method that performs `_count++`. One thousand threads each call
+`increment()` once. Why is the final value of `_count` likely to be less than
+1000?
+{
+  = `_count++` is not atomic: it involves a read, an increment, and a write. Two threads can read the same value before either writes back, losing an increment.
+    #Correct. This is a classic race condition — without synchronisation, concurrent read-modify-write sequences can overlap and produce an incorrect final count.
+  ~ Threads automatically queue their increments so the count is always exactly 1000.
+    #Incorrect. Without synchronisation, the JVM provides no automatic queuing of concurrent writes to shared state.
+  ~ The JVM serialises all primitive operations, so `_count++` is inherently thread-safe.
+    #Incorrect. The JVM does not serialise compound operations on primitives; `_count++` is three separate operations that can interleave.
+  ~ Integer overflow causes the count to wrap around to a value below 1000.
+    #Incorrect. With only 1000 increments, integer overflow is not a factor; the issue is a race condition.
+}
+
+::t14_Q3:: `Executors.newCachedThreadPool()` is recommended for a server that handles client connections. Why is it preferred over `newFixedThreadPool(1)` for this use case?
+{
+  = A cached pool grows as concurrent connections increase and reuses idle threads when connections decrease, handling variable load without queuing clients behind each other.
+    #Correct. A single-thread fixed pool would serialise all client handling, causing each new client to wait for the previous one to finish.
+  ~ A cached pool is synchronised by default, preventing race conditions in client handlers.
+    #Incorrect. Thread pool type does not determine whether shared state in handlers is synchronised.
+  ~ A cached pool automatically balances load across multiple machines.
+    #Incorrect. `ExecutorService` operates within a single JVM; distributed load balancing is a separate concern.
+  ~ A cached pool limits the total number of threads to the number of available CPU cores.
+    #Incorrect. A cached pool creates as many threads as needed; `newWorkStealingPool` relates to CPU cores.
+}
+
+::t14_Q4:: After submitting tasks to an `ExecutorService`, the developer omits
+`pool.shutdown()`. What is the most likely observable problem?
+{
+  = The JVM does not exit after `main()` returns because the non-daemon pool threads are still running and keeping the process alive.
+    #Correct. `ExecutorService` threads are non-daemon by default; the JVM will not exit while they are alive.
+  ~ All submitted tasks are immediately cancelled and their results are lost.
+    #Incorrect. Tasks that have already started or been queued will continue running; the issue is that the JVM stays alive.
+  ~ A NullPointerException is thrown when the pool attempts to clean up its threads.
+    #Incorrect. Without a shutdown call, the pool simply keeps its threads idle and running; no exception is thrown.
+  ~ The pool automatically shuts down after 60 seconds of inactivity.
+    #Incorrect. `ExecutorService` does not have a built-in idle timeout for shutdown; you must call `shutdown()` explicitly.
+}
+
+$CATEGORY: $module$/t15_networking
+
+::t15_Q1:: In the echo server example, `new PrintWriter(clientSocket.getOutputStream(), true)`
+is used. What does the second argument `true` control?
+{
+  = Auto-flush\: the output buffer is flushed automatically after every `println` call, ensuring data is sent to the client immediately.
+    #Correct. Without auto-flush, data may remain in the PrintWriter buffer and never reach the client until the buffer fills or the stream is closed.
+  ~ Thread-safety\: the PrintWriter locks the stream so multiple threads can write concurrently.
+    #Incorrect. `PrintWriter` is not made thread-safe by this flag; the `true` argument controls auto-flushing.
+  ~ Character encoding\: `true` instructs the writer to use UTF-8 instead of the platform default.
+    #Incorrect. Character encoding is set separately via a charset parameter or `OutputStreamWriter`; `true` here means auto-flush.
+  ~ Error handling\: exceptions thrown by the underlying stream are rethrown rather than suppressed.
+    #Incorrect. `PrintWriter` suppresses exceptions by default; to check for errors you call `checkError()`. The `true` flag controls flush behaviour.
+}
+
+::t15_Q2:: A multi-client server uses `serverSocket.accept()` inside a
+`while (true)` loop and calls `pool.submit(new ClientHandler(clientSocket))`
+for each connection. Why does the server accept a second client before the
+first finishes?
+{
+  = Each `ClientHandler` runs on a separate pool thread, so `accept()` returns to the loop immediately and can accept new connections concurrently.
+    #Correct. `submit` is non-blocking\: the work is handed off to the pool and the accept loop continues without waiting.
+  ~ `accept()` is non-blocking in Java and returns null if no second client is ready.
+    #Incorrect. `accept()` is blocking — it blocks until a client connects. It is the `submit()` call that is non-blocking.
+  ~ The second client waits in a queue inside `ServerSocket` and is accepted only after the first disconnects.
+    #Incorrect. The server accepts the second connection as soon as `accept()` is called again, which happens immediately after submitting the first handler.
+  ~ Java automatically forks a new process for each client connection.
+    #Incorrect. Java does not fork processes for socket connections; thread pools are used within the same JVM process.
+}
+
+::t15_Q3:: The protocol requires each JSON message to be sent as a single line
+terminated by a newline. Why is sending multi-line JSON over a raw socket
+problematic when using `BufferedReader.readLine()` to receive it?
+{
+  = `readLine()` reads exactly one line and stops at the first newline, so only the first line of the multi-line JSON is received, resulting in a parse error.
+    #Correct. The receiver reads one `\n`-terminated line and tries to parse it as complete JSON; a multi-line object split across lines cannot be parsed correctly.
+  ~ `BufferedReader` automatically reassembles multi-line messages because TCP guarantees message boundaries.
+    #Incorrect. TCP is a byte-stream protocol with no concept of message boundaries; `readLine()` splits on `\n` without knowledge of JSON structure.
+  ~ Multi-line JSON is rejected by Jackson's `ObjectMapper` because it requires compact format.
+    #Incorrect. Jackson can parse pretty-printed multi-line JSON; the problem is the socket framing, not Jackson's parser.
+  ~ Sending multi-line JSON causes a ConcurrentModificationException on the server.
+    #Incorrect. ConcurrentModificationException is a Java collections concern; it has nothing to do with JSON framing over sockets.
+}
+
+::t15_Q4:: The `ServerResponse<T>` class uses a generic type parameter. When
+the server serialises a `ServerResponse<List<Task>>` to JSON with Jackson,
+what must the client do to correctly deserialise the JSON back to the same type?
+{
+  = Use a `TypeReference<ServerResponse<List<Task>>>` in the `readValue` call to preserve the full generic type information at runtime.
+    #Correct. Due to type erasure, `ServerResponse.class` loses the generic parameter; `TypeReference` captures it as an anonymous subclass, allowing Jackson to reconstruct the nested generic type.
+  ~ Pass `ServerResponse.class` to `readValue` — Jackson infers the generic parameter automatically.
+    #Incorrect. Type erasure means `ServerResponse.class` carries no information about `List<Task>`; Jackson cannot infer it.
+  ~ Cast the deserialized `Object` to `ServerResponse<List<Task>>` after calling `readValue(json, Object.class)`.
+    #Incorrect. Casting to a generic type produces an unchecked cast warning and does not restore type information; individual element types remain unresolved.
+  ~ Store the tasks in a plain `List` field without generics so that deserialisation works without TypeReference.
+    #Incorrect. Using a raw `List` loses type safety and is the problem that `TypeReference` was designed to solve.
+}
+
+$CATEGORY: $module$/t16_json
+
+::t16_Q1:: JSON has exactly six value types. Which of the following is NOT a
+valid JSON value type?
+{
+  = Date, used to represent calendar values such as `2026-04-14`.
+    #Correct (it is the NOT answer). JSON has no date type; dates must be encoded as strings or numbers.
+  ~ String, surrounded by double quotes such as `"hello"`.
+    #Incorrect — String IS one of the six valid JSON types.
+  ~ Array, a comma-separated list of values in square brackets such as `[1, 2, 3]`.
+    #Incorrect — Array IS one of the six valid JSON types.
+  ~ Boolean, either `true` or `false` in lowercase.
+    #Incorrect — Boolean IS one of the six valid JSON types.
+}
+
+::t16_Q2:: A developer writes `mapper.readValue(json, List<Player>.class)` but
+it does not compile. What is the root cause and how is it corrected?
+{
+  = Java's type erasure means generic type parameters are not available at runtime, so `List<Player>.class` is invalid syntax; the fix is to use `new TypeReference<List<Player>>()\{\}`.
+    #Correct. `TypeReference` captures the full generic type as an anonymous subclass, preserving it through erasure so Jackson can deserialise correctly.
+  ~ `List<Player>.class` fails because `List` is an interface and interfaces do not have a `.class` literal.
+    #Incorrect. While `List` is an interface, `List.class` is valid; the problem is the generic parameter, not the interface status.
+  ~ The `ObjectMapper` cannot deserialise into a `List` type; an array `Player[]` must be used instead.
+    #Incorrect. Jackson can deserialise into `List<Player>` when given a `TypeReference`; both array and list forms work.
+  ~ `readValue` does not accept a class literal as the second argument; a `JsonParser` must be used.
+    #Incorrect. `readValue(String, Class<T>)` is a valid overload; the issue is specifically with parameterised generic types.
+}
+
+::t16_Q3:: A JSON object key uses the name `"player_score"` but the
+corresponding Java field is named `playerScore`. Deserialisation produces a
+null value for the field. What annotation resolves this mismatch?
+{
+  = `@JsonProperty("player_score")` placed on the field or its getter, mapping the JSON key to the Java field name.
+    #Correct. `@JsonProperty` allows you to specify the exact JSON key name that Jackson should read or write for a given field.
+  ~ `@JsonIgnore("player_score")` to tell Jackson to skip the mismatched field.
+    #Incorrect. `@JsonIgnore` excludes a field from serialisation/deserialisation entirely; it does not rename it.
+  ~ Rename the Java field to `player_score` because Jackson requires exact name matching.
+    #Incorrect. While renaming is one option, `@JsonProperty` is the designed solution for mapping different names without changing field names.
+  ~ `@JsonIgnoreProperties(\{"player_score"\})` to suppress the unknown key warning.
+    #Incorrect. `@JsonIgnoreProperties` silently ignores unknown JSON keys; it does not bind them to a differently named field.
+}
+
+::t16_Q4:: When using JSON as a wire protocol over a TCP socket, which
+`ObjectMapper` method pair is used to convert objects to strings and back,
+and why are file-based overloads not used?
+{
+  = `writeValueAsString` to serialise and `readValue(String, ...)` to deserialise, because socket communication operates on in-memory strings rather than disk files.
+    #Correct. File-based overloads write to or read from disk; socket-based communication keeps everything in memory as strings sent via PrintWriter/BufferedReader.
+  ~ `writeValue(File, ...)` and `readValue(File, ...)`, because TCP sockets are treated as virtual files by the operating system.
+    #Incorrect. While sockets are file descriptors at the OS level, the Jackson API distinction is between `File`/`Path` objects and in-memory strings; you use string methods for socket communication.
+  ~ `writeBytes` and `readBytes`, because TCP transmits raw byte arrays not character strings.
+    #Incorrect. While TCP is byte-based, the idiomatic Java socket pattern wraps the byte streams in `PrintWriter`/`BufferedReader` for line-based text communication; Jackson's `writeValueAsString` produces the text.
+  ~ `prettyPrint(Object)` and `parse(String)`, which are convenience aliases added in Java 17.
+    #Incorrect. These method names do not exist on `ObjectMapper`; this option is fictional.
+}
