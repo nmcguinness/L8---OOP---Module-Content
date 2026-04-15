@@ -566,249 +566,7 @@ class JdbcGameAssetDao implements GameAssetDao {
 
 ---
 
-## Exercise 04 — Metadata-only DAO: the case for excluding the BLOB
-
-**Objective:** Add `findMetadataById(int id)` and `findAllMetadata()` to the DAO — queries that deliberately exclude the `asset_data` column. Compare the cost of both queries by timing them.
-
-**Context (software + games):**
-
-- **Software dev:** A document library or media server never loads binary content just to display a file list. Metadata-only queries are a fundamental performance pattern.
-- **Games dev:** A game asset browser shows thumbnails and names before the player chooses to download a full asset. The same principle applies.
-
-### What you are building
-
-- `AssetMetadata` value class (assetId, assetName, assetType, fileSize) — no `byte[]`
-- `findMetadataById(int id)` — SELECT without `asset_data`
-- `findAllMetadata()` — SELECT all rows without `asset_data`
-- A timing comparison between a full `findById` and a metadata-only `findMetadataById`
-
-### Required API
-
-```java
-public class AssetMetadata {
-    public AssetMetadata(int assetId, String assetName, String assetType, int fileSize);
-    // getters; toString()
-}
-
-// Add to GameAssetDao:
-Optional<AssetMetadata> findMetadataById(int id) throws Exception;
-List<AssetMetadata> findAllMetadata() throws Exception;
-```
-
-### Tasks
-
-1. Implement `AssetMetadata` as a simple value class (no `assetData` field).
-2. Add `findMetadataById` and `findAllMetadata` to `JdbcGameAssetDao`:
-   - Both `SELECT` statements must list columns explicitly and **omit `asset_data`**.
-3. In `Exercise.run()`:
-   - Insert three assets with large-ish synthetic byte arrays (e.g., `new byte[50_000]`).
-   - Time a full `findById` on one asset: record start/end with `System.nanoTime()`.
-   - Time a `findMetadataById` on the same ID.
-   - Print both times in milliseconds.
-   - Print all metadata with `findAllMetadata()`.
-   - Clean up (delete the three test rows).
-
-### Sample output
-
-```text
-Full findById:      12 ms
-Metadata only:       1 ms
-[1] hero_sprite.png (image/png, 50000 bytes)
-[2] player_map.dat  (application/octet-stream, 50000 bytes)
-[3] theme.ogg       (audio/ogg, 50000 bytes)
-Cleaned up 3 rows
-```
-
-### Constraints
-
-- Both SELECT statements must be written explicitly — do not use `SELECT *`.
-- `AssetMetadata` must not have a `getAssetData()` method — enforce the separation at compile time.
-
-### Done when…
-
-- `findAllMetadata()` does not load any BLOB data (prove it by checking the SQL).
-- The metadata query is measurably faster than the full query (may require larger byte arrays to see a clear difference).
-- All test rows are cleaned up at the end.
-
-<details style="background:#f5f7ff; border:1px solid rgba(0,0,0,0.15); border-radius:10px; padding:0.9rem 1rem; margin:1rem 0;">
-  <summary style="cursor:pointer; font-weight:800; list-style:none; margin:0;">✅ Solution</summary>
-  <div style="margin-top:0.8rem;">
-
-```java
-package t16_binary_io.exercises.e04;
-
-import java.sql.*;
-import java.util.*;
-
-public class Exercise {
-
-    public static void run() throws Exception {
-        String url  = "jdbc:mysql://localhost:3306/game_assets_db";
-        String user = "root";
-        String pass = "";
-
-        JdbcGameAssetDao dao = new JdbcGameAssetDao(url, user, pass);
-
-        byte[] large = new byte[50_000];
-
-        int id1 = dao.insert(new GameAsset(0, "hero_sprite.png", "image/png",                  large.length, large));
-        int id2 = dao.insert(new GameAsset(0, "player_map.dat",  "application/octet-stream",   large.length, large));
-        int id3 = dao.insert(new GameAsset(0, "theme.ogg",       "audio/ogg",                  large.length, large));
-
-        // Time full retrieval
-        long startFull = System.nanoTime();
-        dao.findById(id1);
-        long msFull = (System.nanoTime() - startFull) / 1_000_000;
-        System.out.println("Full findById:     " + msFull + " ms");
-
-        // Time metadata retrieval
-        long startMeta = System.nanoTime();
-        dao.findMetadataById(id1);
-        long msMeta = (System.nanoTime() - startMeta) / 1_000_000;
-        System.out.println("Metadata only:     " + msMeta + " ms");
-
-        for (AssetMetadata m : dao.findAllMetadata()) {
-            System.out.println("[" + m.getAssetId() + "] " + m.getAssetName()
-                + " (" + m.getAssetType() + ", " + m.getFileSize() + " bytes)");
-        }
-
-        dao.deleteById(id1);
-        dao.deleteById(id2);
-        dao.deleteById(id3);
-        System.out.println("Cleaned up 3 rows");
-    }
-}
-
-class AssetMetadata {
-
-    // === Fields ===
-    private int    _assetId;
-    private String _assetName;
-    private String _assetType;
-    private int    _fileSize;
-
-    // === Constructors ===
-    // Creates: an asset metadata record — no binary data
-    public AssetMetadata(int assetId, String assetName, String assetType, int fileSize) {
-        _assetId   = assetId;
-        _assetName = assetName;
-        _assetType = assetType;
-        _fileSize  = fileSize;
-    }
-
-    // === Public API ===
-    public int    getAssetId()   { return _assetId; }
-    public String getAssetName() { return _assetName; }
-    public String getAssetType() { return _assetType; }
-    public int    getFileSize()  { return _fileSize; }
-}
-
-// JdbcGameAssetDao — additions (findMetadataById + findAllMetadata):
-
-// Gets: metadata only for the given ID — asset_data is not loaded
-// public Optional<AssetMetadata> findMetadataById(int id) throws Exception {
-//     if (id <= 0) return Optional.empty();
-//     String sql = "SELECT asset_id, asset_name, asset_type, file_size FROM game_assets WHERE asset_id = ?";
-//     try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql)) {
-//         ps.setInt(1, id);
-//         try (ResultSet rs = ps.executeQuery()) {
-//             if (!rs.next()) return Optional.empty();
-//             return Optional.of(new AssetMetadata(
-//                 rs.getInt("asset_id"), rs.getString("asset_name"),
-//                 rs.getString("asset_type"), rs.getInt("file_size")));
-//         }
-//     }
-// }
-
-// Gets: metadata for all assets — asset_data is not loaded
-// public List<AssetMetadata> findAllMetadata() throws Exception {
-//     String sql = "SELECT asset_id, asset_name, asset_type, file_size FROM game_assets ORDER BY asset_id";
-//     try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
-//         List<AssetMetadata> out = new ArrayList<>();
-//         while (rs.next())
-//             out.add(new AssetMetadata(
-//                 rs.getInt("asset_id"), rs.getString("asset_name"),
-//                 rs.getString("asset_type"), rs.getInt("file_size")));
-//         return out;
-//     }
-// }
-
-// Full JdbcGameAssetDao available in Exercise 03 — add these two methods to it.
-class JdbcGameAssetDao {
-    private String _url, _user, _pass;
-    public JdbcGameAssetDao(String url, String user, String pass) { _url=url; _user=user; _pass=pass; }
-    private Connection open() throws SQLException { return DriverManager.getConnection(_url,_user,_pass); }
-    public int insert(GameAsset asset) throws Exception {
-        String sql = "INSERT INTO game_assets (asset_name, asset_type, file_size, asset_data) VALUES (?, ?, ?, ?)";
-        try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setString(1, asset.getAssetName()); ps.setString(2, asset.getAssetType());
-            ps.setInt(3, asset.getFileSize()); ps.setBytes(4, asset.getAssetData());
-            ps.executeUpdate();
-            try (ResultSet keys = ps.getGeneratedKeys()) { keys.next(); return keys.getInt(1); }
-        }
-    }
-    public Optional<GameAsset> findById(int id) throws Exception {
-        if (id <= 0) return Optional.empty();
-        String sql = "SELECT asset_id, asset_name, asset_type, file_size, asset_data FROM game_assets WHERE asset_id = ?";
-        try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setInt(1, id);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (!rs.next()) return Optional.empty();
-                return Optional.of(new GameAsset(rs.getInt("asset_id"), rs.getString("asset_name"),
-                    rs.getString("asset_type"), rs.getInt("file_size"), rs.getBytes("asset_data")));
-            }
-        }
-    }
-    public Optional<AssetMetadata> findMetadataById(int id) throws Exception {
-        if (id <= 0) return Optional.empty();
-        String sql = "SELECT asset_id, asset_name, asset_type, file_size FROM game_assets WHERE asset_id = ?";
-        try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setInt(1, id);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (!rs.next()) return Optional.empty();
-                return Optional.of(new AssetMetadata(rs.getInt("asset_id"), rs.getString("asset_name"),
-                    rs.getString("asset_type"), rs.getInt("file_size")));
-            }
-        }
-    }
-    public List<AssetMetadata> findAllMetadata() throws Exception {
-        String sql = "SELECT asset_id, asset_name, asset_type, file_size FROM game_assets ORDER BY asset_id";
-        try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
-            List<AssetMetadata> out = new ArrayList<>();
-            while (rs.next())
-                out.add(new AssetMetadata(rs.getInt("asset_id"), rs.getString("asset_name"),
-                    rs.getString("asset_type"), rs.getInt("file_size")));
-            return out;
-        }
-    }
-    public boolean deleteById(int id) throws Exception {
-        if (id <= 0) return false;
-        String sql = "DELETE FROM game_assets WHERE asset_id = ?";
-        try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setInt(1, id); return ps.executeUpdate() == 1;
-        }
-    }
-}
-
-class GameAsset {
-    private int _assetId; private String _assetName, _assetType; private int _fileSize; private byte[] _assetData;
-    public GameAsset(int id, String name, String type, int size, byte[] data) {
-        _assetId=id; _assetName=name.trim(); _assetType=type.trim().toLowerCase(); _fileSize=size; _assetData=data;
-    }
-    public int getAssetId() { return _assetId; }
-    public String getAssetName() { return _assetName; }
-    public String getAssetType() { return _assetType; }
-    public int getFileSize() { return _fileSize; }
-    public byte[] getAssetData() { return _assetData; }
-}
-```
-
-  </div>
-</details>
-
----
-
-## Exercise 05 — Send a binary file from client to server (upload)
+## Exercise 04 — Send a binary file from client to server (upload)
 
 **Objective:** Write a minimal upload server that receives a Base64-encoded file over a socket, decodes it, and stores the bytes in the database using `PreparedStatement.setBytes()`. The client reads a file from disk, encodes it, and sends it as a JSON request.
 
@@ -874,7 +632,7 @@ Cleaned up id=12
 **`UploadServer.java`** — server (start this first; accepts `UPLOAD_FILE` requests, Base64-decodes, stores with `setBytes()`)
 
 ```java
-package t16_binary_io.exercises.e05;
+package t16_binary_io.exercises.e04;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.*;
@@ -980,7 +738,7 @@ public class UploadServer {
 **`UploadClient.java`** — client (start this second; creates the test file, connects to `UploadServer`, uploads, verifies the returned ID)
 
 ```java
-package t16_binary_io.exercises.e05;
+package t16_binary_io.exercises.e04;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.*;
@@ -1055,7 +813,7 @@ public class UploadClient {
 
 ---
 
-## Exercise 06 — Retrieve a stored file from a server (download)
+## Exercise 05 — Retrieve a stored file from a server (download)
 
 **Objective:** Write a retrieve server that fetches a `MEDIUMBLOB` from the database using `ResultSet.getBytes()`, Base64-encodes it, and sends it back to the client as a JSON response. The client decodes the Base64 string and reconstructs the file on disk, then verifies byte-for-byte equality with `Arrays.equals()`.
 
@@ -1127,7 +885,7 @@ Cleaned up id=8
 **`RetrieveServer.java`** — server (start this first; accepts `RETRIEVE_FILE` requests, fetches the BLOB with `getBytes()`, Base64-encodes, returns in JSON)
 
 ```java
-package t16_binary_io.exercises.e06;
+package t16_binary_io.exercises.e05;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.*;
@@ -1235,7 +993,7 @@ public class RetrieveServer {
 **`RetrieveClient.java`** — client (start this second; seeds the DB via JDBC, connects to `RetrieveServer`, decodes the response, verifies integrity)
 
 ```java
-package t16_binary_io.exercises.e06;
+package t16_binary_io.exercises.e05;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.*;
@@ -1327,7 +1085,7 @@ public class RetrieveClient {
 
 ---
 
-## Exercise 07 — Request file metadata without loading the BLOB
+## Exercise 06 — Request file metadata without loading the BLOB
 
 **Objective:** Write a metadata server whose SQL deliberately omits the `asset_data` column. The server returns only the filename, content type, and file size. The client prints the metadata and confirms that no binary data was transferred.
 
@@ -1401,7 +1159,7 @@ Cleaned up id=15
 **`MetadataServer.java`** — server (start this first; handles `GET_METADATA` requests; `asset_data` is deliberately absent from the SELECT)
 
 ```java
-package t16_binary_io.exercises.e07;
+package t16_binary_io.exercises.e06;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.*;
@@ -1504,7 +1262,7 @@ public class MetadataServer {
 **`MetadataClient.java`** — client (start this second; seeds the DB via JDBC, connects to `MetadataServer`, prints metadata, asserts no binary payload)
 
 ```java
-package t16_binary_io.exercises.e07;
+package t16_binary_io.exercises.e06;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.*;
