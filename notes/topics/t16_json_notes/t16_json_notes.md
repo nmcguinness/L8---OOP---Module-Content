@@ -889,6 +889,9 @@ import java.util.Base64;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+//helper to tell you what directory to put your data file in
+System.out.println("Put your data file in: " + System.getProperty("user.dir"));
+
 byte[] fileBytes = Files.readAllBytes(Path.of("profile.png"));
 
 // Converts: raw byte array to a Base64-encoded ASCII string

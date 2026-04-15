@@ -1000,9 +1000,8 @@ public class Exercise {
 
 ### What you are building
 
-- An `UploadServer` class that accepts a single `UPLOAD_FILE` JSON request, decodes the Base64 payload, and stores the bytes with `setBytes()`
-- Client code in `Exercise.run()` that reads a synthetic file, encodes it, and sends the upload request
-- Verified by printing the returned auto-generated ID
+- An `UploadServer` class with a `main()` method: starts on port `9_206`, accepts `UPLOAD_FILE` requests, decodes the Base64 payload, and stores the bytes with `setBytes()`
+- An `UploadClient` class with a `main()` method: reads a synthetic file, encodes it, sends the upload request, and prints the returned auto-generated ID
 
 ### Required request/response shapes
 
@@ -1018,17 +1017,16 @@ UPLOAD_FILE
 
 ### Tasks
 
-1. In `Exercise.run()`:
-   - Create a 512-byte synthetic `byte[]` (e.g. values `0–199` repeating).
-   - Write it to `"data/upload_test.bin"` using `Files.write`.
-   - Start `UploadServer` on port `9_206` as a daemon thread; sleep 200 ms.
-   - Connect a client socket; build the request map; Base64-encode the bytes; send with `out.println(MAPPER.writeValueAsString(request))`.
-   - Read the response; parse the returned ID; print it.
-   - Clean up: delete the stored row via a direct JDBC `DELETE`.
-
-2. Implement `UploadServer`:
+1. Implement `UploadServer` — run this first:
+   - Add a `main(String[] args)` method that prints a startup message and calls `new UploadServer(PORT, URL, DB_USER, DB_PASS).start()`.
    - Loop on `ServerSocket.accept()` until interrupted.
    - In `handleUpload(Socket)`: read one JSON line, extract `fileData`, decode with `Base64.getDecoder().decode(...)`, insert into `game_assets` with `ps.setBytes(4, bytes)`, return `{ "status": "OK", "id": <id> }`.
+
+2. Implement `UploadClient` — run this second:
+   - `main(String[] args)` creates a 512-byte synthetic `byte[]` (e.g. values `0–199` repeating) and writes it to `"data/upload_test.bin"`.
+   - Connects to `UploadServer` on port `9_206`; Base64-encodes the bytes; builds and sends the request map.
+   - Reads the response; parses the returned ID; prints it.
+   - Cleans up: deletes the stored row via a direct JDBC `DELETE`.
 
 ### Sample output
 
@@ -1054,89 +1052,7 @@ Cleaned up id=12
   <summary style="cursor:pointer; font-weight:800; list-style:none; margin:0;">✅ Solution</summary>
   <div style="margin-top:0.8rem;">
 
-**`Exercise.java`** — client (create the test file, start the server, upload, verify the returned ID)
-
-```java
-package t16_binary_io.exercises.e06;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.*;
-import java.net.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.*;
-import java.sql.*;
-import java.util.*;
-
-public class Exercise {
-
-    private static final ObjectMapper MAPPER  = new ObjectMapper();
-    private static final String       URL     = "jdbc:mysql://localhost:3306/car_rental?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
-    private static final String       DB_USER = "car_rental_user";
-    private static final String       DB_PASS = "your_password";
-    private static final int          PORT    = 9_206;
-
-    // Runs: the upload exercise — creates a test file, starts the server, uploads over a socket
-    public static void run() throws Exception {
-        // Create a synthetic 512-byte test file
-        byte[] original = new byte[512];
-        for (int i = 0; i < original.length; i++) original[i] = (byte)(i % 200);
-
-        Files.createDirectories(Path.of("data"));
-        Files.write(Path.of("data/upload_test.bin"), original);
-
-        // Start the upload server on a daemon thread
-        Thread serverThread = new Thread(() -> {
-            try { new UploadServer(PORT, URL, DB_USER, DB_PASS).start(); }
-            catch (Exception e) { System.err.println("Server error: " + e.getMessage()); }
-        });
-        serverThread.setDaemon(true);
-        serverThread.start();
-        Thread.sleep(200);
-
-        // Client: Base64-encode the file and send an UPLOAD_FILE request
-        int storedId;
-        try (Socket         socket = new Socket("localhost", PORT);
-             BufferedReader in     = new BufferedReader(new InputStreamReader(socket.getInputStream(),  StandardCharsets.UTF_8));
-             PrintWriter    out    = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true)) {
-
-            String encoded = Base64.getEncoder().encodeToString(original);
-
-            Map<String, Object> payload = new LinkedHashMap<>();
-            payload.put("fileName",    "upload_test.bin");
-            payload.put("contentType", "application/octet-stream");
-            payload.put("fileSize",    original.length);
-            payload.put("fileData",    encoded);
-
-            Map<String, Object> request = new LinkedHashMap<>();
-            request.put("type",    "UPLOAD_FILE");
-            request.put("payload", payload);
-
-            out.println(MAPPER.writeValueAsString(request));
-
-            String   responseJson = in.readLine();
-            Map<?,?> response     = MAPPER.readValue(responseJson, Map.class);
-            storedId = ((Number) response.get("id")).intValue();
-            System.out.println("Upload OK — stored id: " + storedId);
-        }
-
-        // Clean up the test row
-        deleteById(storedId);
-        System.out.println("Cleaned up id=" + storedId);
-    }
-
-    // Deletes: a game_assets row by id
-    private static void deleteById(int id) throws Exception {
-        String sql = "DELETE FROM game_assets WHERE asset_id = ?";
-        try (Connection        c  = DriverManager.getConnection(URL, DB_USER, DB_PASS);
-             PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setInt(1, id);
-            ps.executeUpdate();
-        }
-    }
-}
-```
-
-**`UploadServer.java`** — server (accept the upload request, Base64-decode, store with `setBytes()`)
+**`UploadServer.java`** — server (start this first; accepts `UPLOAD_FILE` requests, Base64-decodes, stores with `setBytes()`)
 
 ```java
 package t16_binary_io.exercises.e06;
@@ -1148,7 +1064,13 @@ import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.util.*;
 
-class UploadServer {
+public class UploadServer {
+
+    // === Constants ===
+    private static final String URL     = "jdbc:mysql://localhost:3306/car_rental?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+    private static final String DB_USER = "car_rental_user";
+    private static final String DB_PASS = "your_password";
+    private static final int    PORT    = 9_206;
 
     // === Fields ===
     private int    _port;
@@ -1158,9 +1080,16 @@ class UploadServer {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
+    // === Entry point ===
+    // Starts: the upload server; run this class before running UploadClient
+    public static void main(String[] args) throws Exception {
+        System.out.println("UploadServer listening on port " + PORT + " ...");
+        new UploadServer(PORT, URL, DB_USER, DB_PASS).start();
+    }
+
     // === Constructors ===
     // Creates: an upload-only server bound to the given port and database
-    UploadServer(int port, String url, String user, String pass) {
+    public UploadServer(int port, String url, String user, String pass) {
         _port = port;
         _url  = url;
         _user = user;
@@ -1169,7 +1098,7 @@ class UploadServer {
 
     // === Public API ===
     // Starts: the server loop; accepts connections until interrupted
-    void start() throws Exception {
+    public void start() throws Exception {
         try (ServerSocket ss = new ServerSocket(_port)) {
             while (!Thread.currentThread().isInterrupted())
                 handleUpload(ss.accept());
@@ -1229,6 +1158,79 @@ class UploadServer {
 }
 ```
 
+**`UploadClient.java`** — client (start this second; creates the test file, connects to `UploadServer`, uploads, verifies the returned ID)
+
+```java
+package t16_binary_io.exercises.e06;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.*;
+import java.net.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.sql.*;
+import java.util.*;
+
+public class UploadClient {
+
+    private static final ObjectMapper MAPPER  = new ObjectMapper();
+    private static final String       URL     = "jdbc:mysql://localhost:3306/car_rental?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+    private static final String       DB_USER = "car_rental_user";
+    private static final String       DB_PASS = "your_password";
+    private static final int          PORT    = 9_206;
+
+    // Entry point: create the test file, upload to UploadServer, verify the returned ID
+    public static void main(String[] args) throws Exception {
+        // Create a synthetic 512-byte test file
+        byte[] original = new byte[512];
+        for (int i = 0; i < original.length; i++) original[i] = (byte)(i % 200);
+
+        Files.createDirectories(Path.of("data"));
+        Files.write(Path.of("data/upload_test.bin"), original);
+
+        // Base64-encode the file and send an UPLOAD_FILE request
+        int storedId;
+        try (Socket         socket = new Socket("localhost", PORT);
+             BufferedReader in     = new BufferedReader(new InputStreamReader(socket.getInputStream(),  StandardCharsets.UTF_8));
+             PrintWriter    out    = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true)) {
+
+            String encoded = Base64.getEncoder().encodeToString(original);
+
+            Map<String, Object> payload = new LinkedHashMap<>();
+            payload.put("fileName",    "upload_test.bin");
+            payload.put("contentType", "application/octet-stream");
+            payload.put("fileSize",    original.length);
+            payload.put("fileData",    encoded);
+
+            Map<String, Object> request = new LinkedHashMap<>();
+            request.put("type",    "UPLOAD_FILE");
+            request.put("payload", payload);
+
+            out.println(MAPPER.writeValueAsString(request));
+
+            String   responseJson = in.readLine();
+            Map<?,?> response     = MAPPER.readValue(responseJson, Map.class);
+            storedId = ((Number) response.get("id")).intValue();
+            System.out.println("Upload OK — stored id: " + storedId);
+        }
+
+        // Clean up the test row
+        deleteById(storedId);
+        System.out.println("Cleaned up id=" + storedId);
+    }
+
+    // Deletes: a game_assets row by id
+    private static void deleteById(int id) throws Exception {
+        String sql = "DELETE FROM game_assets WHERE asset_id = ?";
+        try (Connection        c  = DriverManager.getConnection(URL, DB_USER, DB_PASS);
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        }
+    }
+}
+```
+
   </div>
 </details>
 
@@ -1245,9 +1247,8 @@ class UploadServer {
 
 ### What you are building
 
-- A `RetrieveServer` class that accepts a `RETRIEVE_FILE` request, calls `rs.getBytes("asset_data")`, and returns the bytes Base64-encoded in a JSON response
-- A known test asset pre-inserted via JDBC so the test has a real ID to request
-- Client code that decodes the response, writes the file to disk, and prints an integrity check
+- A `RetrieveServer` class with a `main()` method: starts on port `9_207`, accepts `RETRIEVE_FILE` requests, calls `rs.getBytes("asset_data")`, and returns the bytes Base64-encoded in a JSON response
+- A `RetrieveClient` class with a `main()` method: seeds the database with a known test asset via JDBC, connects to the server, decodes the response, writes the file to disk, and prints an integrity check
 
 ### Required request/response shapes
 
@@ -1264,19 +1265,19 @@ RETRIEVE_FILE
 
 ### Tasks
 
-1. In `Exercise.run()`:
-   - Create a known 512-byte `byte[]` (e.g. values `0–199` repeating).
-   - Insert it directly into `game_assets` via JDBC (`setBytes()`); capture the returned ID.
-   - Start `RetrieveServer` on port `9_207` as a daemon thread; sleep 200 ms.
-   - Connect a client socket; send `{ "type": "RETRIEVE_FILE", "payload": { "id": <testId> } }`.
-   - Read the response; extract `fileData`; Base64-decode to `byte[]`; write to `"data/retrieved_test.bin"`.
-   - Print the filename, byte count, and `Arrays.equals(original, downloaded)`.
-   - Clean up: delete the test row.
-
-2. Implement `RetrieveServer`:
+1. Implement `RetrieveServer` — run this first:
+   - Add a `main(String[] args)` method that prints a startup message and calls `new RetrieveServer(PORT, URL, DB_USER, DB_PASS).start()`.
    - Loop on `ServerSocket.accept()` until interrupted.
    - In `handleRetrieve(Socket)`: read one JSON line, extract `id`, run `SELECT ... asset_data ... WHERE asset_id = ?`, call `rs.getBytes("asset_data")`, Base64-encode the result, return the full data map.
    - If no row is found for the given ID, return `{ "status": "ERROR", "message": "not found" }`.
+
+2. Implement `RetrieveClient` — run this second:
+   - `main(String[] args)` creates a known 512-byte `byte[]` (values `0–199` repeating).
+   - Inserts it directly into `game_assets` via JDBC (`setBytes()`); captures the returned ID.
+   - Connects a socket to `RetrieveServer` on port `9_207`; sends `{ "type": "RETRIEVE_FILE", "payload": { "id": <testId> } }`.
+   - Reads the response; extracts `fileData`; Base64-decodes to `byte[]`; writes to `"data/retrieved_test.bin"`.
+   - Prints the filename, byte count, and `Arrays.equals(original, downloaded)`.
+   - Cleans up: deletes the test row.
 
 ### Sample output
 
@@ -1304,106 +1305,7 @@ Cleaned up id=8
   <summary style="cursor:pointer; font-weight:800; list-style:none; margin:0;">✅ Solution</summary>
   <div style="margin-top:0.8rem;">
 
-**`Exercise.java`** — client (seed the DB directly via JDBC, connect to the server, decode the response, verify integrity)
-
-```java
-package t16_binary_io.exercises.e07;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.*;
-import java.net.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.*;
-import java.sql.*;
-import java.util.*;
-
-public class Exercise {
-
-    private static final ObjectMapper MAPPER  = new ObjectMapper();
-    private static final String       URL     = "jdbc:mysql://localhost:3306/car_rental?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
-    private static final String       DB_USER = "car_rental_user";
-    private static final String       DB_PASS = "your_password";
-    private static final int          PORT    = 9_207;
-
-    // Runs: the retrieve exercise — seeds the DB, starts the server, downloads over a socket
-    public static void run() throws Exception {
-        // Create a known test asset and insert it directly via JDBC
-        byte[] original = new byte[512];
-        for (int i = 0; i < original.length; i++) original[i] = (byte)(i % 200);
-        int testId = insertAsset("retrieve_test.bin", "application/octet-stream", original.length, original);
-        System.out.println("Pre-inserted test asset — id: " + testId);
-
-        // Start the retrieve server on a daemon thread
-        Thread serverThread = new Thread(() -> {
-            try { new RetrieveServer(PORT, URL, DB_USER, DB_PASS).start(); }
-            catch (Exception e) { System.err.println("Server error: " + e.getMessage()); }
-        });
-        serverThread.setDaemon(true);
-        serverThread.start();
-        Thread.sleep(200);
-
-        // Client: send a RETRIEVE_FILE request and reconstruct the file on disk
-        try (Socket         socket = new Socket("localhost", PORT);
-             BufferedReader in     = new BufferedReader(new InputStreamReader(socket.getInputStream(),  StandardCharsets.UTF_8));
-             PrintWriter    out    = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true)) {
-
-            Map<String, Object> request = new LinkedHashMap<>();
-            request.put("type",    "RETRIEVE_FILE");
-            request.put("payload", Map.of("id", testId));
-
-            out.println(MAPPER.writeValueAsString(request));
-
-            String   responseJson = in.readLine();
-            Map<?,?> response     = MAPPER.readValue(responseJson, Map.class);
-            Map<?,?> data         = (Map<?,?>) response.get("data");
-
-            byte[] downloaded = Base64.getDecoder().decode((String) data.get("fileData"));
-
-            Files.createDirectories(Path.of("data"));
-            Files.write(Path.of("data/retrieved_test.bin"), downloaded);
-
-            System.out.println("Retrieved: " + data.get("fileName") + " (" + downloaded.length + " bytes)");
-            System.out.println("Integrity check: " + Arrays.equals(original, downloaded));
-        }
-
-        // Clean up
-        deleteById(testId);
-        System.out.println("Cleaned up id=" + testId);
-    }
-
-    // Inserts: a binary asset directly via JDBC; returns the auto-generated id
-    private static int insertAsset(String name, String type, int size, byte[] data) throws Exception {
-        String sql = "INSERT INTO game_assets (asset_name, asset_type, file_size, asset_data) VALUES (?, ?, ?, ?)";
-        try (Connection        c  = DriverManager.getConnection(URL, DB_USER, DB_PASS);
-             PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
-            ps.setString(1, name);
-            ps.setString(2, type);
-            ps.setInt(3,    size);
-            ps.setBytes(4,  data);
-            ps.executeUpdate();
-
-            try (ResultSet keys = ps.getGeneratedKeys()) {
-                if (!keys.next())
-                    throw new IllegalStateException("no generated key returned");
-                return keys.getInt(1);
-            }
-        }
-    }
-
-    // Deletes: a game_assets row by id
-    private static void deleteById(int id) throws Exception {
-        String sql = "DELETE FROM game_assets WHERE asset_id = ?";
-        try (Connection        c  = DriverManager.getConnection(URL, DB_USER, DB_PASS);
-             PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setInt(1, id);
-            ps.executeUpdate();
-        }
-    }
-}
-```
-
-**`RetrieveServer.java`** — server (fetch the BLOB with `getBytes()`, Base64-encode, return in JSON response)
+**`RetrieveServer.java`** — server (start this first; accepts `RETRIEVE_FILE` requests, fetches the BLOB with `getBytes()`, Base64-encodes, returns in JSON)
 
 ```java
 package t16_binary_io.exercises.e07;
@@ -1415,7 +1317,13 @@ import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.util.*;
 
-class RetrieveServer {
+public class RetrieveServer {
+
+    // === Constants ===
+    private static final String URL     = "jdbc:mysql://localhost:3306/car_rental?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+    private static final String DB_USER = "car_rental_user";
+    private static final String DB_PASS = "your_password";
+    private static final int    PORT    = 9_207;
 
     // === Fields ===
     private int    _port;
@@ -1425,9 +1333,16 @@ class RetrieveServer {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
+    // === Entry point ===
+    // Starts: the retrieve server; run this class before running RetrieveClient
+    public static void main(String[] args) throws Exception {
+        System.out.println("RetrieveServer listening on port " + PORT + " ...");
+        new RetrieveServer(PORT, URL, DB_USER, DB_PASS).start();
+    }
+
     // === Constructors ===
     // Creates: a retrieve-only server bound to the given port and database
-    RetrieveServer(int port, String url, String user, String pass) {
+    public RetrieveServer(int port, String url, String user, String pass) {
         _port = port;
         _url  = url;
         _user = user;
@@ -1436,7 +1351,7 @@ class RetrieveServer {
 
     // === Public API ===
     // Starts: the server loop; accepts connections until interrupted
-    void start() throws Exception {
+    public void start() throws Exception {
         try (ServerSocket ss = new ServerSocket(_port)) {
             while (!Thread.currentThread().isInterrupted())
                 handleRetrieve(ss.accept());
@@ -1498,6 +1413,96 @@ class RetrieveServer {
 }
 ```
 
+**`RetrieveClient.java`** — client (start this second; seeds the DB via JDBC, connects to `RetrieveServer`, decodes the response, verifies integrity)
+
+```java
+package t16_binary_io.exercises.e07;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.*;
+import java.net.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.sql.*;
+import java.util.*;
+
+public class RetrieveClient {
+
+    private static final ObjectMapper MAPPER  = new ObjectMapper();
+    private static final String       URL     = "jdbc:mysql://localhost:3306/car_rental?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+    private static final String       DB_USER = "car_rental_user";
+    private static final String       DB_PASS = "your_password";
+    private static final int          PORT    = 9_207;
+
+    // Entry point: seed the DB, download from RetrieveServer, verify byte-for-byte integrity
+    public static void main(String[] args) throws Exception {
+        // Create a known test asset and insert it directly via JDBC
+        byte[] original = new byte[512];
+        for (int i = 0; i < original.length; i++) original[i] = (byte)(i % 200);
+        int testId = insertAsset("retrieve_test.bin", "application/octet-stream", original.length, original);
+        System.out.println("Pre-inserted test asset — id: " + testId);
+
+        // Send a RETRIEVE_FILE request and reconstruct the file on disk
+        try (Socket         socket = new Socket("localhost", PORT);
+             BufferedReader in     = new BufferedReader(new InputStreamReader(socket.getInputStream(),  StandardCharsets.UTF_8));
+             PrintWriter    out    = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true)) {
+
+            Map<String, Object> request = new LinkedHashMap<>();
+            request.put("type",    "RETRIEVE_FILE");
+            request.put("payload", Map.of("id", testId));
+
+            out.println(MAPPER.writeValueAsString(request));
+
+            String   responseJson = in.readLine();
+            Map<?,?> response     = MAPPER.readValue(responseJson, Map.class);
+            Map<?,?> data         = (Map<?,?>) response.get("data");
+
+            byte[] downloaded = Base64.getDecoder().decode((String) data.get("fileData"));
+
+            Files.createDirectories(Path.of("data"));
+            Files.write(Path.of("data/retrieved_test.bin"), downloaded);
+
+            System.out.println("Retrieved: " + data.get("fileName") + " (" + downloaded.length + " bytes)");
+            System.out.println("Integrity check: " + Arrays.equals(original, downloaded));
+        }
+
+        // Clean up
+        deleteById(testId);
+        System.out.println("Cleaned up id=" + testId);
+    }
+
+    // Inserts: a binary asset directly via JDBC; returns the auto-generated id
+    private static int insertAsset(String name, String type, int size, byte[] data) throws Exception {
+        String sql = "INSERT INTO game_assets (asset_name, asset_type, file_size, asset_data) VALUES (?, ?, ?, ?)";
+        try (Connection        c  = DriverManager.getConnection(URL, DB_USER, DB_PASS);
+             PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            ps.setString(1, name);
+            ps.setString(2, type);
+            ps.setInt(3,    size);
+            ps.setBytes(4,  data);
+            ps.executeUpdate();
+
+            try (ResultSet keys = ps.getGeneratedKeys()) {
+                if (!keys.next())
+                    throw new IllegalStateException("no generated key returned");
+                return keys.getInt(1);
+            }
+        }
+    }
+
+    // Deletes: a game_assets row by id
+    private static void deleteById(int id) throws Exception {
+        String sql = "DELETE FROM game_assets WHERE asset_id = ?";
+        try (Connection        c  = DriverManager.getConnection(URL, DB_USER, DB_PASS);
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        }
+    }
+}
+```
+
   </div>
 </details>
 
@@ -1514,9 +1519,8 @@ class RetrieveServer {
 
 ### What you are building
 
-- A `MetadataServer` class that handles `GET_METADATA` requests using a SELECT that **omits `asset_data`**
-- A test asset pre-inserted via JDBC
-- Client code that requests metadata and confirms the response contains no `fileData` field
+- A `MetadataServer` class with a `main()` method: starts on port `9_208`, handles `GET_METADATA` requests using a SELECT that **omits `asset_data`**
+- A `MetadataClient` class with a `main()` method: seeds the database with a test asset via JDBC, requests metadata from the server, and confirms the response contains no `fileData` field
 
 ### Required request/response shapes
 
@@ -1534,19 +1538,19 @@ Note: the response **does not contain a `fileData` field** — the BLOB is never
 
 ### Tasks
 
-1. In `Exercise.run()`:
-   - Create a 2 048-byte `byte[]` (e.g. `Arrays.fill(data, (byte) 42)`).
-   - Insert it directly into `game_assets` via JDBC; capture the returned ID.
-   - Start `MetadataServer` on port `9_208` as a daemon thread; sleep 200 ms.
-   - Connect a client socket; send `{ "type": "GET_METADATA", "payload": { "id": <testId> } }`.
-   - Read the response; parse the `data` map; print `fileName`, `contentType`, `fileSize`.
-   - Assert the response map does **not** contain a key `"fileData"`.
-   - Clean up: delete the test row.
-
-2. Implement `MetadataServer`:
+1. Implement `MetadataServer` — run this first:
+   - Add a `main(String[] args)` method that prints a startup message and calls `new MetadataServer(PORT, URL, DB_USER, DB_PASS).start()`.
    - Loop on `ServerSocket.accept()` until interrupted.
    - In `handleMetadata(Socket)`: write the SQL as `SELECT asset_name, asset_type, file_size FROM game_assets WHERE asset_id = ?` — `asset_data` must not appear anywhere in the query string.
    - Return the metadata map on success; `{ "status": "ERROR", "message": "not found" }` if the row does not exist.
+
+2. Implement `MetadataClient` — run this second:
+   - `main(String[] args)` creates a 2 048-byte `byte[]` (e.g. `Arrays.fill(data, (byte) 42)`).
+   - Inserts it directly into `game_assets` via JDBC; captures the returned ID.
+   - Connects a socket to `MetadataServer` on port `9_208`; sends `{ "type": "GET_METADATA", "payload": { "id": <testId> } }`.
+   - Reads the response; parses the `data` map; prints `fileName`, `contentType`, `fileSize`.
+   - Asserts the response map does **not** contain a key `"fileData"`.
+   - Cleans up: deletes the test row.
 
 ### Sample output
 
