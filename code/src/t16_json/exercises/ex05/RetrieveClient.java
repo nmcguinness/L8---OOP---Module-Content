@@ -40,7 +40,6 @@ public class RetrieveClient {
             Files.write(Path.of("data/retrieved_test.bin"), downloaded);
 
             System.out.println("Retrieved: " + data.get("fileName") + " (" + downloaded.length + " bytes)");
-            System.out.println("Integrity check: " + Arrays.equals(original, downloaded));
         }
     }
 }
