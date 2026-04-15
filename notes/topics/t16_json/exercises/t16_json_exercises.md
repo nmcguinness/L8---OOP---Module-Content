@@ -1230,10 +1230,6 @@ public class MetadataClient {
             System.out.println("File size:    " + metadata.get("fileSize") + " bytes");
             System.out.println("fileData absent from response: " + !metadata.containsKey("fileData"));
         }
-
-        // Clean up
-        deleteById(testId);
-        System.out.println("Cleaned up id=" + testId);
     }
 }
 ```
