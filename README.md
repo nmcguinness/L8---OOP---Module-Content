@@ -93,28 +93,44 @@ quadrantChart
 ## Folder Map
 
 ```text
-/                                     # repo root (L8---OOP---Module-Content)
-├─ README.md                          # overview + how to run
-├─ code/                              # runnable Java code (solutions, demos)
+/                                        # repo root (L8---OOP---Module-Content)
+├─ README.md                             # this file
+├─ descriptors/                          # official module and programme descriptor PDFs
+│
+├─ code/                                 # all runnable Java (Maven project)
+│  ├─ pom.xml                            # Maven build — Jackson XML, JUnit Jupiter, MySQL connector
+│  ├─ data/                              # static data files used by exercises (CSV, XML, HTML)
+│  │  ├─ ce01/                           # data for challenge exercise 01
+│  │  ├─ ce02/                           # data for challenge exercise 02 (contacts CSVs)
+│  │  ├─ ce03/                           # data for challenge exercise 03 (weapon XML, country CSV)
+│  │  └─ exercises/                      # shared exercise data (e.g. profane_words.csv)
 │  └─ src/
-│     ├─ common/                      # helpers used by multiple exercises/challenges
-│     └─ tNN-topic/                  # mirrors a topic in notes/topics
+│     ├─ Main.java                       # entry point — interactive menu to run any topic
+│     ├─ common/                         # shared helpers (FileUtils, etc.)
+│     ├─ assessments/                    # assessment sample code
+│     └─ tNN_topic/                      # one package per topic (t01_arrays … t16_json)
+│        ├─ challenges/                  # challenge exercise solutions
+│        │  └─ ceNN/Exercise.java
+│        ├─ demos/                       # lecturer demo code
+│        │  └─ deNN/Demo.java
+│        └─ exercises/                   # standard exercise solutions
+│           └─ eNN/Exercise.java         # each has a static run() entry point
 │
-├─ lecturer/                          # staff-only WIP (drafts, keys, lesson plans)
-│
-├─ descriptors/                       # official module and programme descriptor PDFs
-│
-└─ notes/                             # student-facing learning material (non-runnable)
+└─ notes/                                # student-facing learning material (Markdown, non-runnable)
+   ├─ applied/                           # applied case studies (e.g. TaskHub)
+   │  └─ taskhub/
+   ├─ assessments/
+   │  ├─ briefs/                         # CA briefs, sample reports, README templates
+   │  └─ self-assessments/              # MCQ self-assessment files (.gift format)
    ├─ shared/
-   │  ├─ cheat sheets/
-   │  ├─ general/
-   │  └─ mind maps/                        
-   ├─ assessments/                    # continuous assessment documents for the module
-   │  └─ briefs/
-   └─ topics/                         # notes, exercises, applied case studies, and challenges exercises for the module
-      └─ tNN-topic/                   # one folder per topic (e.g. t14_concurrency)
-         ├─ challenges/               # challenge exercises for the topic
-         └─ exercises/                # standard exercises for the topic
+   │  ├─ cheat sheets/                   # JUnit assertion guides
+   │  ├─ general/                        # style guide, DRY notes, commit guidelines, tools
+   │  └─ mind maps/                      # revision mindmaps (t01–t07, collections)
+   └─ topics/                            # one folder per topic
+      └─ tNN_topic/
+         ├─ tNN_topic_notes.md           # main notes file
+         ├─ challenges/                  # challenge exercise briefs
+         └─ exercises/                   # standard exercise briefs
 ```
 
 ---
