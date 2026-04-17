@@ -4,16 +4,7 @@ This space holds your weekly topics, exercises, shared resources, and assessment
 
 ---
 
-## Continuous Assessment Briefs
-
-| CA                   | Summary                                                                                                                                                                                                                                               | Brief                                                                                               |
-|:-|:-|:-|
-| **GCA1** | Work in **pairs** to design and implement a small records system. Load a large CSV from GitHub, parse to in-memory structures, support searching/filtering/ordering and simple reporting. | [CA brief](/notes/assessments/briefs/2025-26-l8-s2-oop-gca1.md), [Stage 2 Report Template](/notes/assessments/briefs/2025-26-l8-s2-oop-gca1-sample-report.md) |
-| **GCA2** | Work in **groups** to design and implement a multi-tier client-server system with a JDBC DAO layer, JSON socket protocol, binary file (BLOB) storage, and a full JUnit test suite with ≥70% coverage. | CA brief - see Moodle, [Sample README](/notes/assessments/briefs/GCA2_README_SAMPLE.md) |
-
----
-
-## Module Content
+## 1. Module Content
 
 | Topic | Description | Requires | Notes | Exercises | Challenge Exercises |
 |:--|:--|:--|:--|:--|:--|
@@ -36,7 +27,7 @@ This space holds your weekly topics, exercises, shared resources, and assessment
 
 ---
 
-## Topic Map — Difficulty vs OOP Transferability
+## 2. Topic Map — Difficulty vs OOP Transferability
 
 The chart below positions each topic on two axes:
 - **X — Difficulty**: how much new syntax and mental model is required
@@ -73,24 +64,72 @@ quadrantChart
 
 ---
 
-## Cheatsheets
+## 3. Continuous Assessment Briefs
 
-| Topic | Description |
-|:--|:--|
-| [Writing JUnit tests in Intellij](notes/shared/cheat%20sheets/cheatsheet_junit_in_intellij.md) | A practical JUnit “Snippet Gallery” for students: copy-pasteable assertion examples with brief explanations, plus real-world helper classes (`PricingUtils`, `DataUtils`) and complete test classes in the appendix. It also includes quick setup tips for adding JUnit to Maven/IntelliJ. |
-| [Writing JUnit tests by parameter](/notes/shared/cheat%20sheets/cheatsheet_junit_asserts_by_parameter_type.md) |  A guide to choosing the right JUnit assertions by parameter type (primitives, strings, arrays, lists, mixed inputs), with edge-case checklists and copy-paste snippets—plus a ready-to-run scaffold test class in the appendix. |
-
----
-
-## Mindmaps
-
-| Topics Covered | Summary | Link |
-|:--|:--|:--|
-| Topics 01–07 | Revision mindmaps covering Arrays, Ordering (Comparable/Comparator), Collections (ArrayList & LinkedList), Equality & Hashing, Inheritance, and Interfaces. Each topic includes visual mindmaps, code snippets, and self-assessment prompts. | [Revision Mindmaps](/notes/shared/mind%20maps/revision_t01_t07.md) |
+| CA                   | Summary                                                                                                                                                                                                                                               | Brief                                                                                               |
+|:-|:-|:-|
+| **GCA1** | Work in **pairs** to design and implement a small records system. Load a large CSV from GitHub, parse to in-memory structures, support searching/filtering/ordering and simple reporting. | [CA brief](/notes/assessments/briefs/2025-26-l8-s2-oop-gca1.md), [Stage 2 Report Template](/notes/assessments/briefs/2025-26-l8-s2-oop-gca1-sample-report.md) |
+| **GCA2** | Work in **groups** to design and implement a multi-tier client-server system with a JDBC DAO layer, JSON socket protocol, binary file (BLOB) storage, and a full JUnit test suite with ≥70% coverage. | CA brief - see Moodle, [Sample README](/notes/assessments/briefs/GCA2_README_SAMPLE.md) |
 
 ---
 
-## Folder Map
+## 4. Getting Started
+
+- Ensure a recent JDK is installed and selected in your IDE.
+- Open `code/` as a Maven project in IntelliJ: right-click `code/pom.xml` → **Add as Maven Project**. IntelliJ will download all dependencies automatically.
+- Use your IDE's Markdown preview for notes files and Mermaid diagrams, or view them on GitHub.
+
+> :bulb: **Keep a "bug diary".** For each bug you hit, note the cause and the fix. Patterns will emerge, and you'll get faster.
+
+---
+
+## 5. How to Use This Repo
+
+- Start with the official [module descriptor](https://courses.dkit.ie/index.cfm/page/module/moduleId/55497/deliveryperiodid/1066) to understand *what* we cover in this module.
+- Check **assessments/briefs/** for the current CA brief and rubric.
+- Each week, open the matching folder in **topics/** (e.g. `t01_arrays/`):
+  - Work through **exercises/** first (core skills), then try **challenges/** (apply + extend).
+  - **Do not peek** at the **solutions/** until after we cover the material in class.
+- Use **shared/** for general setup notes, style guidance, and cheat sheets.
+
+---
+
+## 6. Running Exercises from `Main`
+
+Run `Main.java`. A menu appears:
+
+```
+=====================================================
+         OOP Module — Topic Exercise Runner
+=====================================================
+  0.  Exit
+  1.  t01 — Arrays
+  2.  t02 — Ordering
+  ...
+ 14.  t14 — Concurrency I
+=====================================================
+Select topic (0 to exit):
+```
+
+Enter a number to run all exercises for that topic. Enter `0` to exit. The menu loops until you exit.
+
+Every exercise package contains a single entry point:
+
+```java
+// Each exercise/challenge has an Exercise class with a static run() method.
+// Main calls them via their fully-qualified package path, e.g.:
+t01_arrays.challenges.ce01.Exercise.run();
+
+// Notes:
+//  - Packages mirror notes/topics, e.g. t01_arrays.exercises.ex01
+//  - Multiple Exercise classes are fine because packages make them unique
+//  - Shared helpers live in package 'common', e.g. common.FileUtils
+//  - t12 exercises require a running MySQL instance (see t12 note in menu)
+```
+
+---
+
+## 7. Folder Map
 
 ```text
 /                                        # repo root (L8---OOP---Module-Content)
@@ -135,72 +174,32 @@ quadrantChart
 
 ---
 
-## How to use this repo
-- Start with the official [module descriptor](https://courses.dkit.ie/index.cfm/page/module/moduleId/55497/deliveryperiodid/1066) to understand *what* we cover in this module.
-- Check **assessments/briefs/** for the current CA/ICA brief and rubric.
-- Each week, open the matching folder in **topics/** (e.g., `t01-arrays/`):
-  - Work through **exercises/** first (core skills), then try **challenges/** (apply + extend).
-  - **Do not peek** at the **solutions/** until after we cover the material in class.
-- Use **shared/** for general setup notes, style guidance, and cheat sheets.
+## 8. Cheatsheets
+
+| Topic | Description |
+|:--|:--|
+| [Writing JUnit tests in Intellij](notes/shared/cheat%20sheets/cheatsheet_junit_in_intellij.md) | A practical JUnit "Snippet Gallery" for students: copy-pasteable assertion examples with brief explanations, plus real-world helper classes (`PricingUtils`, `DataUtils`) and complete test classes in the appendix. It also includes quick setup tips for adding JUnit to Maven/IntelliJ. |
+| [Writing JUnit tests by parameter](/notes/shared/cheat%20sheets/cheatsheet_junit_asserts_by_parameter_type.md) | A guide to choosing the right JUnit assertions by parameter type (primitives, strings, arrays, lists, mixed inputs), with edge-case checklists and copy-paste snippets—plus a ready-to-run scaffold test class in the appendix. |
 
 ---
 
-## Running exercises from `Main`
+## 9. Mindmaps
 
-Open `code/` as a Maven project in IntelliJ (right-click `code/pom.xml` → **Add as Maven Project**), then run `Main`.
-
-A menu appears:
-
-```
-=====================================================
-         OOP Module — Topic Exercise Runner
-=====================================================
-  0.  Exit
-  1.  t01 — Arrays
-  2.  t02 — Ordering
-  ...
- 14.  t14 — Concurrency I
-=====================================================
-Select topic (0 to exit):
-```
-
-Enter a number to run all exercises for that topic. Enter `0` to exit. The menu loops until you exit.
-
-Every exercise package contains a single entry point:
-
-```java
-// Each exercise/challenge has an Exercise class with a static run() method.
-// Main calls them via their fully-qualified package path, e.g.:
-t01_arrays.challenges.ce01.Exercise.run();
-
-// Notes:
-//  - Packages mirror notes/topics, e.g. t01_arrays.exercises.ex01
-//  - Multiple Exercise classes are fine because packages make them unique
-//  - Shared helpers live in package ‘common’, e.g. common.FileUtils
-//  - t12 exercises require a running MySQL instance (see t12 note in menu)
-```
+| Topics Covered | Summary | Link |
+|:--|:--|:--|
+| Topics 01–07 | Revision mindmaps covering Arrays, Ordering (Comparable/Comparator), Collections (ArrayList & LinkedList), Equality & Hashing, Inheritance, and Interfaces. Each topic includes visual mindmaps, code snippets, and self-assessment prompts. | [Revision Mindmaps](/notes/shared/mind%20maps/revision_t01_t07.md) |
 
 ---
 
-## Getting Started
-- Ensure a recent JDK is installed and selected in your IDE.
-- Use your IDE’s Markdown preview for `notes.md` and Mermaid diagrams, or view on GitHub.
-- Build and run small Java files directly in your IDE while working through exercises.
-
-> :bulb: **Keep a “bug diary”.** For each bug you hit, note the cause and the fix. Patterns will emerge, and you’ll get faster.
-
----
-
-## General Directions to Improve as a Programmer
+## 10. General Directions to Improve as a Programmer
 
 - **Show up**: Consistent **class attendance** opens time for questions, feedback, and debugging together.
-- **Ask early, ask often**: If you’re stuck for 15–20 minutes, **ask**. Small gaps compound quickly.
-- **Take structured notes**: Keep a simple, dated log of *what you learned* and *what still confuses you*. Include short
-  code snippets and diagrams—especially for tricky ideas (e.g., references vs values, parameter passing).
+- **Ask early, ask often**: If you're stuck for 15–20 minutes, **ask**. Small gaps compound quickly.
+- **Take structured notes**: Keep a simple, dated log of *what you learned* and *what still confuses you*. Include short code snippets and diagrams — especially for tricky ideas (e.g. references vs values, parameter passing).
 - **Practice deliberately**: Write small programs daily. Re‑implement examples *from scratch* without looking.
 - **Read code**: Study the sample solutions **after** attempting the exercises. Compare naming, layout, and tests.
 - **Use a style guide**: Follow `shared/general/style-guide.md`. Clean, consistent code is easier to fix and extend.
-- **Test as you go**: Add small `main` demos or assertions. Run code often. Don’t leave all testing to the end.
+- **Test as you go**: Add small `main` demos or assertions. Run code often. Don't leave all testing to the end.
 - **Version control**: Commit early and often with meaningful messages. Branch for experiments.
 - **Balance matters**: Sleep, nutrition, movement, and breaks improve problem‑solving. Overwork slows you down.
 - **Be patient**: Skill grows with time-on-task. Focus on steady improvement, not perfection on day one.
