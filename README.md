@@ -51,8 +51,8 @@ quadrantChart
     y-axis Java-specific --> Transfers to any OO language
     quadrant-1 High effort, high payoff
     quadrant-2 Approachable, high payoff
-    quadrant-3 Foundations — Java-specific
-    quadrant-4 Advanced — Java-specific
+    quadrant-3 Foundations - Java-specific
+    quadrant-4 Advanced - Java-specific
     t01 Arrays: [0.10, 0.20]
     t02 Ordering: [0.25, 0.52]
     t03 Collections I: [0.15, 0.28]
