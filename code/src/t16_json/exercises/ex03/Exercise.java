@@ -10,6 +10,7 @@ public class Exercise {
     private static final String DB_PASS = "";
 
     public static void main(String[] args) throws Exception {
+
         GameAssetDao dao = new JdbcGameAssetDao(URL, DB_USER, DB_PASS);
 
         byte[] original = new byte[]{10, 20, 30, 40, 50};
@@ -23,5 +24,6 @@ public class Exercise {
         System.out.println("Round-trip OK: " + ok);
 
         System.out.println("Deleted: " + dao.deleteById(id));
+
     }
 }

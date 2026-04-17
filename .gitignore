@@ -1,6 +1,16 @@
 # Lecturer
 [Ll]ecturer/
 
+# IntelliJ build output
+out/
+
+# Maven build output
+target/
+
+# Claude Code session data
+.claude/
+**/.claude/
+
 # Compiled class file
 *.class
 
