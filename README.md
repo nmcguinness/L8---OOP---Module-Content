@@ -188,6 +188,7 @@ t01_arrays.challenges.ce01.Exercise.run();
 | Topics Covered | Summary | Link |
 |:--|:--|:--|
 | Topics 01–07 | Revision mindmaps covering Arrays, Ordering (Comparable/Comparator), Collections (ArrayList & LinkedList), Equality & Hashing, Inheritance, and Interfaces. Each topic includes visual mindmaps, code snippets, and self-assessment prompts. | [Revision Mindmaps](/notes/shared/mind%20maps/revision_t01_t07.md) |
+| Topics 08–16 | Revision mindmaps covering Generics I & II, Design Patterns I & II, DB Connectivity, Functional Interfaces, Concurrency, Networking, and JSON & Binary Storage. Each topic includes a Mermaid mindmap and key concept overview. | [Revision Mindmaps](/notes/shared/mind%20maps/revision_t08_t16.md) |
 
 ---
 

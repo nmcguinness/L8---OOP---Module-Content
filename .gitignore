@@ -1,9 +1,8 @@
 # Lecturer
 [Ll]ecturer/
 
-# IntelliJ project files — regenerated from pom.xml on Maven import; must not be committed
+# IntelliJ project files — regenerated locally; must not be committed
 *.iml
-.idea/libraries/
 .idea/workspace.xml
 
 # IntelliJ build output
