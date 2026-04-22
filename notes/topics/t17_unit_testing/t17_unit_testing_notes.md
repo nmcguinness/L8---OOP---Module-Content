@@ -1,5 +1,5 @@
 ---
-title: "Unit Testing — What Good Tests Look Like and How GCA2 Needs to Be Tested"
+title: "Unit Testing — What Good Tests Look Like"
 subtitle: "COMP C8Z03 — Year 2 OOP"
 topic_code: t17_unit_testing
 description: "What makes a good JUnit 5 test, how to recognise and avoid trivial or poorly formed tests, and a concrete test catalogue covering every layer of a GCA2 Stage 4 submission."
@@ -17,7 +17,7 @@ prerequisites:
   - t15 — Networking (ClientHandler, ServerResponse<T>, ClientRequest)
 ---
 
-# Unit Testing — What Good Tests Look Like and How GCA2 Needs to Be Tested
+# Unit Testing — What Good Tests Look Like 
 
 > **Prerequisites:**
 > - You have a working JDBC DAO layer (t12)
