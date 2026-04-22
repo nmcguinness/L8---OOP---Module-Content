@@ -406,50 +406,6 @@ flowchart TD
 
 ---
 
-## Optional: going further with a service layer
-
-`DaoRegistry` is the minimum viable solution.
-If your dispatch logic starts to include business rules (e.g. "a player cannot belong to two teams", "a score must reference a valid match"), those rules should not live in `ClientHandler`.
-
-The next step is a **service layer**: a class (or set of classes) that wraps the registry and exposes business operations.
-
-```java
-public class GameService {
-
-    // === Fields ===
-    private DaoRegistry _registry;
-
-    // === Constructors ===
-    // Creates: a service backed by the provided DAO registry
-    public GameService(DaoRegistry registry) {
-        if (registry == null) throw new IllegalArgumentException("registry is required");
-        _registry = registry;
-    }
-
-    // === Public API ===
-    // Registers: a new player — validates that the team exists before inserting
-    public int registerPlayer(String name, String position, int teamId) throws Exception {
-        Optional<?> team = _registry.teams().findById(teamId);
-        if (team.isEmpty())
-            throw new IllegalArgumentException("team not found: " + teamId);
-        return _registry.players().insert(name, position);
-    }
-
-    // Gets: all players on a given team
-    public List<?> getPlayersForTeam(int teamId) throws Exception {
-        return _registry.players().findByTeamId(teamId);
-    }
-}
-```
-
-`ClientHandler` then takes a `GameService` instead of a `DaoRegistry`, and `dispatch` calls service methods rather than DAO methods directly.
-
-Whether you need a service layer depends on your domain:
-- **Simple CRUD with no cross-table rules** → `DaoRegistry` is enough.
-- **Rules that span multiple tables** → add a service layer.
-
----
-
 ## Common mistakes
 
 | Mistake | What happens | Fix |
@@ -467,8 +423,6 @@ Whether you need a service layer depends on your domain:
 1. Add a fourth table to your schema (e.g. `matches`). Add `MatchDao` to `DaoRegistry` without changing `ClientHandler` or `Server`.
 2. Add `GET_ALL_MATCHES` and `INSERT_MATCH` to `ClientHandler.dispatch()`.
 3. Verify the registry's null checks by writing a JUnit test that passes `null` for one DAO and confirms `IllegalArgumentException` is thrown.
-4. Extract a `GameService` (or equivalent for your domain) and move all multi-table logic out of `dispatch` into service methods.
-5. Draw the updated architecture diagram for your own project domain, labelling every arrow with what is passed.
 
 ---
 
@@ -477,5 +431,4 @@ Whether you need a service layer depends on your domain:
 1. `DaoRegistry` is a plain holder with no logic. What design principle does that reflect?
 2. Why is the same `DaoRegistry` instance passed to every `ClientHandler` safe in a multithreaded server?
 3. What would break if `DaoRegistry` stored concrete types (`JdbcPlayerDao`) instead of interface types (`PlayerDao`)?
-4. At what point would you choose to introduce a service layer rather than keeping `DaoRegistry` alone?
-5. If you needed to support two different databases (e.g. MySQL for players, a mock for tests), which class would you change?
+4. If you needed to support two different databases (e.g. MySQL for players, a mock for tests), which class would you change?
