@@ -76,6 +76,12 @@ public class UploadServer {
 
         } catch (Exception e) {
             System.err.println("Upload handler error: " + e.getMessage());
+            try (PrintWriter errOut = new PrintWriter(new OutputStreamWriter(client.getOutputStream(), StandardCharsets.UTF_8), true)) {
+                Map<String, Object> err = new LinkedHashMap<>();
+                err.put("status", "ERROR");
+                err.put("message", e.getMessage());
+                errOut.println(MAPPER.writeValueAsString(err));
+            } catch (Exception ignored) {}
         }
     }
 

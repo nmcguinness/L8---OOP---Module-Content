@@ -25,6 +25,7 @@ This space holds your weekly topics, exercises, shared resources, and assessment
 | t15 | **Networking** — build a multi-client TCP server with a JSON request/response protocol | t12 | [Notes](/notes/topics/t15_networking/t15_networking_notes.md), [Supplement — Multiple DAOs](/notes/topics/t15_networking/t15_networking_supplement_dao_registry.md) | [Exercises](/notes/topics/t15_networking/exercises/t15_networking_exercises.md) | — |
 | t16 | **JSON + Binary File Storage** — serialise and deserialise Java objects with Jackson; Base64-encode binary data for JSON transport; store and retrieve `MEDIUMBLOB` columns with JDBC `setBytes()`/`getBytes()`; write metadata-only queries that skip the BLOB; send JSON over sockets | t12, t13 | [Notes](/notes/topics/t16_json/t16_json_notes.md) | [Exercises](/notes/topics/t16_json/exercises/t16_json_exercises.md) | — |
 | t17 | **Unit Testing** — what makes a good JUnit 5 test; naming, AAA, and single-purpose rules; DTO validation tests, DAO integration tests against a test database, JSON round-trip tests, `ServerResponse<T>` tests, binary round-trip tests; running coverage in IntelliJ and meeting the GCA2 ≥70% requirement | t12, t15, t16 | [Notes](/notes/topics/t17_unit_testing/t17_unit_testing_notes.md) | — | — |
+| t18 | **Documenting a Project** — write Javadoc for classes and methods with `@author`, `@param`, `@return`, and `@throws` tags; produce ER diagrams, flowcharts, sequence diagrams, and architecture diagrams using Mermaid markdown; document a complete N-tier GCA2 system end-to-end | t12, t15 | [Notes](/notes/topics/t18_documenting_a_project/t18_documenting_a_project_notes.md) | — | — |
 
 ---
 
@@ -62,6 +63,7 @@ quadrantChart
     t15 Networking: [0.70, 0.65]
     t16 JSON & Binary Storage: [0.65, 0.52]
     t17 Unit Testing: [0.56, 0.85]
+    t18 Documenting a Project: [0.32, 0.68]
 ```
 
 ---

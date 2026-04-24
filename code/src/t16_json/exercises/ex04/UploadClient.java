@@ -42,8 +42,12 @@ public class UploadClient {
 
             out.println(MAPPER.writeValueAsString(request));
 
-            String   responseJson = in.readLine();
-            Map<?,?> response     = MAPPER.readValue(responseJson, Map.class);
+            String responseJson = in.readLine();
+            if (responseJson == null)
+                throw new IOException("Server closed connection without responding");
+            Map<?,?> response = MAPPER.readValue(responseJson, Map.class);
+            if ("ERROR".equals(response.get("status")))
+                throw new RuntimeException("Server error: " + response.get("message"));
             storedId = ((Number) response.get("id")).intValue();
             System.out.println("Upload OK — stored id: " + storedId);
         }

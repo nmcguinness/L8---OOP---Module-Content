@@ -757,6 +757,29 @@ Use this list to verify you have written the right tests before submitting.
 
 ---
 
+---
+
+## Appendix A — GCA2 Stage 4: In What Order Should I Write My Tests?
+
+### Recommended order
+
+Start with the lowest layer and work up. Each step depends on the one before it being stable — if a later test fails, you know the failure is in the current layer, not something below it.
+
+```mermaid
+flowchart TD
+    A(["Start"])
+    A   --> B["1. Test DB Connection\nDriverManager.getConnection to test database"]
+    B   --> C["2. Test DAOs\nfindAll · findById · insert · update · deleteById · findByFilter"]
+    C   --> D["3. Test to/from JSON\nentity serialise → deserialise round-trip\nServerResponse · ClientRequest"]
+    D   --> E["4. Test to/from Base64\nencode → decode → assertArrayEquals"]
+    E   --> F["5. Test client connects to server\nclient socket opens on correct port"]
+    F   --> G["6. Test socket closes cleanly\nDISCONNECT request — server releases thread"]
+    G   --> H["7. Test CRUD over socket\nfull request/response cycle end-to-end"]
+    H   --> DONE(["Done — run coverage,\ncommit screenshot"])
+```
+
+---
+
 ## Lesson Context
 
 ```yaml
