@@ -31,7 +31,11 @@ public class DatabaseConnection {
 
     // Opens: a new JDBC Connection using the stored credentials; caller must close it
     public Connection open() throws SQLException {
-        return DriverManager.getConnection(_url, _user, _pass);
+        return open(_url, _user, _pass);
+    }
+
+    public Connection open(String url, String user, String pass) throws SQLException {
+        return DriverManager.getConnection(url, user, pass);
     }
 
     // Closes: the given Connection safely; ignores null and already-closed connections

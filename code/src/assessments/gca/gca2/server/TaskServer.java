@@ -22,10 +22,9 @@ import java.util.concurrent.Executors;
 public class TaskServer {
 
     // === Constants ===
-    private static final String URL     = "jdbc:mysql://localhost:3306/gca2_support_db"
-                                        + "?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
-    private static final String DB_USER = "gca2_user";
-    private static final String DB_PASS = "your_password";
+    private static final String URL     = "jdbc:mysql://localhost:3306/gca2_support_db";
+    private static final String DB_USER = "root";
+    private static final String DB_PASS = "";
     private static final int    PORT    = 9_300;
     private static final int    THREADS = 10;
 
