@@ -55,7 +55,31 @@ static int factorial(int n) {
 }
 ```
 
-![Recursion anatomy — base case vs recursive case](https://kroki.io/plantuml/svg/hZLBbsIwDIbvfQpLXMphh0mb1MFhsEF3mXgCLmnq0ojUQY4D4u3nFqFVgLZESiT7-__8SrKIYlhS57O4d3QwbDqojN3vOCSqP4MPDKfWCY76K2xM8lIGko3pELpAIR6MxXoELZnD6aKfvAxj3LTijk7OH4Fr5H-pmzyTsujnA3LljIap7wVlWayf_xCMcxTDGMGbIHhnuS7K1_XbLfXIp7_gbMZo0R0RFE8yz1wDeWUigtXlfQrSIkF-xjjNACbfbtfKFyOS6iQxwcAejU-4pZwCqF3i2Bta4_10rqoo4ZChV06B3mbWtyCib-DkpN1S7LSAfM2gxDVVTNUTY9RXHco2dJUjBEM1XAL8HkC1a7KFbvppfgA)
+```kroki-plantuml
+' alt: Recursion anatomy — base case vs recursive case
+@startuml
+skinparam backgroundColor white
+skinparam DefaultFontName monospaced
+skinparam ArrowColor #444444
+skinparam ActivityBorderColor #444444
+skinparam ActivityBackgroundColor #F8F8F8
+skinparam ActivityDiamondBackgroundColor #FFF8E1
+skinparam ActivityDiamondBorderColor #888888
+skinparam NoteBackgroundColor #E8F5E9
+skinparam NoteBorderColor #888888
+start
+:receive input;
+if (base case?) then (yes)
+  #LightGreen:return base value\n(no recursive call);
+  stop
+else (no)
+  :call self with\nsmaller input;
+  :receive sub-result;
+  :combine and return;
+  stop
+endif
+@enduml
+```
 
 ---
 
@@ -63,7 +87,46 @@ static int factorial(int n) {
 
 When `factorial(4)` runs, Java pushes one stack frame per call. The activation bars below show each frame on the stack; the arrows on the way back up are the return values unwinding:
 
-![factorial(4) call stack — frames pushed down, values unwound up](https://kroki.io/plantuml/svg/jdNLbsIwEAbgvU8xgk27QGqckD5UKp7pBqFK7bIb40yIRbCp45TepAfqxWpDEA4PtYoSKZ7P_sdW0i8N06ZaFaRcCrlmmq1gzvhyoVUl05EqlIZNLgx69TFmrCpMoqSZsRXCSklVrhnH1EOv-FGh5DjQWm3ecsGXEssSgjNkKjJ7SxwqnaLeZba73e4Z-mKbFVysmTTDoy7byY27_pjkR8Rx7OkBN-KTGaHk_9BJfJKMJ7eenSmDJ2pyl3Qn98fqODAXKUKmlJmrL0LWh_6hxVlRoG4BK2HUrGSMG6UFK66i6209iS6BsAbhJUBrQC-BoAYBtKdikZtnjSgJGUHnyebCA_jdELY7NnQt2aozYcOEvgmJrTpDG4b6hhJbdSZomMA3zd6kPWjQ7h1Utps3ZyUCt493KeGxZz9OO9zZJ2s0lZZ2MEVvzW3ufgM1ofDzDQH0gDYs3e5jfyC1DZ2l1sYNG27PxdrRgUaOxm7ZqGEj0keZ2n_2Fw)
+```kroki-plantuml
+' alt: factorial(4) call stack — frames pushed down, values unwound up
+@startuml
+skinparam backgroundColor white
+skinparam DefaultFontName monospaced
+skinparam SequenceArrowThickness 1
+skinparam SequenceLifeLineBorderColor #555
+skinparam SequenceParticipantBackgroundColor #F0F0F0
+skinparam SequenceParticipantBorderColor #666
+skinparam ActivationBorderColor #666
+skinparam ActivationBackgroundColor #FFFDE7
+skinparam NoteBackgroundColor #E8F5E9
+skinparam NoteBorderColor #666
+hide footbox
+
+participant "caller" as C
+participant "factorial(4)" as F4
+participant "factorial(3)" as F3
+participant "factorial(2)" as F2
+participant "factorial(1)" as F1 #LightGreen
+
+C -> F4 : factorial(4)
+activate F4
+F4 -> F3 : factorial(3)
+activate F3
+F3 -> F2 : factorial(2)
+activate F2
+F2 -> F1 : factorial(1)
+activate F1 #LightGreen
+note right of F1 : base case\nn <= 1
+F1 --> F2 : return 1
+deactivate F1
+F2 --> F3 : return 2 x 1 = 2
+deactivate F2
+F3 --> F4 : return 3 x 2 = 6
+deactivate F3
+F4 --> C : return 4 x 6 = 24
+deactivate F4
+@enduml
+```
 
 If you forget the base case, frames pile up until Java throws `StackOverflowError`.
 
@@ -97,7 +160,39 @@ static int fib(int n) {
 
 The call tree for `fib(4)` shows why: every non-leaf node spawns **two** sub-calls, and sub-trees are recomputed repeatedly (green nodes are base cases):
 
-![fib(4) call tree — exponential branching with repeated sub-problems](https://kroki.io/plantuml/svg/jZLLboMwEEX3_opR2JRFJF5BbSWq9BG6qbLoH4zBJijgiYxRfr9GkMZ1pTby5mrOscev7WBQm7Hv2HBs1Qk19sCxOjaaRlW_UkcazofWCIe_CYljZ0pSZo-9gJ4UDSesRO1Iz1rTeZ4f5HnukE9RGVRNJ15I10L_43h7CcrNNBx1T-a3tbsvN7sH3_L7MX1pAyvZ8rssXAEOIDMfpAtIfZCEADNK0GUwwwVxf1ocFvHMYoTgo20O5l0LoXwvCoto9qI_PWc9fqNX3dj353pMZrBeP003cUn24DJdIv-Osa0muGR-zdFU50u9uuaIM6bsGwEnY6gHkvYZ4BG0GOxXgwJSthWqth_1Cw)
+```kroki-plantuml
+' alt: fib(4) call tree — exponential branching with repeated sub-problems
+@startuml
+skinparam backgroundColor white
+skinparam DefaultFontName monospaced
+skinparam ArrowColor #666
+skinparam RectangleBorderColor #666
+skinparam RectangleBackgroundColor #F5F5F5
+skinparam NoteBackgroundColor #E8F5E9
+skinparam NoteBorderColor #666
+
+rectangle "fib(4)" as f4
+rectangle "fib(3)" as f3
+rectangle "fib(2)  " as f2a
+rectangle " fib(2)" as f2b
+rectangle "fib(1)=1" as f1a #LightGreen
+rectangle "fib(0)=0" as f0a #LightGreen
+rectangle "fib(1)=1" as f1b #LightGreen
+rectangle "fib(1)=1" as f1c #LightGreen
+rectangle "fib(0)=0" as f0b #LightGreen
+
+f4 --> f3
+f4 --> f2a
+f3 --> f2b
+f3 --> f1a
+f2a --> f1b
+f2a --> f0a
+f2b --> f1c
+f2b --> f0b
+
+note bottom of f4 : result = 3
+@enduml
+```
 
 ---
 
