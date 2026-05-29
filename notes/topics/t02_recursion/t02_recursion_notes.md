@@ -1,4 +1,4 @@
----
+﻿---
 title: "Recursion"
 subtitle: "COMP C8Z03 — Year 2 OOP"
 topic_code: t02_recursion
@@ -55,6 +55,9 @@ static int factorial(int n) {
 }
 ```
 
+<details>
+<summary>Diagram markdown</summary>
+
 ```kroki-plantuml
 ' alt: Recursion anatomy — base case vs recursive case
 @startuml
@@ -81,11 +84,18 @@ endif
 @enduml
 ```
 
+</details>
+<!-- kroki:rendered images/rendered/9d90c529.svg sha256:9d90c529 alt="Recursion anatomy — base case vs recursive case" -->
+![Recursion anatomy — base case vs recursive case](images/rendered/9d90c529.svg)
+
 ---
 
 ## Call-stack model
 
 When `factorial(4)` runs, Java pushes one stack frame per call. The activation bars below show each frame on the stack; the arrows on the way back up are the return values unwinding:
+
+<details>
+<summary>Diagram markdown</summary>
 
 ```kroki-plantuml
 ' alt: factorial(4) call stack — frames pushed down, values unwound up
@@ -128,6 +138,10 @@ deactivate F4
 @enduml
 ```
 
+</details>
+<!-- kroki:rendered images/rendered/9ba98703.svg sha256:9ba98703 alt="factorial(4) call stack — frames pushed down, values unwound up" -->
+![factorial(4) call stack — frames pushed down, values unwound up](images/rendered/9ba98703.svg)
+
 If you forget the base case, frames pile up until Java throws `StackOverflowError`.
 
 ---
@@ -159,6 +173,9 @@ static int fib(int n) {
 > ⚠️ Naïve Fibonacci is **exponential** — `fib(40)` makes ~330 million calls. For large `n`, use memoisation or a loop.
 
 The call tree for `fib(4)` shows why: every non-leaf node spawns **two** sub-calls, and sub-trees are recomputed repeatedly (green nodes are base cases):
+
+<details>
+<summary>Diagram markdown</summary>
 
 ```kroki-plantuml
 ' alt: fib(4) call tree — exponential branching with repeated sub-problems
@@ -193,6 +210,10 @@ f2b --> f0b
 note bottom of f4 : result = 3
 @enduml
 ```
+
+</details>
+<!-- kroki:rendered images/rendered/95c16aef.svg sha256:95c16aef alt="fib(4) call tree — exponential branching with repeated sub-problems" -->
+![fib(4) call tree — exponential branching with repeated sub-problems](images/rendered/95c16aef.svg)
 
 ---
 
