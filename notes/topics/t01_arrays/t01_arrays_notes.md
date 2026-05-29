@@ -1,4 +1,4 @@
----
+﻿---
 title: "Arrays (1D & 2D)"
 subtitle: "COMP C8Z03 — Year 2 OOP"
 topic_code: t01_arrays
@@ -10,7 +10,8 @@ status: published
 authors: ["OOP Teaching Team"]
 tags: [java, arrays, 1d, 2d, loops, indexing, debugging, year2, comp-c8z03]
 difficulty_tier: Foundation
-previous_topic: none
+mlos: [MLO3]
+previous_topic: t00_oop_fundamentals
 prerequisites:
   - Variables, if statements, and loops
   - Simple methods
@@ -343,4 +344,5 @@ this_lesson:
   topic_code: t01_arrays
   primary_domain_emphasis: Balanced
   difficulty_tier: Foundation
+mlos: [MLO3]
 ```

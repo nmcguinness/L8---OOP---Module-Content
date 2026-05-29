@@ -2,30 +2,46 @@
 
 This space holds your weekly topics, exercises, shared resources, and assessment briefs. Use it alongside Moodle and the official [module descriptor](https://courses.dkit.ie/index.cfm/page/module/moduleId/55497/deliveryperiodid/1066).
 
+> **Branch notice — please read before using these notes**
+>
+> | Branch | Academic year | Who should use it |
+> |:-------|:--------------|:------------------|
+> | `main` | **2026/27** | Students taking the module in 2026/27 |
+> | `2025-26` | **2025/26** | Students repeating the August 2026 exam |
+>
+> If you are sitting the **August 2026 repeat exam**, switch to the [`2025-26` branch](../../tree/2025-26) — those notes match the 2025/26 delivery of the module. The `main` branch has been updated for 2026/27 and **should not be used for repeat-exam preparation**.
+
 ---
 
 ## 1. Module Content
 
 | Topic | Description | Requires | Notes | Exercises | Challenge Exercises |
 |:--|:--|:--|:--|:--|:--|
-| t01 | **Arrays** — create, fill, iterate, and debug fixed-size 1D and 2D arrays | — | [Notes](notes/topics/t01_arrays/t01_arrays_notes.md) | [Exercises](notes/topics/t01_arrays/exercises/t01_arrays_exercises.md) | [Array of Suspects](notes/topics/t01_arrays/challenges/ce01_array_of_suspects.md) |
-| t02 | **Ordering** — sort objects by natural order (Comparable) or custom rules (Comparator) | t01 | [Notes](/notes/topics/t02_ordering/t02_ordering_notes.md) | [Exercises](/notes/topics/t02_ordering/exercises/t02_ordering_exercises.md) | — |
-| t03 | **Collections I** — dynamic lists with ArrayList; add, remove, and iterate safely | t01 | [Notes](/notes/topics/t03_collections_1/t03_collections_1_notes.md) | [Exercises](/notes/topics/t03_collections_1/exercises/t03_collections_1_exercises.md) | — |
-| t04 | **Collections II** — LinkedList as list and deque; mutation-safe iteration with ListIterator | t03 | [Notes](/notes/topics/t04_collections_2/t04_collections_2_notes.md) | [Exercises](/notes/topics/t04_collections_2/exercises/t04_collections_2_exercises.md) | — |
-| t05 | **Equality & Hashing** — implement equals/hashCode correctly; understand identity vs value equality | t03 | [Notes](/notes/topics/t05_equality_hashing/t05_equality_hashing_notes.md) | [Exercises](/notes/topics/t05_equality_hashing/exercises/t05_equality_hashing_exercises.md) | — |
-| t06 | **Inheritance** — extend classes, override methods, and model hierarchies with abstract types | t05 | [Notes](/notes/topics/t06_inheritance/t06_inheritance_notes.md) | [Exercises](/notes/topics/t06_inheritance/exercises/t06_inheritance_exercises.md) | — |
-| t07 | **Interfaces** — define shared behaviour contracts; enable polymorphism without inheritance | t06 | [Notes](/notes/topics/t07_interface/t07_interface_notes.md) | [Exercises](/notes/topics/t07_interface/exercises/t07_interface_exercises.md) | [Directory Distillery](notes/topics/t07_interface/challenges/ce02_the_directory_distillery.md) |
-| t08 | **Generics I** — write type-safe reusable classes and methods using type parameters | t07 | [Notes](/notes/topics/t08_generics_1/t08_generics_1_notes.md) | [Exercises](/notes/topics/t08_generics_1/exercises/t08_generics_1_exercises.md) | [Frequency Forge](notes/topics/t08_generics_1/challenges/ce03_frequency_forge.md), [Cargo Manifest](notes/topics/t08_generics_1/challenges/ce04_cargo_manifest.md) |
-| t09 | **Generics II** — use wildcards (`? extends` / `? super`) and apply the PECS rule | t08 | [Notes](/notes/topics/t09_generics_2/t09_generics_2_notes.md) | [Exercises](/notes/topics/t09_generics_2/exercises/t09_generics_2_exercises.md) | — |
-| t10 | **Design Patterns I** — replace conditional logic with Strategy and Command patterns | t07 | [Notes](/notes/topics/t10_design_patterns_1/t10_design_patterns_1_notes.md) | [Exercises](/notes/topics/t10_design_patterns_1/exercises/t10_design_patterns_exercises.md) | — |
-| t11 | **Design Patterns II** — decouple creation and events with Factory, Observer, and Adapter | t10 | [Notes](/notes/topics/t11_design_patterns_2/t11_design_patterns_2_notes.md) | [Exercises](/notes/topics/t11_design_patterns_2/exercises/t11_design_patterns_2_exercises.md) | — |
-| t12 | **DB Connectivity** — connect to MySQL with JDBC; implement the DAO pattern for N-tier apps | t07 | [Notes](/notes/topics/t12_dao/t12_db_connectivity_dao_notes.md) | [Exercises](/notes/topics/t12_dao/exercises/t12_db_connectivity_exercises.md) | — |
-| t13 | **Functional Interfaces** — pass behaviour as data using Consumer, Function, Predicate, Supplier | t07 | [Notes](/notes/topics/t13_functional_interfaces/t13_functional_interfaces_notes.md) | [Exercises](/notes/topics/t13_functional_interfaces/exercises/t13_functional_interfaces_exercises.md) | [Alien vs Predicate](notes/topics/t13_functional_interfaces/challenges/ce05_alien_vs_predicate.md), [Accumulator Ops](notes/topics/t13_functional_interfaces/challenges/ce06_accumulator_ops.md) |
-| t14 | **Concurrency** — run tasks in parallel with Runnable threads and ExecutorService pools | t07 | [Notes](/notes/topics/t14_concurrency/t14_concurrency_notes.md) | [Exercises](/notes/topics/t14_concurrency/exercises/t14_concurrency_exercises.md) | — |
-| t15 | **Networking** — build a multi-client TCP server with a JSON request/response protocol | t12 | [Notes](/notes/topics/t15_networking/t15_networking_notes.md), [Supplement — Multiple DAOs](/notes/topics/t15_networking/t15_networking_supplement_dao_registry.md) | [Exercises](/notes/topics/t15_networking/exercises/t15_networking_exercises.md) | — |
-| t16 | **JSON + Binary File Storage** — serialise and deserialise Java objects with Jackson; Base64-encode binary data for JSON transport; store and retrieve `MEDIUMBLOB` columns with JDBC `setBytes()`/`getBytes()`; write metadata-only queries that skip the BLOB; send JSON over sockets | t12, t13 | [Notes](/notes/topics/t16_json/t16_json_notes.md) | [Exercises](/notes/topics/t16_json/exercises/t16_json_exercises.md) | — |
-| t17 | **Unit Testing** — what makes a good JUnit 5 test; naming, AAA, and single-purpose rules; DTO validation tests, DAO integration tests against a test database, JSON round-trip tests, `ServerResponse<T>` tests, binary round-trip tests; running coverage in IntelliJ and meeting the GCA2 ≥70% requirement | t12, t15, t16 | [Notes](/notes/topics/t17_unit_testing/t17_unit_testing_notes.md) | — | — |
-| t18 | **Documenting a Project** — write Javadoc for classes and methods with `@author`, `@param`, `@return`, and `@throws` tags; produce ER diagrams, flowcharts, sequence diagrams, and architecture diagrams using Mermaid markdown; document a complete N-tier GCA2 system end-to-end | t12, t15 | [Notes](/notes/topics/t18_documenting_a_project/t18_documenting_a_project_notes.md) | — | — |
+| t00 | **OOP Fundamentals** — class anatomy, fields, constructors, access modifiers, guard clauses, object creation | — | [Notes](notes/topics/t00_oop_fundamentals/t00_oop_fundamentals_notes.md) | [Exercises](notes/topics/t00_oop_fundamentals/exercises/t00_oop_fundamentals_exercises.md) | — |
+| t01 | **Arrays** — create, fill, iterate, and debug fixed-size 1D and 2D arrays | t00 | [Notes](notes/topics/t01_arrays/t01_arrays_notes.md) | [Exercises](notes/topics/t01_arrays/exercises/t01_arrays_exercises.md) | [Array of Suspects](notes/topics/t01_arrays/challenges/ce01_array_of_suspects.md) |
+| t02 | **Recursion** — base case and recursive case, call-stack model, array/string/number patterns, flood fill, when not to recurse | t01 | [Notes](notes/topics/t02_recursion/t02_recursion_notes.md) | [Exercises](notes/topics/t02_recursion/exercises/t02_recursion_exercises.md) | — |
+| t03 | **Ordering** — sort objects by natural order (Comparable) or custom rules (Comparator) | t01 | [Notes](notes/topics/t03_ordering/t03_ordering_notes.md) | [Exercises](notes/topics/t03_ordering/exercises/t03_ordering_exercises.md) | — |
+| t04 | **Equality & Hashing** — implement equals/hashCode correctly; understand identity vs value equality | t03 | [Notes](notes/topics/t04_equality_hashing/t04_equality_hashing_notes.md) | [Exercises](notes/topics/t04_equality_hashing/exercises/t04_equality_hashing_exercises.md) | — |
+| t05 | **Collections I** — dynamic lists with ArrayList; add, remove, and iterate safely | t01 | [Notes](notes/topics/t05_collections_1/t05_collections_1_notes.md) | [Exercises](notes/topics/t05_collections_1/exercises/t05_collections_1_exercises.md) | — |
+| t06 | **Collections II** — LinkedList as list and deque; mutation-safe iteration with ListIterator | t05 | [Notes](notes/topics/t06_collections_2/t06_collections_2_notes.md) | [Exercises](notes/topics/t06_collections_2/exercises/t06_collections_2_exercises.md) | — |
+| t07 | **Collections III** — HashSet, TreeSet, HashMap, TreeMap; choosing the right collection | t04, t06 | [Notes](notes/topics/t07_collections_3_set_map/t07_collections_3_set_map_notes.md) | [Exercises](notes/topics/t07_collections_3_set_map/exercises/t07_collections_3_set_map_exercises.md) | — |
+| t08 | **Inheritance** — extend classes, override methods, and model hierarchies with abstract types | t07 | [Notes](notes/topics/t08_inheritance/t08_inheritance_notes.md) | [Exercises](notes/topics/t08_inheritance/exercises/t08_inheritance_exercises.md) | — |
+| t09 | **Interfaces** — define shared behaviour contracts; enable polymorphism without inheritance | t08 | [Notes](notes/topics/t09_interface/t09_interface_notes.md) | [Exercises](notes/topics/t09_interface/exercises/t09_interface_exercises.md) | [Directory Distillery](notes/topics/t09_interface/challenges/ce02_the_directory_distillery.md) |
+| t10 | **Exception Handling** — checked vs unchecked exceptions, try/catch/finally, custom exception types | t09 | [Notes](notes/topics/t10_exception_handling/t10_exception_handling_notes.md) | [Exercises](notes/topics/t10_exception_handling/exercises/t10_exception_handling_exercises.md) | — |
+| t11 | **Generics I** — write type-safe reusable classes and methods using type parameters | t09 | [Notes](notes/topics/t11_generics_1/t11_generics_1_notes.md) | [Exercises](notes/topics/t11_generics_1/exercises/t11_generics_1_exercises.md) | [Frequency Forge](notes/topics/t11_generics_1/challenges/ce03_frequency_forge.md), [Cargo Manifest](notes/topics/t11_generics_1/challenges/ce04_cargo_manifest.md) |
+| t12 | **Generics II** — use wildcards (`? extends` / `? super`) and apply the PECS rule | t11 | [Notes](notes/topics/t12_generics_2/t12_generics_2_notes.md) | [Exercises](notes/topics/t12_generics_2/exercises/t12_generics_2_exercises.md) | — |
+| t13 | **Design Patterns I** — replace conditional logic with Strategy and Command patterns | t09 | [Notes](notes/topics/t13_design_patterns_1/t13_design_patterns_1_notes.md) | [Exercises](notes/topics/t13_design_patterns_1/exercises/t13_design_patterns_1_exercises.md) | — |
+| t14 | **Design Patterns II** — decouple creation and events with Factory, Observer, and Adapter | t13 | [Notes](notes/topics/t14_design_patterns_2/t14_design_patterns_2_notes.md) | [Exercises](notes/topics/t14_design_patterns_2/exercises/t14_design_patterns_2_exercises.md) | — |
+| t15 | **DB Connectivity** — connect to MySQL with JDBC; implement the DAO pattern for N-tier apps | t09 | [Notes](notes/topics/t15_dao/t15_dao_notes.md) | [Exercises](notes/topics/t15_dao/exercises/t15_dao_exercises.md) | — |
+| t16 | **Functional Interfaces** — pass behaviour as data using Consumer, Function, Predicate, Supplier | t09 | [Notes](notes/topics/t16_functional_interfaces/t16_functional_interfaces_notes.md) | [Exercises](notes/topics/t16_functional_interfaces/exercises/t16_functional_interfaces_exercises.md) | [Alien vs Predicate](notes/topics/t16_functional_interfaces/challenges/ce05_alien_vs_predicate.md), [Accumulator Ops](notes/topics/t16_functional_interfaces/challenges/ce06_accumulator_ops.md) |
+| t17 | **Streams API** — pipeline model, filter/map/flatMap, terminal ops, Collectors, IntStream | t16 | [Notes](notes/topics/t17_streams_api/t17_streams_api_notes.md) | [Exercises](notes/topics/t17_streams_api/exercises/t17_streams_api_exercises.md) | — |
+| t18 | **Java I/O** — NIO.2 Path/Files API, BufferedReader/Writer, CSV parsing, config loaders | t17 | [Notes](notes/topics/t18_io/t18_io_notes.md) | [Exercises](notes/topics/t18_io/exercises/t18_io_exercises.md) | — |
+| t19 | **Concurrency** — run tasks in parallel with Runnable threads and ExecutorService pools | t09 | [Notes](notes/topics/t19_concurrency/t19_concurrency_notes.md) | [Exercises](notes/topics/t19_concurrency/exercises/t19_concurrency_exercises.md) | — |
+| t20 | **JSON I: Jackson Basics** — JSON format, ObjectMapper, serialisation/deserialisation, TypeReference | t15 | [Notes](notes/topics/t20_json_1_jackson_basics/t20_json_1_jackson_basics_notes.md) | [Exercises](notes/topics/t20_json_1_jackson_basics/exercises/t20_json_1_jackson_basics_exercises.md) | — |
+| t21 | **JSON II: Jackson Advanced** — protocol design, request routing, Base64, BLOB/JDBC, JSON over sockets | t20 | [Notes](notes/topics/t21_json_2_jackson_advanced/t21_json_2_jackson_advanced_notes.md) | [Exercises](notes/topics/t21_json_2_jackson_advanced/exercises/t21_json_2_jackson_advanced_exercises.md) | — |
+| t22 | **Networking** — build a multi-client TCP server with a JSON request/response protocol | t15, t21 | [Notes](notes/topics/t22_networking/t22_networking_notes.md) | [Exercises](notes/topics/t22_networking/exercises/t22_networking_exercises.md) | — |
+| t23 | **Unit Testing** — JUnit 5, AAA pattern, naming conventions, DAO integration tests, coverage | t15, t21, t22 | [Notes](notes/topics/t23_unit_testing/t23_unit_testing_notes.md) | — | — |
+| t24 | **Documenting a Project** — Javadoc tags, ER/flowchart/sequence/architecture diagrams with Mermaid | t15, t22 | [Notes](notes/topics/t24_documenting_a_project/t24_documenting_a_project_notes.md) | — | — |
 
 ---
 
@@ -46,24 +62,31 @@ quadrantChart
     quadrant-2 Approachable, high payoff
     quadrant-3 Foundations - Java-specific
     quadrant-4 Advanced - Java-specific
+    t00 OOP Fundamentals: [0.08, 0.85]
     t01 Arrays: [0.10, 0.20]
-    t02 Ordering: [0.25, 0.52]
-    t03 Collections I: [0.15, 0.28]
-    t04 Collections II: [0.35, 0.42]
-    t05 Equality & Hashing: [0.42, 0.72]
-    t06 Inheritance: [0.38, 0.88]
-    t07 Interfaces: [0.44, 0.92]
-    t08 Generics I: [0.50, 0.70]
-    t09 Generics II: [0.72, 0.58]
-    t10 Design Patterns I: [0.58, 0.95]
-    t11 Design Patterns II: [0.63, 0.90]
-    t12 DB Connectivity: [0.54, 0.60]
-    t13 Functional Interfaces: [0.48, 0.82]
-    t14 Concurrency: [0.76, 0.78]
-    t15 Networking: [0.70, 0.65]
-    t16 JSON & Binary Storage: [0.65, 0.52]
-    t17 Unit Testing: [0.56, 0.85]
-    t18 Documenting a Project: [0.32, 0.68]
+    t02 Recursion: [0.28, 0.80]
+    t03 Ordering: [0.25, 0.52]
+    t04 Equality & Hashing: [0.42, 0.72]
+    t05 Collections I: [0.15, 0.28]
+    t06 Collections II: [0.35, 0.42]
+    t07 Collections III: [0.40, 0.38]
+    t08 Inheritance: [0.38, 0.88]
+    t09 Interfaces: [0.44, 0.92]
+    t10 Exception Handling: [0.30, 0.75]
+    t11 Generics I: [0.50, 0.70]
+    t12 Generics II: [0.72, 0.58]
+    t13 Design Patterns I: [0.58, 0.95]
+    t14 Design Patterns II: [0.63, 0.90]
+    t15 DB Connectivity: [0.54, 0.60]
+    t16 Functional Interfaces: [0.48, 0.82]
+    t17 Streams API: [0.52, 0.45]
+    t18 Java IO: [0.36, 0.40]
+    t19 Concurrency: [0.76, 0.78]
+    t20 JSON I Basics: [0.45, 0.55]
+    t21 JSON II Advanced: [0.65, 0.52]
+    t22 Networking: [0.70, 0.65]
+    t23 Unit Testing: [0.56, 0.85]
+    t24 Documenting a Project: [0.32, 0.68]
 ```
 
 ---
@@ -91,7 +114,7 @@ quadrantChart
 
 - Start with the official [module descriptor](https://courses.dkit.ie/index.cfm/page/module/moduleId/55497/deliveryperiodid/1066) to understand *what* we cover in this module.
 - Check **assessments/briefs/** for the current CA brief and rubric.
-- Each week, open the matching folder in **topics/** (e.g. `t01_arrays/`):
+- Each week, open the matching folder in **topics/** (e.g. `t02_recursion/`):
   - Work through **exercises/** first (core skills), then try **challenges/** (apply + extend).
   - **Do not peek** at the **solutions/** until after we cover the material in class.
 - Use **shared/** for general setup notes, style guidance, and cheat sheets.
@@ -107,10 +130,12 @@ Run `Main.java`. A menu appears:
          OOP Module — Topic Exercise Runner
 =====================================================
   0.  Exit
-  1.  t01 — Arrays
-  2.  t02 — Ordering
+  1.  t00 — OOP Fundamentals
+  2.  t01 — Arrays
+  3.  t02 — Recursion
+  4.  t03 — Ordering
   ...
- 14.  t14 — Concurrency I
+ 25.  t24 — Documenting a Project
 =====================================================
 Select topic (0 to exit):
 ```
@@ -128,7 +153,7 @@ t01_arrays.challenges.ce01.Exercise.run();
 //  - Packages mirror notes/topics, e.g. t01_arrays.exercises.ex01
 //  - Multiple Exercise classes are fine because packages make them unique
 //  - Shared helpers live in package 'common', e.g. common.FileUtils
-//  - t12 exercises require a running MySQL instance (see t12 note in menu)
+//  - t15 exercises require a running MySQL instance (see t15 note in menu)
 ```
 
 ---
@@ -141,7 +166,7 @@ t01_arrays.challenges.ce01.Exercise.run();
 ├─ descriptors/                          # official module and programme descriptor PDFs
 │
 ├─ code/                                 # all runnable Java (Maven project)
-│  ├─ pom.xml                            # Maven build — Jackson XML, JUnit Jupiter, MySQL connector
+│  ├─ pom.xml                            # Maven build — Jackson, JUnit Jupiter, MySQL connector
 │  ├─ data/                              # static data files used by exercises (CSV, XML, HTML)
 │  │  ├─ ce01/                           # data for challenge exercise 01
 │  │  ├─ ce02/                           # data for challenge exercise 02 (contacts CSVs)
@@ -153,7 +178,7 @@ t01_arrays.challenges.ce01.Exercise.run();
 │     ├─ assessments/                    # assessment sample code
 │     │  └─ gca/
 │     │     └─ gca2/                     # GCA2 N-tier reference: Task, TaskDAO, Server, Client
-│     └─ tNN_topic/                      # one package per topic (t01_arrays … t16_json)
+│     └─ tNN_topic/                      # one package per topic (t00_oop_fundamentals … t24_documenting_a_project)
 │        ├─ challenges/                  # challenge exercise solutions
 │        │  └─ ceNN/Exercise.java
 │        ├─ demos/                       # lecturer demo code
@@ -170,16 +195,13 @@ t01_arrays.challenges.ce01.Exercise.run();
    ├─ shared/
    │  ├─ cheat sheets/                   # JUnit assertion guides
    │  ├─ general/                        # style guide, DRY notes, commit guidelines, tools
-   │  └─ mind maps/                      # revision mindmaps (t01–t07, collections)
-   └─ topics/                            # one folder per topic
-      ├─ tNN_topic/
-      │  ├─ tNN_topic_notes.md           # main notes file
-      │  ├─ challenges/                  # challenge exercise briefs
-      │  └─ exercises/                   # standard exercise briefs
-      └─ t17_unit_testing/
-         ├─ t17_unit_testing_notes.md    # what makes a good test; GCA2 Stage 4 test catalogue
-         └─ exercises/
-            └─ t17_unit_testing_exercises.md
+   │  └─ mind maps/                      # revision mindmaps (t01–t09, collections)
+   └─ topics/                            # one folder per topic (t00–t24)
+      └─ tNN_topic/
+         ├─ tNN_topic_notes.md           # main notes file
+         ├─ challenges/                  # challenge exercise briefs
+         └─ exercises/                   # standard exercise briefs
+            └─ tNN_topic_exercises.md
 ```
 
 ---
