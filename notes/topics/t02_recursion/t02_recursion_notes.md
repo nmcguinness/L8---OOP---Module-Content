@@ -85,6 +85,7 @@ endif
 ```
 
 </details>
+
 <!-- kroki:rendered images/rendered/9d90c529.svg sha256:9d90c529 alt="Recursion anatomy — base case vs recursive case" -->
 ![Recursion anatomy — base case vs recursive case](images/rendered/9d90c529.svg)
 
@@ -139,6 +140,7 @@ deactivate F4
 ```
 
 </details>
+
 <!-- kroki:rendered images/rendered/9ba98703.svg sha256:9ba98703 alt="factorial(4) call stack — frames pushed down, values unwound up" -->
 ![factorial(4) call stack — frames pushed down, values unwound up](images/rendered/9ba98703.svg)
 
@@ -212,6 +214,7 @@ note bottom of f4 : result = 3
 ```
 
 </details>
+
 <!-- kroki:rendered images/rendered/95c16aef.svg sha256:95c16aef alt="fib(4) call tree — exponential branching with repeated sub-problems" -->
 ![fib(4) call tree — exponential branching with repeated sub-problems](images/rendered/95c16aef.svg)
 
