@@ -110,7 +110,7 @@ Select a domain and model **one primary entity** throughout the project.
 | F23 | **Javadoc** | All classes and non-trivial methods must have Javadoc. Class-level Javadoc must include `@author`. Method Javadoc must describe purpose, parameters, return values, and any exceptions thrown. Trivial getters/setters/`toString()` may omit Javadoc. |
 | F24 | **Architecture Diagram** | One-page annotated diagram (Mermaid markdown recommended) showing Client → Server → DAO → Database, the JSON protocol layer, and where each design pattern is applied. Committed to the repo before the submission deadline. |
 | F25 | **README** | Complete README covering: domain overview; how to run; architecture diagram link; protocol documentation (each request type, payload, and `ServerResponse<T>` shape); design pattern justification; exception handling approach; test coverage evidence; Harvard-style references; AI usage declaration. |
-| F26 | **Screencast** | Record an 8–10 minute screencast demonstrating all major functional requirements working end-to-end. Must show: a client connecting to the live server and performing each CRUD operation; two simultaneous clients connected at the same time; each design pattern identified and briefly explained in the code; the JUnit test suite running with coverage output visible. State your name and student ID at the start. Filename format: `2025-26-L8-OOP-RepeatCA-StudentID`. Submit via Moodle alongside your GitHub URL. A missing or inaccessible screencast will result in **zero for Component H**. |
+| F26 | **Screencast** | Record an 8–10 minute screencast demonstrating all major functional requirements working end-to-end. Must show: a client connecting to the live server and performing each CRUD operation; two simultaneous clients connected at the same time; each design pattern identified and briefly explained in the code; the JUnit test suite running with coverage output visible. State your name and student ID at the start. Upload to YouTube as **unlisted** and submit the URL via Moodle. Video title format: `2025-26-L8-OOP-RepeatCA-StudentID`. A missing, private, or inaccessible screencast will result in **zero for Component H**. |
 
 
 
@@ -167,6 +167,14 @@ Good:   'Implement getPlayerById — returns Optional<Player>, empty if not foun
 
 ## 8. Submission Checklist
 
+Your Moodle submission must include **three mandatory items**:
+
+1. **GitHub repository URL** — the repo must be private with your lecturer added as a collaborator. This is the primary graded artefact.
+2. **Screencast URL** — an unlisted YouTube link to your 8–10 minute screencast demonstrating all major functional requirements.
+3. **Signed CA Cover Sheet** — a signed PDF of the DkIT assignment cover sheet.
+
+> ⚠️ **A submission missing any of these three items will not be graded.** A repository with no meaningful commit history before the deadline, a screencast that is private or inaccessible, or an absent cover sheet will each independently result in a non-submission.
+
 | Item | Required |
 | :-- | :-- |
 | GitHub repo URL submitted via Moodle | ✓ |
@@ -178,8 +186,8 @@ Good:   'Implement getPlayerById — returns Optional<Player>, empty if not foun
 | IntelliJ coverage screenshot at `/reports/coverage.png` (≥70%) | ✓ |
 | Architecture diagram committed to repo | ✓ |
 | README complete (all sections in Section 4G) | ✓ |
-| Screencast (8–10 min) submitted via Moodle; filename `2025-26-L8-OOP-RepeatCA-StudentID` | ✓ |
-| Signed CA Cover Sheet uploaded to Moodle | ✓ |
+| Unlisted YouTube screencast URL submitted via Moodle (8–10 min); title `2025-26-L8-OOP-RepeatCA-StudentID` | ✓ |
+| Signed CA Cover Sheet PDF uploaded to Moodle | ✓ |
 | Live online interview attended | ✓ |
 
 
