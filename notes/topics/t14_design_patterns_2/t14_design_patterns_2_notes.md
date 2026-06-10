@@ -1,6 +1,6 @@
 ---
-title: "Design Patterns II — Structure, Coordination & Extension"
-subtitle: "COMP C8Z03 — Year 2 OOP"
+title: "Design Patterns II ï¿½ Structure, Coordination & Extension"
+subtitle: "COMP C8Z03 ï¿½ Year 2 OOP"
 topic_code: t14_design_patterns_2
 description: "How creation and coordination become design problems at scale, and how Factory, Observer, and Adapter help systems evolve without collapsing into coupling and conditionals."
 created: 2026-02-04
@@ -19,7 +19,7 @@ prerequisites:
   - Collections (basic collections and queues)
 ---
 
-# Design Patterns II — Structure, Coordination & Extension
+# Design Patterns II ï¿½ Structure, Coordination & Extension
 
 > **Prerequisites:**
 > - You understand Strategy and Command patterns  
@@ -29,9 +29,9 @@ prerequisites:
 
 ---
 
-## What you’ll learn
+## What youï¿½ll learn
 
-| Skill Type | You will be able to… |
+| Skill Type | You will be able toï¿½ |
 | :- | :- |
 | Understand | Explain why object creation and coordination become design problems at scale. |
 | Apply | Use Factory to remove creation logic from clients. |
@@ -64,7 +64,7 @@ From last week, we already have:
 - Queues executing commands,
 - Strategies defining execution policy.
 
-That design works — **until it doesn’t**.  
+That design works ï¿½ **until it doesnï¿½t**.  
 Today we fix the cracks.
 
 ---
@@ -97,6 +97,42 @@ Encapsulate object creation so clients depend on *what* they want, not *how* it 
 - **Client**: requests an object
 - **Factory**: decides how objects are created
 - **Product**: interface of the created object
+
+```kroki-plantuml
+' alt: Factory pattern â€” Client asks Factory for a Command; Factory creates the right concrete type
+@startuml
+skinparam backgroundColor white
+skinparam ClassFontName monospaced
+skinparam ClassBackgroundColor #F8F8F8
+skinparam ClassBorderColor #777
+skinparam ArrowColor #444
+
+class Client
+
+interface Command {
+    + execute()
+    + undo()
+}
+
+interface TaskCommandFactory {
+    + createFor(task : Task) : Command
+}
+
+class DefaultTaskCommandFactory {
+    + createFor(task : Task) : Command
+}
+
+class ExecuteTaskCommand {
+    + execute()
+    + undo()
+}
+
+Client         -right-> TaskCommandFactory  : requests
+TaskCommandFactory <|.. DefaultTaskCommandFactory
+DefaultTaskCommandFactory ..> ExecuteTaskCommand : creates
+Command <|.. ExecuteTaskCommand
+@enduml
+```
 
 ### Trade-offs
 - Adds indirection and extra types
@@ -142,7 +178,7 @@ public final class DefaultTaskCommandFactory
   </summary>
   <div>
 
-Using <code>new</code> is not bad — **spreading creation logic everywhere is**.
+Using <code>new</code> is not bad ï¿½ **spreading creation logic everywhere is**.
 
 Factory allows:
 - configuration-based creation,
@@ -332,7 +368,7 @@ We now have:
 - New features attach around the system.
 - This is the minimum structure needed before concurrency.
 
-Next week, this design will **fail under parallel load** — and we will fix it with threads.
+Next week, this design will **fail under parallel load** ï¿½ and we will fix it with threads.
 
   </div>
 </details>
@@ -341,9 +377,9 @@ Next week, this design will **fail under parallel load** — and we will fix it wi
 
 ## Pattern comparison (important)
 
-- **Factory vs Strategy** — creation vs behaviour  
-- **Observer vs Command** — reaction to state vs representation of work  
-- **Adapter vs Refactoring** — protection vs redesign  
+- **Factory vs Strategy** ï¿½ creation vs behaviour  
+- **Observer vs Command** ï¿½ reaction to state vs representation of work  
+- **Adapter vs Refactoring** ï¿½ protection vs redesign  
 
 ---
 
@@ -356,7 +392,7 @@ Next week, this design will **fail under parallel load** — and we will fix it wi
 Combining many patterns without real design pressure leads to unnecessary indirection,
 harder debugging, and unclear ownership.
 
-Patterns should remove complexity — not introduce it.
+Patterns should remove complexity ï¿½ not introduce it.
 
   </div>
 </details>
@@ -380,7 +416,7 @@ Which patterns would you introduce or extend? Justify your choices.
 - Do components know too much about each other?
 - Does adding behaviour require modifying many classes?
 
-If yes, a pattern may be missing — or misused.
+If yes, a pattern may be missing ï¿½ or misused.
 
 ---
 
@@ -389,20 +425,20 @@ If yes, a pattern may be missing — or misused.
 1. Why does Factory reduce coupling compared to direct construction?
 2. What problem does Observer solve that Strategy does not?
 3. When is Adapter preferable to refactoring existing code?
-4. Which pattern would you introduce first in a growing system — and why?
+4. Which pattern would you introduce first in a growing system ï¿½ and why?
 5. How do these patterns prepare the system for concurrency?
 
 ---
 
 ## Further reading
 
-- Refactoring Guru — Factory Method  
+- Refactoring Guru ï¿½ Factory Method  
   https://refactoring.guru/design-patterns/factory-method
-- Refactoring Guru — Observer  
+- Refactoring Guru ï¿½ Observer  
   https://refactoring.guru/design-patterns/observer
-- Refactoring Guru — Adapter  
+- Refactoring Guru ï¿½ Adapter  
   https://refactoring.guru/design-patterns/adapter
-- Martin Fowler — Patterns of Enterprise Application Architecture  
+- Martin Fowler ï¿½ Patterns of Enterprise Application Architecture  
   https://martinfowler.com/books/eaa.html
 
 ---

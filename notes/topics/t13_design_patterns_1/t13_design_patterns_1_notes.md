@@ -1,6 +1,6 @@
 ---
-title: "Design Patterns I — Behaviour & Decoupling"
-subtitle: "COMP C8Z03 — Year 2 OOP"
+title: "Design Patterns I ï¿½ Behaviour & Decoupling"
+subtitle: "COMP C8Z03 ï¿½ Year 2 OOP"
 topic_code: t13_design_patterns_1
 description: "Why conditional-heavy designs become brittle, and how Strategy and Command help you encapsulate behaviour and work to reduce coupling."
 created: 2026-02-04
@@ -18,7 +18,7 @@ prerequisites:
   - Inheritance and interface references (polymorphism)
 ---
 
-# Design Patterns I — Behaviour & Decoupling
+# Design Patterns I ï¿½ Behaviour & Decoupling
 
 > **Prerequisites:**
 > - You can create classes with fields, constructors, and methods  
@@ -27,11 +27,11 @@ prerequisites:
 
 ---
 
-## What you’ll learn
+## What youï¿½ll learn
 
 
 
-| Skill Type | You will be able to… |
+| Skill Type | You will be able toï¿½ |
 | :- | :- |
 | Understand | Explain why repeated conditional logic leads to brittle designs. |
 | Understand | Describe the intent of the Strategy and Command patterns. |
@@ -99,7 +99,7 @@ public interface TaskRepository {
 }
 ```
 
-> In your own projects, these would be concrete classes or interfaces you define. The patterns do not care what `Task` contains — they only depend on the interface.
+> In your own projects, these would be concrete classes or interfaces you define. The patterns do not care what `Task` contains ï¿½ they only depend on the interface.
 
 ---
 
@@ -108,9 +108,43 @@ public interface TaskRepository {
 ### Intent
 > Define a family of algorithms, encapsulate each one, and make them interchangeable.
 
+```kroki-plantuml
+' alt: Strategy pattern â€” Context delegates to an interchangeable Strategy implementation
+@startuml
+skinparam backgroundColor white
+skinparam ClassFontName monospaced
+skinparam ClassBackgroundColor #F8F8F8
+skinparam ClassBorderColor #777
+skinparam ArrowColor #444
+
+interface ExecutionStrategy {
+    + execute(task : Task)
+}
+
+class TaskRunner {
+    - _strategy : ExecutionStrategy
+    + TaskRunner(strategy : ExecutionStrategy)
+    + setStrategy(s : ExecutionStrategy)
+    + run(task : Task)
+}
+
+class FastExecution {
+    + execute(task : Task)
+}
+
+class SafeExecution {
+    + execute(task : Task)
+}
+
+TaskRunner o-right-> ExecutionStrategy : delegates to
+ExecutionStrategy <|.. FastExecution
+ExecutionStrategy <|.. SafeExecution
+@enduml
+```
+
 ---
 
-### Step A — Strategy interface
+### Step A ï¿½ Strategy interface
 
 ```java
 public interface ExecutionStrategy {
@@ -120,7 +154,7 @@ public interface ExecutionStrategy {
 
 ---
 
-### Step B — Concrete strategies
+### Step B ï¿½ Concrete strategies
 
 ```java
 public class FastExecution implements ExecutionStrategy {
@@ -139,7 +173,7 @@ public class SafeExecution implements ExecutionStrategy {
 
 ---
 
-### Step C — Context uses the strategy
+### Step C ï¿½ Context uses the strategy
 
 ```java
 public class TaskRunner {
@@ -160,7 +194,7 @@ public class TaskRunner {
 
 | Pro | Con |
 | :-- | :-- |
-| Replaces `if`/`switch` on type with polymorphism | One class per strategy — more files |
+| Replaces `if`/`switch` on type with polymorphism | One class per strategy ï¿½ more files |
 | New behaviour = new class, no existing code changed | Client must choose which strategy to inject |
 | Strategy can be swapped at runtime | Overkill when only one strategy will ever exist |
 
@@ -170,6 +204,53 @@ public class TaskRunner {
 
 ### Intent
 > Encapsulate a request as an object.
+
+```kroki-plantuml
+' alt: Command pattern â€” Invoker queues Commands; each Command calls a Receiver
+@startuml
+skinparam backgroundColor white
+skinparam ClassFontName monospaced
+skinparam ClassBackgroundColor #F8F8F8
+skinparam ClassBorderColor #777
+skinparam ArrowColor #444
+
+interface Command {
+    + execute()
+    + undo()
+}
+
+class TaskInvoker {
+    - _history : List<Command>
+    + submit(cmd : Command)
+    + undoLast()
+}
+
+class SaveTaskCommand {
+    - _task : Task
+    - _repo : TaskRepository
+    + execute()
+    + undo()
+}
+
+class DeleteTaskCommand {
+    - _task : Task
+    - _repo : TaskRepository
+    + execute()
+    + undo()
+}
+
+class TaskRepository {
+    + save(task : Task)
+    + delete(task : Task)
+}
+
+TaskInvoker o-right-> Command : queues
+Command <|.. SaveTaskCommand
+Command <|.. DeleteTaskCommand
+SaveTaskCommand   -right-> TaskRepository : calls
+DeleteTaskCommand -right-> TaskRepository : calls
+@enduml
+```
 
 ---
 
@@ -228,7 +309,7 @@ public class CommandQueue {
 
 | Pro | Con |
 | :-- | :-- |
-| Decouples the caller from execution — caller never knows how work is done | One class per command type — more files |
+| Decouples the caller from execution ï¿½ caller never knows how work is done | One class per command type ï¿½ more files |
 | Commands can be queued, logged, retried, or threaded | Can be over-engineered for simple one-shot calls |
 | Enables undo/redo by storing executed commands | All command state must be captured at creation time |
 
@@ -236,7 +317,7 @@ public class CommandQueue {
 
 ## Games example
 
-### Strategy — AI behaviour that changes at runtime
+### Strategy ï¿½ AI behaviour that changes at runtime
 
 ```java
 // Strategy interface: all behaviours share this contract
@@ -284,11 +365,11 @@ public class Enemy {
 }
 ```
 
-*No `if (behaviour == PATROL) ... else if (behaviour == CHASE)` anywhere. Adding `StealthBehaviour` means one new class — nothing else changes.*
+*No `if (behaviour == PATROL) ... else if (behaviour == CHASE)` anywhere. Adding `StealthBehaviour` means one new class ï¿½ nothing else changes.*
 
 ---
 
-### Command — input action queue for replay
+### Command ï¿½ input action queue for replay
 
 ```java
 // Command interface with optional undo
@@ -350,7 +431,7 @@ public class ActionReplay {
 
 ## Software example
 
-### Strategy — pluggable notification channel
+### Strategy ï¿½ pluggable notification channel
 
 ```java
 public interface NotificationStrategy {
@@ -371,7 +452,7 @@ public class LogNotification implements NotificationStrategy {
     }
 }
 
-// Context — works with any strategy
+// Context ï¿½ works with any strategy
 public class AlertService {
 
     private NotificationStrategy _strategy;
@@ -402,7 +483,7 @@ alerts.alert("admin@example.com", "Disk usage normal");
 
 ---
 
-### Command — undoable text editor operations
+### Command ï¿½ undoable text editor operations
 
 ```java
 public interface EditorCommand {
@@ -449,7 +530,7 @@ public class Editor {
 ## Reflective questions
 
 1. A `TaskRunner` has an `if (type.equals("FAST")) ... else if (type.equals("SAFE")) ...` branch. Why is this a problem when a third execution mode is added?
-2. What is the structural difference between Strategy and Command? Both use interfaces with a single method — what distinguishes them?
+2. What is the structural difference between Strategy and Command? Both use interfaces with a single method ï¿½ what distinguishes them?
 3. Why must a Command capture all its state at construction time rather than reading it at execution time?
 4. You have five concrete strategies and only one will ever be active at a time. Is this still better than an `if`/`switch`? Justify your answer.
 5. How does the Command pattern enable undo? What additional method would you add to the `Command` interface, and what state must each concrete command store?
@@ -532,7 +613,7 @@ public final class TaskQueue {
 
 **Why this matters**
 - Strategies allow execution policies to change without modifying the queue or commands.
-- Commands turn “work” into data that can later be logged, threaded, retried, or sent across a network.
+- Commands turn ï¿½workï¿½ into data that can later be logged, threaded, retried, or sent across a network.
 - This structure naturally extends to:
   - multi-threaded execution (ExecutorService),
   - server-side request handlers,
@@ -549,21 +630,21 @@ In later weeks, this queue will stop executing tasks directly and instead **disp
 
 The following resources provide clear explanations, diagrams, and refactoring-oriented perspectives on the patterns covered in this lesson:
 
-- **Refactoring Guru — Strategy Pattern**  
+- **Refactoring Guru ï¿½ Strategy Pattern**  
   https://refactoring.guru/design-patterns/strategy  
   Clear motivation, UML diagrams, and refactoring examples.
 
-- **Refactoring Guru — Command Pattern**  
+- **Refactoring Guru ï¿½ Command Pattern**  
   https://refactoring.guru/design-patterns/command  
   Excellent for understanding commands as objects and how they enable undo/queueing.
 
-- **Martin Fowler — Refactoring**  
+- **Martin Fowler ï¿½ Refactoring**  
   https://martinfowler.com/books/refactoring.html  
   Foundational text linking patterns directly to improving existing codebases.
 
-- **SourceMaking — Design Patterns**  
+- **SourceMaking ï¿½ Design Patterns**  
   https://sourcemaking.com/design_patterns  
-  Useful for pattern comparison and recognising “when you already have one”.
+  Useful for pattern comparison and recognising ï¿½when you already have oneï¿½.
 
 ---
 
